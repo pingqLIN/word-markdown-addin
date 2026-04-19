@@ -64,6 +64,17 @@ const setErrorStatus = (error) => {
   setStatus(message);
 };
 
+const requireOfficeRuntime = () => {
+  if (
+    typeof window.Office !== "object" ||
+    typeof window.Office.onReady !== "function"
+  ) {
+    throw new Error(
+      "Office.js 未載入完成，請確認可存取 https://appsforoffice.microsoft.com，並確認 `office.js` 已經成功載入。"
+    );
+  }
+};
+
 const toWordMarkdown = (markdown) => markdownToWord(markdown);
 
 const insertMarkdownIntoWord = async (markdown) => {
@@ -185,6 +196,8 @@ const onDropFiles = (event) => {
   }
   handleMdFile(files[0]);
 };
+
+requireOfficeRuntime();
 
 Office.onReady(() => {
   try {
