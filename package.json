@@ -7,6 +7,7 @@
   "scripts": {
     "render-manifest": "node scripts/render-manifest.js",
     "start": "npm run render-manifest && npm run dev-server",
+    "start:local": "node scripts/start-local.js",
     "dev-server": "node scripts/dev-server.js",
     "dev": "npm run start",
     "build": "echo \"No build step required for this static manifest sample.\""

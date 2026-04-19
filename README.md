@@ -35,6 +35,9 @@
    npm run dev
    ```
    服務會先以 `MANIFEST_HOST`（預設 `http://localhost:3000`）產生 `manifest.xml`，再啟動開發伺服器（預設仍為 `http://localhost:3000`）。
+   # 一鍵啟動（本地化推薦）：
+   npm run start:local
+   # 或直接指定主機：`npm run start:local -- --host https://addin.example.internal`
 3. 在 Word 選擇「上傳我的清單」/sideload manifest，載入 `manifest.xml`。
 
 ## 使用方式
