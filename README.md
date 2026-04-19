@@ -48,7 +48,8 @@
 2. 點「插入 Markdown 到文件」：
    - 選擇 `.md` 檔案。
    - 檔案內容會被轉為 HTML 插入到游標位置。
-3. 點「匯出為 Markdown」：
+3. 若你用系統關聯開啟 `.md` 檔，任務窗格會在偵測到副檔名為 `.md`/`.markdown` 後顯示「將目前文件格式化為 Markdown」，直接把整份文件現有文字重新解析為 Markdown 格式並回寫 Word。
+4. 點「匯出為 Markdown」：
    - 點選後會把目前 Word 文件轉為 Markdown 字串顯示在文字區。
    - 點「下載為 Markdown 檔」可直接儲存成 `.md`。
 

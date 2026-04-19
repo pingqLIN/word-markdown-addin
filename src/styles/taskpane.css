@@ -47,6 +47,28 @@ button {
   color: #ffffff;
 }
 
+button.secondary {
+  background: #f59e0b;
+}
+
+button.secondary:hover {
+  background: #d97706;
+}
+
+.helper {
+  margin: 8px 0 0;
+  font-size: 0.92rem;
+  color: #4b5563;
+}
+
+.helper.visible {
+  color: #92400e;
+  background: #fffbeb;
+  border-radius: 6px;
+  padding: 6px 8px;
+  border: 1px solid #fcd34d;
+}
+
 button:hover {
   background: #1d4ed8;
 }
@@ -60,10 +82,4 @@ textarea {
 .status {
   min-height: 1.4em;
   color: #1f2937;
-}
-
-.helper {
-  margin: 8px 0 0;
-  font-size: 0.92rem;
-  color: #4b5563;
 }

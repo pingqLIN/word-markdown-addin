@@ -5,6 +5,8 @@ const exportButton = document.getElementById("export-btn");
 const exportPreview = document.getElementById("export-preview");
 const downloadButton = document.getElementById("download-btn");
 const dropZone = document.getElementById("drop-zone");
+const mdAutoImportButton = document.getElementById("md-auto-import-btn");
+const mdAutoImportHelper = document.getElementById("md-auto-import-helper");
 
 const requireMarkdownLibraries = () => {
   if (typeof window.marked?.parse !== "function") {
@@ -77,6 +79,14 @@ const requireOfficeRuntime = () => {
 
 const toWordMarkdown = (markdown) => markdownToWord(markdown);
 
+const isMarkdownLikeFilename = (url = "") =>
+  /\.(md|markdown)$/i.test(String(url).split(/[?#]/)[0].trim());
+
+const detectMarkdownDocument = () => {
+  const url = window.Office.context?.document?.url || "";
+  return isMarkdownLikeFilename(url);
+};
+
 const insertMarkdownIntoWord = async (markdown) => {
   requireMarkdownLibraries();
   ensureOffice();
@@ -87,6 +97,31 @@ const insertMarkdownIntoWord = async (markdown) => {
     selection.insertHtml(html, Word.InsertLocation.replace);
     await context.sync();
   });
+};
+
+const formatExistingMarkdownDocument = async () => {
+  requireMarkdownLibraries();
+  ensureOffice();
+
+  const markdown = await Word.run(async (context) => {
+    const body = context.document.body;
+    body.load("text");
+    await context.sync();
+    return body.text || "";
+  });
+
+  if (!markdown.trim()) {
+    return "文件內目前沒有可轉換的內容。";
+  }
+
+  const html = toWordMarkdown(markdown);
+  await Word.run(async (context) => {
+    const body = context.document.body;
+    body.clear();
+    body.insertHtml(html, Word.InsertLocation.end);
+    await context.sync();
+  });
+  return "已將目前文件按 Markdown 格式寫回 Word。";
 };
 
 const exportWordToMarkdown = async () => {
@@ -117,6 +152,17 @@ const exportWordToMarkdown = async () => {
 
 const setDownloadButtonEnabled = (enabled) => {
   downloadButton.disabled = !enabled;
+};
+
+const setAutoImportState = (isVisible, helperText = "") => {
+  if (mdAutoImportButton) {
+    mdAutoImportButton.hidden = !isVisible;
+  }
+
+  if (mdAutoImportHelper) {
+    mdAutoImportHelper.textContent = helperText || "";
+    mdAutoImportHelper.classList.toggle("visible", Boolean(helperText));
+  }
 };
 
 const triggerDownload = (content) => {
@@ -153,6 +199,16 @@ const handleDownload = async () => {
       return;
     }
     triggerDownload(exportPreview.value);
+  } catch (error) {
+    setErrorStatus(error);
+  }
+};
+
+const handleAutoImport = async () => {
+  try {
+    setStatus("正在依據現有文件內容建立 Markdown 格式…");
+    const message = await formatExistingMarkdownDocument();
+    setStatus(message);
   } catch (error) {
     setErrorStatus(error);
   }
@@ -208,9 +264,18 @@ Office.onReady(() => {
     return;
   }
 
+  const mdDetected = detectMarkdownDocument();
+  const mdHelperText = mdDetected
+    ? "偵測到 Markdown 文件，點擊可將目前純文字內容直接轉為 Word 格式。"
+    : "";
+  setAutoImportState(mdDetected, mdHelperText);
+
   importButton.addEventListener("click", () => {
     mdFileInput.click();
   });
+  if (mdAutoImportButton) {
+    mdAutoImportButton.addEventListener("click", handleAutoImport);
+  }
 
   mdFileInput.addEventListener("change", () => {
     const file = mdFileInput.files && mdFileInput.files[0];
