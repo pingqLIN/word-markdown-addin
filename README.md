@@ -29,9 +29,11 @@
 1. 安裝 Node.js 20+。
 2. 在根目錄執行：
    ```bash
+   # 一鍵安裝＋啟動（建議首次）：
+   npm run setup
+
+   # 若你偏好分步驟，也可以用：
    npm install
-   # 若需自訂 add-in Host，可設定環境變數 MANIFEST_HOST
-   # 例如：$env:MANIFEST_HOST="https://addin.example.internal"
    npm run dev
    ```
    服務會先以 `MANIFEST_HOST`（預設 `http://localhost:3000`）產生 `manifest.xml`，再啟動開發伺服器（預設仍為 `http://localhost:3000`）。
