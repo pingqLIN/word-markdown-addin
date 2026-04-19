@@ -8,7 +8,9 @@
     "render-manifest": "node scripts/render-manifest.js",
     "start": "npm run render-manifest && npm run dev-server",
     "start:local": "node scripts/start-local.js",
-    "setup": "npm install --no-audit --no-fund && npm run start:local",
+    "setup": "node scripts/setup-auto.js",
+    "setup:with-md-association": "node scripts/setup-auto.js --associate-md",
+    "sideload": "node scripts/sideload.js",
     "dev-server": "node scripts/dev-server.js",
     "dev": "npm run start",
     "build": "echo \"No build step required for this static manifest sample.\""

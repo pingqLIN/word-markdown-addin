@@ -18,12 +18,24 @@ for (let index = 0; index < args.length; index += 1) {
   }
 }
 
+const quoteWindowsArgument = (value) =>
+  /[\s"]/u.test(value) ? `"${value.replace(/"/gu, "\"\"")}"` : value;
+
 const runCommand = (command, cmdArgs, env) => new Promise((resolve, reject) => {
-  const proc = spawn(command, cmdArgs, {
-    env,
-    stdio: "inherit",
-    shell: false,
-  });
+  const proc = process.platform === "win32" && /\.cmd$/i.test(command)
+    ? spawn("cmd.exe", [
+      "/d",
+      "/s",
+      "/c",
+      `${command} ${cmdArgs.map(quoteWindowsArgument).join(" ")}`.trim(),
+    ], {
+      env,
+      stdio: "inherit",
+    })
+    : spawn(command, cmdArgs, {
+      env,
+      stdio: "inherit",
+    });
 
   proc.on("error", (error) => reject(error));
   proc.on("close", (code) => {

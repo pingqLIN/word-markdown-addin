@@ -87,6 +87,16 @@ const server = http.createServer(async (req, res) => {
   }
 });
 
+server.on("error", (error) => {
+  if (error.code === "EADDRINUSE") {
+    console.error("Port 3000 is already in use. Stop the existing process or rerun with a different MANIFEST_HOST.");
+    process.exit(1);
+  }
+
+  console.error("Server failed to start:", error);
+  process.exit(1);
+});
+
 server.listen(PORT, () => {
   console.log(`Word Markdown Add-in dev server running: http://localhost:${PORT}`);
 });

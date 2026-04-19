@@ -27,20 +27,36 @@
 ## 快速開始
 
 1. 安裝 Node.js 20+。
-2. 在根目錄執行：
+2. 在專案根目錄執行一個指令（自動安裝＋產生 manifest＋啟動本機伺服器）：
    ```bash
-   # 一鍵安裝＋啟動（建議首次）：
    npm run setup
-
-   # 若你偏好分步驟，也可以用：
-   npm install
-   npm run dev
    ```
-   服務會先以 `MANIFEST_HOST`（預設 `http://localhost:3000`）產生 `manifest.xml`，再啟動開發伺服器（預設仍為 `http://localhost:3000`）。
-   # 一鍵啟動（本地化推薦）：
-   npm run start:local
-   # 或直接指定主機：`npm run start:local -- --host https://addin.example.internal`
-3. 在 Word 選擇「上傳我的清單」/sideload manifest，載入 `manifest.xml`。
+   服務會使用 `MANIFEST_HOST`（預設 `http://localhost:3000`）產生 `manifest.xml`，並啟動 `dev-server`。
+3. 若你要自動 sideload 到桌面版 Word，請在另一個終端機執行：
+   ```bash
+   npm run sideload
+   ```
+   這個指令會重新產生 `manifest.xml`、啟動本機伺服器，並用 Office 開發工具把 add-in sideload 到 Word Desktop。
+
+如果你偏好手動 sideload，仍可在 Word 選擇「上傳我的清單」/Upload My Add-in，載入 `manifest.xml`。
+
+如果你要把 `.md` 檔關聯到 Word（可選），可用一鍵同時完成：
+
+```bash
+npm run setup:with-md-association
+```
+
+#### 進階啟動
+
+- 本地化指令（保留舊流程）：
+  - `npm run start:local`
+  - `npm run start:local -- --host https://addin.example.internal`
+- 桌面版 Word 自動 sideload：
+  - `npm run sideload`
+  - 建議先關閉 Word 再執行，成功率較高。
+- 分步驟舊流程：
+  - `npm install`
+  - `npm run dev`
 
 ## 使用方式
 
