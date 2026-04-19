@@ -21,7 +21,7 @@
 - `src/styles/taskpane.css`：任務窗格樣式。
 - `assets/icon.svg`：add-in 圖示。
 - `scripts/dev-server.js`：本地靜態伺服器。
-- `src/lib/marked.min.js`、`src/lib/turndown.min.js`：本地 Markdown 轉換核心函式庫（避免外部 CDN 依賴）。
+- `src/lib/office.js`、`src/lib/marked.min.js`、`src/lib/turndown.min.js`：本地核心腳本，避免啟動時依賴外部 CDN。
 - `package.json`：專案指令。
 
 ## 快速開始
@@ -52,8 +52,8 @@
 
 ## 目前狀態更新
 
-- 本地化轉換流程：`marked` 與 `turndown` 已改為以 `src/lib` 載入，避免匯入/匯出依賴外部 CDN 套件。
-- 仍使用本地靜態伺服器提供 `office.js` 指向入口、任務窗格、圖示與腳本資源；頁面初始化時會先驗證 `marked` 與 `turndown` 是否成功載入，若載入失敗會即時回報。
+- 本地化流程：`office.js`、`marked` 與 `turndown` 都改為以 `src/lib` 載入，降低啟動與轉換階段對外部 CDN 的依賴。
+- 檔案仍透過本地靜態伺服器提供任務窗格、圖示與腳本資源；頁面初始化時會先驗證 `marked` 與 `turndown` 是否成功載入，若載入失敗會即時回報。
 
 ## Windows `.md` 檔案關聯（可選）
 

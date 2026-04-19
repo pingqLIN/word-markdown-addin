@@ -70,7 +70,7 @@ const requireOfficeRuntime = () => {
     typeof window.Office.onReady !== "function"
   ) {
     throw new Error(
-      "Office.js 未載入完成，請確認可存取 https://appsforoffice.microsoft.com，並確認 `office.js` 已經成功載入。"
+      "Office.js 未載入完成，請確認任務窗格頁面的 `lib/office.js` 可正確讀取。"
     );
   }
 };
