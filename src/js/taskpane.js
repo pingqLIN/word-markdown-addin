@@ -6,6 +6,16 @@ const exportPreview = document.getElementById("export-preview");
 const downloadButton = document.getElementById("download-btn");
 const dropZone = document.getElementById("drop-zone");
 
+const requireMarkdownLibraries = () => {
+  if (typeof window.marked?.parse !== "function") {
+    throw new Error("marked 函式庫未載入，請檢查 src/lib/marked.min.js。");
+  }
+
+  if (typeof window.TurndownService !== "function") {
+    throw new Error("turndown 函式庫未載入，請檢查 src/lib/turndown.min.js。");
+  }
+};
+
 const turndownService = new TurndownService({
   codeBlockStyle: "fenced",
   headingStyle: "atx",
@@ -46,9 +56,18 @@ const setStatus = (message) => {
   statusElement.textContent = message || "";
 };
 
+const setErrorStatus = (error) => {
+  const message =
+    error && typeof error.message === "string"
+      ? error.message
+      : "發生未預期錯誤，請稍後再試。";
+  setStatus(message);
+};
+
 const toWordMarkdown = (markdown) => markdownToWord(markdown);
 
 const insertMarkdownIntoWord = async (markdown) => {
+  requireMarkdownLibraries();
   ensureOffice();
   const html = toWordMarkdown(markdown);
 
@@ -60,6 +79,7 @@ const insertMarkdownIntoWord = async (markdown) => {
 };
 
 const exportWordToMarkdown = async () => {
+  requireMarkdownLibraries();
   ensureOffice();
 
   return Word.run(async (context) => {
@@ -110,7 +130,7 @@ const exportMarkdownFile = async () => {
     setStatus(markdown ? "匯出成功，可點「下載為 Markdown 檔」儲存。" : "文件目前為空，沒有可匯出的內容。");
     return markdown;
   } catch (error) {
-    setStatus(error.message || "匯出失敗");
+    setErrorStatus(error);
     throw error;
   }
 };
@@ -123,7 +143,7 @@ const handleDownload = async () => {
     }
     triggerDownload(exportPreview.value);
   } catch (error) {
-    setStatus(error.message || "下載失敗");
+    setErrorStatus(error);
   }
 };
 
@@ -146,7 +166,7 @@ const handleMdFile = (file) => {
       await insertMarkdownIntoWord(markdown);
       setStatus("已匯入 Markdown。");
     } catch (error) {
-      setStatus(error.message || "匯入失敗");
+      setErrorStatus(error);
     }
   };
   reader.onerror = () => {
@@ -167,6 +187,14 @@ const onDropFiles = (event) => {
 };
 
 Office.onReady(() => {
+  try {
+    requireMarkdownLibraries();
+  } catch (error) {
+    setErrorStatus(error);
+    setDownloadButtonEnabled(false);
+    return;
+  }
+
   importButton.addEventListener("click", () => {
     mdFileInput.click();
   });

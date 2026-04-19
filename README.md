@@ -21,6 +21,7 @@
 - `src/styles/taskpane.css`：任務窗格樣式。
 - `assets/icon.svg`：add-in 圖示。
 - `scripts/dev-server.js`：本地靜態伺服器。
+- `src/lib/marked.min.js`、`src/lib/turndown.min.js`：本地 Markdown 轉換核心函式庫（避免外部 CDN 依賴）。
 - `package.json`：專案指令。
 
 ## 快速開始
@@ -48,6 +49,11 @@
 
 - 這是 Word 任務窗格層級的「導入／導出」整合，能讓使用者在 Word 內直接操作 `.md`。  
 - 若要做到「作業系統原生」雙擊 `.md` 就直接在 Word 透過這個增益集開啟，屬於「檔案關聯/IT 部署政策」層級議題，不是 manifest 本身可以直接保證的行為。
+
+## 目前狀態更新
+
+- 本地化轉換流程：`marked` 與 `turndown` 已改為以 `src/lib` 載入，避免匯入/匯出依賴外部 CDN 套件。
+- 仍使用本地靜態伺服器提供 `office.js` 指向入口、任務窗格、圖示與腳本資源；頁面初始化時會先驗證 `marked` 與 `turndown` 是否成功載入，若載入失敗會即時回報。
 
 ## Windows `.md` 檔案關聯（可選）
 
