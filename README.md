@@ -30,9 +30,11 @@
 2. 在根目錄執行：
    ```bash
    npm install
+   # 若需自訂 add-in Host，可設定環境變數 MANIFEST_HOST
+   # 例如：$env:MANIFEST_HOST="https://addin.example.internal"
    npm run dev
    ```
-   服務會在 `http://localhost:3000` 啟動（建議本機先用 HTTP 測試；上線或企業環境可改 HTTPS）。
+   服務會先以 `MANIFEST_HOST`（預設 `http://localhost:3000`）產生 `manifest.xml`，再啟動開發伺服器（預設仍為 `http://localhost:3000`）。
 3. 在 Word 選擇「上傳我的清單」/sideload manifest，載入 `manifest.xml`。
 
 ## 使用方式

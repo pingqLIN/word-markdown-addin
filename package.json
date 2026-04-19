@@ -5,7 +5,9 @@
   "description": "Microsoft Word add-in to import and export Markdown (.md) documents.",
   "type": "module",
   "scripts": {
-    "start": "node scripts/dev-server.js",
+    "render-manifest": "node scripts/render-manifest.js",
+    "start": "npm run render-manifest && npm run dev-server",
+    "dev-server": "node scripts/dev-server.js",
     "dev": "npm run start",
     "build": "echo \"No build step required for this static manifest sample.\""
   },
