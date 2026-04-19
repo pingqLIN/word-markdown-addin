@@ -1,0 +1,16 @@
+{
+  "name": "word-markdown-addin",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Microsoft Word add-in to import and export Markdown (.md) documents.",
+  "type": "module",
+  "scripts": {
+    "start": "node scripts/dev-server.js",
+    "dev": "npm run start",
+    "build": "echo \"No build step required for this static manifest sample.\""
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "license": "MIT"
+}

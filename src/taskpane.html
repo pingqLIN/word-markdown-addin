@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Word Markdown Companion</title>
+    <link rel="stylesheet" href="styles/taskpane.css" />
+    <script src="https://appsforoffice.microsoft.com/lib/1/hosted/office.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/turndown/dist/turndown.js"></script>
+    <script src="js/taskpane.js" defer></script>
+  </head>
+  <body>
+    <main class="container">
+      <h1>Word Markdown Companion</h1>
+      <p>在 Word 中讀寫 <code>.md</code> 內容。</p>
+
+      <section class="panel">
+        <label for="md-file">匯入 Markdown</label>
+        <input id="md-file" type="file" accept=".md,.markdown,text/markdown" />
+        <button id="import-btn" type="button">插入 Markdown 到文件</button>
+        <div id="drop-zone" class="drop-zone" aria-label="拖放 .md 檔案到此處">
+          或拖放 .md 到這裡
+        </div>
+        <p class="helper">可匯入本機 <code>.md</code> 檔案並插入到目前游標位置。</p>
+      </section>
+
+      <section class="panel">
+        <button id="export-btn" type="button">匯出為 Markdown</button>
+        <textarea id="export-preview" readonly rows="10" placeholder="匯出後的 Markdown 將顯示在這裡"></textarea>
+        <button id="download-btn" type="button" disabled>下載為 Markdown 檔</button>
+        <p class="helper">若文件為空，匯出結果將為空白。</p>
+      </section>
+
+      <p id="status" class="status" aria-live="polite"></p>
+    </main>
+  </body>
+</html>

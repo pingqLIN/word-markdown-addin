@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<OfficeApp xmlns="http://schemas.microsoft.com/office/appforoffice/1.1"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xmlns:bt="http://schemas.microsoft.com/office/officeappbasictypes/1.0"
+          xmlns:ov="http://schemas.microsoft.com/office/taskpaneappversionoverrides"
+          xsi:type="TaskPaneApp">
+  <Id>e6c1ec6a-3b55-4ed6-8a57-1d3de4f6b4d1</Id>
+  <Version>1.0.0.0</Version>
+  <ProviderName>Internal</ProviderName>
+  <DefaultLocale>en-US</DefaultLocale>
+  <DisplayName DefaultValue="Word Markdown Companion"/>
+  <Description DefaultValue="Import and export Markdown files in Microsoft Word with one click."/>
+  <IconUrl DefaultValue="http://localhost:3000/assets/icon.svg"/>
+  <SupportUrl DefaultValue="http://localhost:3000/"/>
+  <AppDomains>
+    <AppDomain>http://localhost:3000</AppDomain>
+  </AppDomains>
+  <Hosts>
+    <Host Name="Document"/>
+  </Hosts>
+  <Requirements>
+    <Sets DefaultMinVersion="1.3">
+      <Set Name="WordApi" MinVersion="1.3"/>
+    </Sets>
+  </Requirements>
+  <DefaultSettings>
+    <SourceLocation DefaultValue="http://localhost:3000/taskpane.html"/>
+    <RequestedHeight>450</RequestedHeight>
+  </DefaultSettings>
+  <Permissions>ReadWriteDocument</Permissions>
+
+  <VersionOverrides xmlns="http://schemas.microsoft.com/office/taskpaneappversionoverrides" xsi:type="TaskPaneApp">
+    <Hosts>
+      <Host xsi:type="Document">
+        <DesktopFormFactor>
+          <ExtensionPoint xsi:type="PrimaryCommandSurface">
+            <CustomTab id="WordMarkdownTab">
+              <Group id="WordMarkdownGroup" label="Markdown">
+                <Control id="OpenMd" xsi:type="Button">
+                  <Label resid="OpenMd.Label" />
+                  <Supertip>
+                    <Title resid="OpenMd.Label" />
+                    <Description resid="OpenMd.Tooltip" />
+                  </Supertip>
+                  <Action xsi:type="ShowTaskpane">
+                    <TaskpaneId>WordMarkdownTaskpane</TaskpaneId>
+                    <SourceLocation resid="Taskpane.Url" />
+                  </Action>
+                  <Icon>
+                    <bt:Image size="16" resid="Icon.16x16"/>
+                    <bt:Image size="32" resid="Icon.32x32"/>
+                    <bt:Image size="80" resid="Icon.80x80"/>
+                  </Icon>
+                </Control>
+                <Control id="ExportMd" xsi:type="Button">
+                  <Label resid="ExportMd.Label" />
+                  <Supertip>
+                    <Title resid="ExportMd.Label" />
+                    <Description resid="ExportMd.Tooltip" />
+                  </Supertip>
+                  <Action xsi:type="ShowTaskpane">
+                    <TaskpaneId>WordMarkdownTaskpane</TaskpaneId>
+                    <SourceLocation resid="Taskpane.Url" />
+                  </Action>
+                  <Icon>
+                    <bt:Image size="16" resid="Icon.16x16"/>
+                    <bt:Image size="32" resid="Icon.32x32"/>
+                    <bt:Image size="80" resid="Icon.80x80"/>
+                  </Icon>
+                </Control>
+              </Group>
+            </CustomTab>
+          </ExtensionPoint>
+        </DesktopFormFactor>
+      </Host>
+    </Hosts>
+    <Resources>
+      <bt:Urls>
+        <bt:Url id="Taskpane.Url" DefaultValue="http://localhost:3000/taskpane.html"/>
+      </bt:Urls>
+      <bt:Images>
+        <bt:Image id="Icon.16x16" DefaultValue="http://localhost:3000/assets/icon.svg"/>
+        <bt:Image id="Icon.32x32" DefaultValue="http://localhost:3000/assets/icon.svg"/>
+        <bt:Image id="Icon.80x80" DefaultValue="http://localhost:3000/assets/icon.svg"/>
+      </bt:Images>
+      <bt:ShortStrings>
+        <bt:String id="OpenMd.Label" DefaultValue="Import .md" />
+        <bt:String id="ExportMd.Label" DefaultValue="Export .md" />
+      </bt:ShortStrings>
+      <bt:LongStrings>
+        <bt:String id="OpenMd.Tooltip" DefaultValue="Import a local Markdown (.md) file into the current document." />
+        <bt:String id="ExportMd.Tooltip" DefaultValue="Export the current document to Markdown (.md) format." />
+      </bt:LongStrings>
+    </Resources>
+  </VersionOverrides>
+</OfficeApp>
