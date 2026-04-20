@@ -7,6 +7,31 @@ const downloadButton = document.getElementById("download-btn");
 const dropZone = document.getElementById("drop-zone");
 const mdAutoImportButton = document.getElementById("md-auto-import-btn");
 const mdAutoImportHelper = document.getElementById("md-auto-import-helper");
+const pendingMarkdownState = {
+  fileName: "",
+  markdown: "",
+};
+
+const logTaskpaneEvent = async (message, extra = null) => {
+  const detail =
+    extra && typeof extra === "object"
+      ? ` ${JSON.stringify(extra)}`
+      : "";
+
+  try {
+    await fetch("/api/taskpane-log", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        message: `${message}${detail}`,
+      }),
+    });
+  } catch (error) {
+    console.warn("taskpane log failed", error);
+  }
+};
 
 const requireMarkdownLibraries = () => {
   if (typeof window.marked?.parse !== "function") {
@@ -72,7 +97,7 @@ const requireOfficeRuntime = () => {
     typeof window.Office.onReady !== "function"
   ) {
     throw new Error(
-      "Office.js 未載入完成，請確認任務窗格頁面的 `lib/office.js` 可正確讀取。"
+      "Office.js 未載入完成，請確認任務窗格可連到 Microsoft hosted office.js。"
     );
   }
 };
@@ -91,12 +116,17 @@ const insertMarkdownIntoWord = async (markdown) => {
   requireMarkdownLibraries();
   ensureOffice();
   const html = toWordMarkdown(markdown);
+  await logTaskpaneEvent("insertMarkdownIntoWord:start", {
+    markdownLength: markdown.length,
+  });
 
   await Word.run(async (context) => {
     const selection = context.document.getSelection();
     selection.insertHtml(html, Word.InsertLocation.replace);
     await context.sync();
   });
+
+  await logTaskpaneEvent("insertMarkdownIntoWord:success");
 };
 
 const formatExistingMarkdownDocument = async () => {
@@ -154,15 +184,55 @@ const setDownloadButtonEnabled = (enabled) => {
   downloadButton.disabled = !enabled;
 };
 
-const setAutoImportState = (isVisible, helperText = "") => {
+const setAutoImportState = (isVisible, helperText = "", buttonText = "") => {
   if (mdAutoImportButton) {
     mdAutoImportButton.hidden = !isVisible;
+    if (buttonText) {
+      mdAutoImportButton.textContent = buttonText;
+    }
   }
 
   if (mdAutoImportHelper) {
     mdAutoImportHelper.textContent = helperText || "";
     mdAutoImportHelper.classList.toggle("visible", Boolean(helperText));
   }
+};
+
+const getDocumentText = async () =>
+  Word.run(async (context) => {
+    const body = context.document.body;
+    body.load("text");
+    await context.sync();
+    return body.text || "";
+  });
+
+const fetchPendingMarkdown = async () => {
+  const response = await fetch("/api/pending-markdown", {
+    method: "GET",
+    cache: "no-store",
+  });
+
+  if (response.status === 204) {
+    return null;
+  }
+
+  if (!response.ok) {
+    throw new Error("無法讀取待匯入的 Markdown 檔案。");
+  }
+
+  const payload = await response.json();
+  if (!payload || typeof payload.markdown !== "string") {
+    return null;
+  }
+
+  return payload;
+};
+
+const clearPendingMarkdown = async () => {
+  await fetch("/api/pending-markdown", {
+    method: "DELETE",
+    cache: "no-store",
+  });
 };
 
 const triggerDownload = (content) => {
@@ -214,6 +284,36 @@ const handleAutoImport = async () => {
   }
 };
 
+const handlePendingMarkdownImport = async () => {
+  try {
+    if (!pendingMarkdownState.markdown) {
+      setStatus("目前沒有待匯入的 Markdown 檔案。");
+      await logTaskpaneEvent("handlePendingMarkdownImport:no-pending-markdown");
+      return;
+    }
+
+    setStatus(`正在匯入 ${pendingMarkdownState.fileName || "Markdown 檔案"}…`);
+    await logTaskpaneEvent("handlePendingMarkdownImport:start", {
+      fileName: pendingMarkdownState.fileName || "",
+      markdownLength: pendingMarkdownState.markdown.length,
+    });
+    await insertMarkdownIntoWord(pendingMarkdownState.markdown);
+    await clearPendingMarkdown();
+    await logTaskpaneEvent("handlePendingMarkdownImport:cleared-pending");
+
+    pendingMarkdownState.fileName = "";
+    pendingMarkdownState.markdown = "";
+    setAutoImportState(false);
+    setStatus("已匯入剛開啟的 Markdown 檔案。");
+    await logTaskpaneEvent("handlePendingMarkdownImport:success");
+  } catch (error) {
+    setErrorStatus(error);
+    await logTaskpaneEvent("handlePendingMarkdownImport:error", {
+      message: error?.message || String(error),
+    });
+  }
+};
+
 const handleMdFile = (file) => {
   if (!file) {
     setStatus("請先選擇 .md 檔案。");
@@ -254,6 +354,7 @@ const onDropFiles = (event) => {
 };
 
 requireOfficeRuntime();
+void logTaskpaneEvent("taskpane-script-loaded");
 
 Office.onReady(() => {
   try {
@@ -261,20 +362,27 @@ Office.onReady(() => {
   } catch (error) {
     setErrorStatus(error);
     setDownloadButtonEnabled(false);
+    void logTaskpaneEvent("Office.onReady:library-check-failed", {
+      message: error?.message || String(error),
+    });
     return;
   }
 
-  const mdDetected = detectMarkdownDocument();
-  const mdHelperText = mdDetected
-    ? "偵測到 Markdown 文件，點擊可將目前純文字內容直接轉為 Word 格式。"
-    : "";
-  setAutoImportState(mdDetected, mdHelperText);
+  void logTaskpaneEvent("Office.onReady:ready");
 
+  const mdDetected = detectMarkdownDocument();
   importButton.addEventListener("click", () => {
     mdFileInput.click();
   });
   if (mdAutoImportButton) {
-    mdAutoImportButton.addEventListener("click", handleAutoImport);
+    mdAutoImportButton.addEventListener("click", () => {
+      if (pendingMarkdownState.markdown) {
+        handlePendingMarkdownImport();
+        return;
+      }
+
+      handleAutoImport();
+    });
   }
 
   mdFileInput.addEventListener("change", () => {
@@ -295,4 +403,56 @@ Office.onReady(() => {
   dropZone.addEventListener("drop", onDropFiles);
   setStatus("初始化完成，可匯入或匯出 Markdown。");
   setDownloadButtonEnabled(false);
+
+  void (async () => {
+    try {
+      await logTaskpaneEvent("pending-check:start");
+      const pending = await fetchPendingMarkdown();
+      if (pending) {
+        pendingMarkdownState.fileName = pending.fileName || "";
+        pendingMarkdownState.markdown = pending.markdown || "";
+        await logTaskpaneEvent("pending-check:found", {
+          fileName: pendingMarkdownState.fileName,
+          markdownLength: pendingMarkdownState.markdown.length,
+        });
+
+        const existingText = await getDocumentText();
+        await logTaskpaneEvent("pending-check:document-text-loaded", {
+          textLength: existingText.length,
+        });
+        setAutoImportState(
+          true,
+          pendingMarkdownState.fileName
+            ? `偵測到剛由 launcher 交接的 Markdown：${pendingMarkdownState.fileName}`
+            : "偵測到剛由 launcher 交接的 Markdown 檔案。",
+          "匯入剛開啟的 Markdown 檔",
+        );
+
+        if (!existingText.trim()) {
+          await logTaskpaneEvent("pending-check:auto-import-eligible");
+          await handlePendingMarkdownImport();
+          return;
+        }
+
+        setStatus("已偵測到待匯入 Markdown 檔，可點按鈕插入到目前文件。");
+        await logTaskpaneEvent("pending-check:manual-import-required");
+        return;
+      }
+
+      await logTaskpaneEvent("pending-check:none");
+      const mdHelperText = mdDetected
+        ? "偵測到 Markdown 文件，點擊可將目前純文字內容直接轉為 Word 格式。"
+        : "";
+      setAutoImportState(mdDetected, mdHelperText, "將目前文件格式化為 Markdown");
+    } catch (error) {
+      const mdHelperText = mdDetected
+        ? "偵測到 Markdown 文件，點擊可將目前純文字內容直接轉為 Word 格式。"
+        : "";
+      setAutoImportState(mdDetected, mdHelperText, "將目前文件格式化為 Markdown");
+      console.error(error);
+      await logTaskpaneEvent("pending-check:error", {
+        message: error?.message || String(error),
+      });
+    }
+  })();
 });

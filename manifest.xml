@@ -3,14 +3,15 @@
           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
           xmlns:bt="http://schemas.microsoft.com/office/officeappbasictypes/1.0"
           xmlns:ov="http://schemas.microsoft.com/office/taskpaneappversionoverrides"
-          xsi:type="TaskPaneApp">
+  xsi:type="TaskPaneApp">
   <Id>e6c1ec6a-3b55-4ed6-8a57-1d3de4f6b4d1</Id>
-  <Version>1.0.0.0</Version>
+  <Version>1.0.0.1</Version>
   <ProviderName>Internal</ProviderName>
   <DefaultLocale>en-US</DefaultLocale>
   <DisplayName DefaultValue="Word Markdown Companion"/>
   <Description DefaultValue="Import and export Markdown files in Microsoft Word with one click."/>
-  <IconUrl DefaultValue="http://localhost:3000/assets/icon.svg"/>
+  <IconUrl DefaultValue="http://localhost:3000/assets/icon-32.png"/>
+  <HighResolutionIconUrl DefaultValue="http://localhost:3000/assets/icon-80.png"/>
   <SupportUrl DefaultValue="http://localhost:3000/"/>
   <AppDomains>
     <AppDomain>http://localhost:3000</AppDomain>
@@ -35,7 +36,13 @@
         <DesktopFormFactor>
           <ExtensionPoint xsi:type="PrimaryCommandSurface">
             <CustomTab id="WordMarkdownTab">
-              <Group id="WordMarkdownGroup" label="Markdown">
+              <Group id="WordMarkdownGroup">
+                <Label resid="WordMarkdownGroup.Label" />
+                <Icon>
+                  <bt:Image size="16" resid="Icon.16x16"/>
+                  <bt:Image size="32" resid="Icon.32x32"/>
+                  <bt:Image size="80" resid="Icon.80x80"/>
+                </Icon>
                 <Control id="OpenMd" xsi:type="Button">
                   <Label resid="OpenMd.Label" />
                   <Supertip>
@@ -69,6 +76,7 @@
                   </Icon>
                 </Control>
               </Group>
+              <Label resid="WordMarkdownTab.Label" />
             </CustomTab>
           </ExtensionPoint>
         </DesktopFormFactor>
@@ -79,11 +87,13 @@
         <bt:Url id="Taskpane.Url" DefaultValue="http://localhost:3000/taskpane.html"/>
       </bt:Urls>
       <bt:Images>
-        <bt:Image id="Icon.16x16" DefaultValue="http://localhost:3000/assets/icon.svg"/>
-        <bt:Image id="Icon.32x32" DefaultValue="http://localhost:3000/assets/icon.svg"/>
-        <bt:Image id="Icon.80x80" DefaultValue="http://localhost:3000/assets/icon.svg"/>
+        <bt:Image id="Icon.16x16" DefaultValue="http://localhost:3000/assets/icon-16.png"/>
+        <bt:Image id="Icon.32x32" DefaultValue="http://localhost:3000/assets/icon-32.png"/>
+        <bt:Image id="Icon.80x80" DefaultValue="http://localhost:3000/assets/icon-80.png"/>
       </bt:Images>
       <bt:ShortStrings>
+        <bt:String id="WordMarkdownTab.Label" DefaultValue="Markdown" />
+        <bt:String id="WordMarkdownGroup.Label" DefaultValue="Markdown Tools" />
         <bt:String id="OpenMd.Label" DefaultValue="Import .md" />
         <bt:String id="ExportMd.Label" DefaultValue="Export .md" />
       </bt:ShortStrings>

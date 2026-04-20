@@ -1,10 +1,16 @@
 import http from "node:http";
-import { stat, readFile } from "node:fs/promises";
+import { stat, readFile, rm, appendFile, mkdir } from "node:fs/promises";
 import { createHash } from "node:crypto";
 import path from "node:path";
 
 const PORT = 3000;
 const ROOT = process.cwd();
+const PENDING_MARKDOWN_PATH = path.join(
+  ROOT,
+  ".local",
+  "pending-open.json",
+);
+const TASKPANE_LOG_PATH = path.join(ROOT, ".local", "taskpane.log");
 
 const MIME_TYPES = {
   ".html": "text/html; charset=utf-8",
@@ -28,6 +34,9 @@ const resolvePath = (requestUrl) => {
   if (normalized === "manifest.xml") {
     return path.join(ROOT, "manifest.xml");
   }
+  if (normalized.startsWith("assets/")) {
+    return path.join(ROOT, normalized);
+  }
   if (normalized.startsWith("src/")) {
     return path.join(ROOT, normalized);
   }
@@ -37,9 +46,113 @@ const resolvePath = (requestUrl) => {
 const toEtag = (contents) =>
   `"${createHash("sha1").update(contents).digest("hex")}"`;
 
+const writeJson = (res, statusCode, payload) => {
+  res.writeHead(statusCode, {
+    "Content-Type": "application/json; charset=utf-8",
+    "Cache-Control": "no-cache",
+    "Access-Control-Allow-Origin": "*",
+  });
+  res.end(JSON.stringify(payload));
+};
+
+const readPendingMarkdown = async () => {
+  const contents = await readFile(PENDING_MARKDOWN_PATH, "utf8");
+  return JSON.parse(contents);
+};
+
+const clearPendingMarkdown = async () => {
+  await rm(PENDING_MARKDOWN_PATH, { force: true });
+};
+
+const appendTaskpaneLog = async (entry) => {
+  const timestamp = new Date().toISOString();
+  const line = `[${timestamp}] ${entry}\n`;
+  await mkdir(path.dirname(TASKPANE_LOG_PATH), { recursive: true });
+  await appendFile(TASKPANE_LOG_PATH, line, "utf8");
+};
+
+const readRequestBody = async (req) =>
+  new Promise((resolve, reject) => {
+    const chunks = [];
+
+    req.on("data", (chunk) => {
+      chunks.push(chunk);
+    });
+    req.on("end", () => {
+      resolve(Buffer.concat(chunks).toString("utf8"));
+    });
+    req.on("error", reject);
+  });
+
 const server = http.createServer(async (req, res) => {
   try {
     const url = new URL(req.url || "", `http://localhost:${PORT}`);
+
+    if (url.pathname === "/api/pending-markdown") {
+      if (req.method === "DELETE") {
+        await clearPendingMarkdown();
+        res.writeHead(204, {
+          "Cache-Control": "no-cache",
+          "Access-Control-Allow-Origin": "*",
+        });
+        res.end();
+        return;
+      }
+
+      if (req.method === "GET") {
+        try {
+          const pending = await readPendingMarkdown();
+          writeJson(res, 200, pending);
+          return;
+        } catch (error) {
+          if (error.code === "ENOENT") {
+            res.writeHead(204, {
+              "Cache-Control": "no-cache",
+              "Access-Control-Allow-Origin": "*",
+            });
+            res.end();
+            return;
+          }
+
+          throw error;
+        }
+      }
+
+      res.writeHead(405, {
+        Allow: "GET, DELETE",
+        "Access-Control-Allow-Origin": "*",
+      });
+      res.end("Method not allowed");
+      return;
+    }
+
+    if (url.pathname === "/api/taskpane-log") {
+      if (req.method !== "POST") {
+        res.writeHead(405, {
+          Allow: "POST",
+          "Access-Control-Allow-Origin": "*",
+        });
+        res.end("Method not allowed");
+        return;
+      }
+
+      const rawBody = await readRequestBody(req);
+      const payload = rawBody ? JSON.parse(rawBody) : {};
+      const message =
+        payload && typeof payload.message === "string"
+          ? payload.message.trim()
+          : "";
+
+      if (!message) {
+        writeJson(res, 400, { error: "message is required" });
+        return;
+      }
+
+      await appendTaskpaneLog(message);
+      writeJson(res, 202, { ok: true });
+      return;
+    }
+
     const filePath = resolvePath(url.pathname);
 
     if (!filePath) {

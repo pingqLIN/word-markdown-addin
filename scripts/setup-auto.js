@@ -36,6 +36,11 @@ const serverProbeUrls = [
   "http://127.0.0.1:3000/taskpane.html",
   "http://[::1]:3000/taskpane.html",
 ];
+const serverCompatibilityUrls = [
+  "http://localhost:3000/api/pending-markdown",
+  "http://127.0.0.1:3000/api/pending-markdown",
+  "http://[::1]:3000/api/pending-markdown",
+];
 
 const quoteWindowsArgument = (value) =>
   /[\s"]/u.test(value) ? `"${value.replace(/"/gu, "\"\"")}"` : value;
@@ -85,6 +90,21 @@ const isAnyUrlReady = async (urls) => {
   return false;
 };
 
+const isCompatibleServerReady = async (urls) => {
+  for (const url of urls) {
+    try {
+      const response = await fetch(url, { method: "GET" });
+      if (response.status === 200 || response.status === 204) {
+        return true;
+      }
+    } catch {
+      // Ignore individual probe failures and continue.
+    }
+  }
+
+  return false;
+};
+
 const isPortInUse = (port, host) => new Promise((resolvePort) => {
   const socket = net.createConnection({ port, host });
 
@@ -110,7 +130,7 @@ const isLocalPortInUse = async (port) => {
 
 const waitForUrl = async (urls, attempts = 30, intervalMs = 1000) => {
   for (let attempt = 0; attempt < attempts; attempt += 1) {
-    if (await isAnyUrlReady(urls)) {
+    if (await isAnyUrlReady(urls) && await isCompatibleServerReady(serverCompatibilityUrls)) {
       return;
     }
 
@@ -166,6 +186,10 @@ try {
   let shouldReuseExistingServer = false;
 
   if (normalizedHost === defaultHost && await isAnyUrlReady(serverProbeUrls)) {
+    if (!await isCompatibleServerReady(serverCompatibilityUrls)) {
+      throw new Error("An older dev server is already running on http://localhost:3000. Stop the existing node process and rerun setup so the updated Markdown bridge API is available.");
+    }
+
     console.log("Detected an existing local dev server on http://localhost:3000.");
     console.log("Setup complete. Reusing the running server.");
     shouldReuseExistingServer = true;
