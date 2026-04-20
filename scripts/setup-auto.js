@@ -159,7 +159,7 @@ const startBackgroundProcess = (command, commandArgs, env = process.env) => {
   });
 };
 
-try {
+const main = async () => {
   console.log("Word Markdown Add-in auto setup");
   console.log(`- ADDIN_HOST: ${normalizedHost}`);
   console.log("Running npm install...");
@@ -196,7 +196,7 @@ try {
   }
 
   if (shouldReuseExistingServer) {
-    process.exit(0);
+    return;
   }
 
   console.log("Starting dev server...");
@@ -217,7 +217,11 @@ try {
     }
     throw error;
   }
+};
+
+try {
+  await main();
 } catch (error) {
   console.error(error?.message || error);
-  process.exit(1);
+  process.exitCode = 1;
 }
