@@ -24,10 +24,15 @@ function Get-OpenCommandValue([string]$progId) {
   }
 
   try {
-    return (Get-ItemProperty -Path "HKCU:\Software\Classes\$progId\shell\open\command" -ErrorAction Stop)."(default)"
+    return (Get-Item "HKCU:\Software\Classes\$progId\shell\open\command" -ErrorAction Stop).GetValue("")
   } catch {
     return $null
   }
+}
+
+function Set-DefaultRegistryValue([string]$path, [string]$value) {
+  New-Item -Path $path -Force | Out-Null
+  Set-Item -Path $path -Value $value
 }
 
 function Set-OpenCommandValue([string]$progId, [string]$commandValue) {
@@ -35,21 +40,7 @@ function Set-OpenCommandValue([string]$progId, [string]$commandValue) {
     return
   }
 
-  $regPath = "HKCU\Software\Classes\$progId\shell\open\command"
-  $process = Start-Process -FilePath "reg.exe" -ArgumentList @(
-    "add",
-    $regPath,
-    "/ve",
-    "/t",
-    "REG_SZ",
-    "/d",
-    $commandValue,
-    "/f"
-  ) -NoNewWindow -Wait -PassThru
-
-  if ($process.ExitCode -ne 0) {
-    throw "Failed to set open command for $progId"
-  }
+  Set-DefaultRegistryValue -path "HKCU:\Software\Classes\$progId\shell\open\command" -value $commandValue
 }
 
 if ($Undo) {
@@ -96,36 +87,9 @@ if ($existingWordApplicationCommand) {
 
 $shell = New-Item -Path "HKCU:\Software\Classes\$extension" -Force | Out-Null
 New-Item -Path "HKCU:\Software\Classes\$extension" -Name "OpenWithProgids" -Force | Out-Null
-Set-ItemProperty -Path "HKCU:\Software\Classes\$extension" -Name "(default)" -Value $fileType
-$fileTypeCommandPath = "HKCU\Software\Classes\$fileType\shell\open\command"
-$fileTypeCommandProcess = Start-Process -FilePath "reg.exe" -ArgumentList @(
-  "add",
-  $fileTypeCommandPath,
-  "/ve",
-  "/t",
-  "REG_SZ",
-  "/d",
-  $launcherCommand,
-  "/f"
-) -NoNewWindow -Wait -PassThru
-if ($fileTypeCommandProcess.ExitCode -ne 0) {
-  throw "Failed to set launcher command for $fileType"
-}
-New-Item -Path "HKCU:\Software\Classes\$fileType\DefaultIcon" -Force | Out-Null
-$defaultIconPath = "HKCU\Software\Classes\$fileType\DefaultIcon"
-$defaultIconProcess = Start-Process -FilePath "reg.exe" -ArgumentList @(
-  "add",
-  $defaultIconPath,
-  "/ve",
-  "/t",
-  "REG_SZ",
-  "/d",
-  "$WordPath,0",
-  "/f"
-) -NoNewWindow -Wait -PassThru
-if ($defaultIconProcess.ExitCode -ne 0) {
-  throw "Failed to set icon for $fileType"
-}
+Set-Item -Path "HKCU:\Software\Classes\$extension" -Value $fileType
+Set-DefaultRegistryValue -path "HKCU:\Software\Classes\$fileType\shell\open\command" -value $launcherCommand
+Set-DefaultRegistryValue -path "HKCU:\Software\Classes\$fileType\DefaultIcon" -value "$WordPath,0"
 
 if ($userChoiceProgId) {
   Set-OpenCommandValue -progId $userChoiceProgId -commandValue $launcherCommand
