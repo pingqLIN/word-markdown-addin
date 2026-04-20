@@ -33,8 +33,7 @@
 
 ## 5. 單機版 smoke test
 
-- `npm run setup`
-- `npm run sideload`
+- `npm run single-machine`
 - 從 Word 開啟 taskpane
 - 手動選檔匯入 `.md`
 - 拖放 `.md` 匯入
@@ -44,7 +43,7 @@
 ## 6. 線上版 smoke test
 
 - 設定正式 `MANIFEST_HOST`
-- 執行 `npm run build:store`
+- 執行 `npm run online`
 - 用正式 HTTPS manifest 載入 add-in
 - 測試 Word Desktop
 - 測試 Word Online

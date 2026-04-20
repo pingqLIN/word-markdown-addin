@@ -15,7 +15,9 @@
     "dev-server": "node scripts/dev-server.js",
     "dev": "npm run start",
     "build": "echo \"No build step required for this static manifest sample.\"",
-    "build:store": "npm run render-manifest:store"
+    "build:store": "npm run render-manifest:store",
+    "single-machine": "npm run setup:with-md-association && npm run sideload",
+    "online": "npm install --no-audit --no-fund && npm run build:store"
   },
   "engines": {
     "node": ">=20"
