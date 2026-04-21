@@ -48,9 +48,11 @@ npm run online
 
 ### GitHub Pages
 
-這個 repo 已內建 GitHub Pages workflow。公開後：
+這個 repo 目前採 `gh-pages` branch 發佈，不依賴 GitHub Actions。發佈時：
 
-- push 到 `main` 會自動部署
+- 先設定 GitHub Pages 實際網址為 `MANIFEST_HOST`
+- 執行 `npm run build:online`
+- 把 `dist/site/` 內容發佈到 `gh-pages` branch root
 - Pages 站點會提供：
   - `index.html`
   - `manifest.store.xml`
