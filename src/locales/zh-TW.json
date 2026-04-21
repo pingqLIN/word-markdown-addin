@@ -1,9 +1,19 @@
 {
+  "meta": {
+    "title": "Word × Markdown 助手"
+  },
   "hero": {
-    "eyebrow": "EDITORIAL TOOLPANE",
+    "eyebrow": "文件工具面板",
     "badge": "Word × Markdown",
-    "title": "Word Markdown Companion",
+    "title": "Word × Markdown 助手",
     "copy": "在 Word 內完成匯入、整理與匯出 <code>.md</code>。"
+  },
+  "controls": {
+    "themeSwitcher": "主題切換",
+    "languageSwitcher": "語言切換",
+    "primaryTools": "主要工具",
+    "secondaryTools": "其他工具",
+    "dropzone": "將 .md 檔案拖放到這裡"
   },
   "theme": {
     "kicker": "主題",
@@ -15,20 +25,20 @@
   },
   "tabs": {
     "import": {
-      "kicker": "INPUT",
-      "label": "Import"
+      "kicker": "主要",
+      "label": "匯入"
     },
     "export": {
-      "kicker": "OUTPUT",
-      "label": "Export"
+      "kicker": "主要",
+      "label": "匯出"
     },
     "format": {
       "kicker": "FORMAT",
-      "label": "Format"
+      "label": "格式整理"
     }
   },
   "toolbox": {
-    "kicker": "WORKBENCH",
+    "kicker": "操作區",
     "import": {
       "title": "匯入 Markdown",
       "summary": "把本機 Markdown 插入目前 Word 文件，或接手 launcher 剛交接的內容。"
@@ -44,36 +54,70 @@
   },
   "import": {
     "fileLabel": "選取來源檔案",
-    "primaryAction": "插入 Markdown 到文件",
+    "primaryAction": "匯入 Markdown 到文件",
     "dropzoneTitle": "拖放檔案到這裡",
     "dropzoneBody": "也可以使用上方按鈕選取本機 Markdown 檔。",
     "helper": "支援 <code>.md</code> / <code>.markdown</code>，內容會插入目前游標位置。"
   },
   "export": {
-    "primaryAction": "從目前文件產生 Markdown",
+    "primaryAction": "將目前文件轉成 Markdown",
     "secondaryAction": "下載為 Markdown 檔",
     "previewLabel": "輸出預覽",
     "previewPlaceholder": "匯出後的 Markdown 會出現在這裡。",
     "helper": "若文件為空，預覽與下載內容也會是空白。"
   },
   "format": {
-    "lead": "將文件中的純 Markdown 字符整理成 Word 版式，或接手 launcher 交來的檔案內容。",
-    "primaryAction": "將目前文件格式化為 Markdown",
+    "lead": "把文件中的純 Markdown 標記整理成 Word 版式，或接手 launcher 交來的檔案內容。",
+    "primaryAction": "將 Markdown 文字套用為 Word 版式",
     "helper": "適合剛開啟的純文字 Markdown 文件，或需要重新套用本專案轉換規則時使用。"
   },
   "reference": {
-    "kicker": "REFERENCE",
-    "title": "Format 字符轉換參考",
-    "summary": "這裡整理本專案在 Word 與 Markdown 之間較常見的字符與版式對應，方便編修時對照。",
+    "kicker": "參考",
+    "title": "格式轉換參考",
+    "summary": "這裡整理本專案在 Word 與 Markdown 之間較常見的標記與版式對應，並參考常見 Markdown 寫法與 GFM 延伸語法。",
+    "demo": {
+      "kicker": "範例",
+      "title": "實際顯示效果",
+      "summary": "以下範例用常見 Markdown 寫法對照在 Word 內較接近的呈現效果，方便快速判斷格式是否符合預期。",
+      "heading": {
+        "label": "標題",
+        "render": "文件主標題",
+        "note": "在 Word 中通常會對應到標題樣式。"
+      },
+      "quote": {
+        "label": "引用",
+        "render": "這是一段重點引用"
+      },
+      "emphasis": {
+        "label": "強調",
+        "bold": "粗體文字",
+        "italic": "斜體文字",
+        "code": "inline code"
+      },
+      "list": {
+        "label": "清單",
+        "item1": "第一項",
+        "item2": "第二項",
+        "item3": "第三項"
+      },
+      "table": {
+        "label": "表格",
+        "col1": "欄位",
+        "col2": "值",
+        "row1col1": "狀態",
+        "row1col2": "完成"
+      }
+    },
     "cards": {
       "structure": {
         "title": "段落與標題",
         "item1": "<code>#</code> 到 <code>######</code> 對應 Word Heading 1 到 Heading 6",
         "item2": "一般段落會保留為標準內文段落",
-        "item3": "空行會切成新的 Word 段落"
+        "item3": "空行會切成新的 Word 段落",
+        "item4": "<code>---</code> 常見於表示水平分隔線"
       },
       "emphasis": {
-        "title": "強調字符",
+        "title": "強調標記",
         "item1": "<code>**bold**</code> 轉成粗體",
         "item2": "<code>_italic_</code> 轉成斜體",
         "item3": "<code>`inline code`</code> 會保留成等寬字呈現"
@@ -82,7 +126,14 @@
         "title": "清單與區塊",
         "item1": "<code>- item</code> 轉成項目符號清單",
         "item2": "<code>1. item</code> 轉成編號清單",
-        "item3": "<code>```code```</code> 保留為程式碼區塊語意"
+        "item3": "<code>```code```</code> 保留為程式碼區塊語意",
+        "item4": "<code>&gt; quote</code> 可用來表示引用區塊"
+      },
+      "tables": {
+        "title": "表格與延伸",
+        "item1": "<code>| head | cell |</code> 這類 pipe table 屬於常見 GFM 延伸",
+        "item2": "本專案使用的 marked 解析器支援常見表格語法",
+        "item3": "匯出時表格仍會依 Turndown 與 Word 結構回寫"
       },
       "links": {
         "title": "連結與匯出",

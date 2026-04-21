@@ -1,9 +1,19 @@
 {
+  "meta": {
+    "title": "Word Markdown Companion"
+  },
   "hero": {
     "eyebrow": "EDITORIAL TOOLPANE",
     "badge": "Word × Markdown",
     "title": "Word Markdown Companion",
     "copy": "Handle <code>.md</code> import, formatting, and export directly inside Word."
+  },
+  "controls": {
+    "themeSwitcher": "Theme switcher",
+    "languageSwitcher": "Language switcher",
+    "primaryTools": "Primary tools",
+    "secondaryTools": "Secondary tools",
+    "dropzone": "Drop a .md file here"
   },
   "theme": {
     "kicker": "THEME",
@@ -64,13 +74,47 @@
   "reference": {
     "kicker": "REFERENCE",
     "title": "Format conversion reference",
-    "summary": "A quick reference for the common Markdown and Word mappings used by this project.",
+    "summary": "A quick reference for the common Markdown and Word mappings used by this project, including familiar Markdown patterns and GFM-style extensions.",
+    "demo": {
+      "kicker": "DEMO",
+      "title": "Rendered examples",
+      "summary": "These side-by-side examples show familiar Markdown syntax and the closest Word-style result you should expect inside this task pane workflow.",
+      "heading": {
+        "label": "Heading",
+        "render": "Document heading",
+        "note": "This usually maps to a Word heading style."
+      },
+      "quote": {
+        "label": "Quote",
+        "render": "This is a highlighted quotation"
+      },
+      "emphasis": {
+        "label": "Emphasis",
+        "bold": "Bold text",
+        "italic": "Italic text",
+        "code": "inline code"
+      },
+      "list": {
+        "label": "List",
+        "item1": "First item",
+        "item2": "Second item",
+        "item3": "Third item"
+      },
+      "table": {
+        "label": "Table",
+        "col1": "Field",
+        "col2": "Value",
+        "row1col1": "Status",
+        "row1col2": "Done"
+      }
+    },
     "cards": {
       "structure": {
         "title": "Structure and headings",
         "item1": "<code>#</code> through <code>######</code> map to Word Heading 1 through Heading 6",
         "item2": "Regular paragraphs stay as standard body paragraphs",
-        "item3": "Blank lines split into new Word paragraphs"
+        "item3": "Blank lines split into new Word paragraphs",
+        "item4": "<code>---</code> is commonly used for a horizontal rule"
       },
       "emphasis": {
         "title": "Emphasis markers",
@@ -82,7 +126,14 @@
         "title": "Lists and blocks",
         "item1": "<code>- item</code> becomes a bulleted list",
         "item2": "<code>1. item</code> becomes a numbered list",
-        "item3": "<code>```code```</code> keeps code-block semantics"
+        "item3": "<code>```code```</code> keeps code-block semantics",
+        "item4": "<code>&gt; quote</code> expresses a blockquote"
+      },
+      "tables": {
+        "title": "Tables and extensions",
+        "item1": "<code>| head | cell |</code> style pipe tables are a common GFM extension",
+        "item2": "The marked parser used by this project supports common table syntax",
+        "item3": "On export, tables are still written back through Turndown and Word structure"
       },
       "links": {
         "title": "Links and export",

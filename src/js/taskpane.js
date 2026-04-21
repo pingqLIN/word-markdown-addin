@@ -149,6 +149,8 @@ const loadLocaleMessages = async (locale) => {
 };
 
 const applyTranslations = () => {
+  document.title = getTranslation("meta.title", document.title);
+
   document.querySelectorAll("[data-i18n]").forEach((element) => {
     const key = element.dataset.i18n;
     if (!key) {
@@ -176,6 +178,18 @@ const applyTranslations = () => {
     element.setAttribute(
       "placeholder",
       getTranslation(key, element.getAttribute("placeholder") || ""),
+    );
+  });
+
+  document.querySelectorAll("[data-i18n-aria-label]").forEach((element) => {
+    const key = element.dataset.i18nAriaLabel;
+    if (!key) {
+      return;
+    }
+
+    element.setAttribute(
+      "aria-label",
+      getTranslation(key, element.getAttribute("aria-label") || ""),
     );
   });
 

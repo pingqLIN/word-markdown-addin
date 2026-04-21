@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Word Markdown Companion</title>
+    <title>Word × Markdown 助手</title>
     <link rel="stylesheet" href="styles/taskpane.css" />
     <script src="https://appsforoffice.microsoft.com/lib/1/hosted/office.js" defer></script>
     <script src="lib/marked.min.js" defer></script>
@@ -15,11 +15,11 @@
       <section class="hero">
         <div class="hero-topline">
           <div class="hero-meta">
-            <p class="eyebrow" data-i18n="hero.eyebrow">EDITORIAL TOOLPANE</p>
+            <p class="eyebrow" data-i18n="hero.eyebrow">文件工具面板</p>
             <span class="hero-badge" data-i18n="hero.badge">Word × Markdown</span>
           </div>
           <div class="hero-controls hero-controls-top">
-            <div class="theme-switch" role="group" aria-label="Theme switcher">
+            <div class="theme-switch" role="group" aria-label="主題切換" data-i18n-aria-label="controls.themeSwitcher">
               <button
                 type="button"
                 class="theme-dot-button is-active"
@@ -31,35 +31,35 @@
                 <span class="theme-dot theme-dot-dark" aria-hidden="true"></span>
               </button>
             </div>
-            <div class="pill-switch" role="group" aria-label="Language switcher">
+            <div class="pill-switch" role="group" aria-label="語言切換" data-i18n-aria-label="controls.languageSwitcher">
               <button type="button" class="switch-button is-active" data-locale-switch="zh-TW">繁中</button>
               <button type="button" class="switch-button" data-locale-switch="en-US">EN</button>
             </div>
           </div>
         </div>
         <div class="hero-heading">
-          <h1 data-i18n="hero.title">Word Markdown Companion</h1>
+          <h1 data-i18n="hero.title">Word × Markdown 助手</h1>
         </div>
-        <nav class="hero-links" aria-label="跳到工具區">
+        <nav class="hero-links" aria-label="主要工具" data-i18n-aria-label="controls.primaryTools">
           <a class="hero-link is-active" href="#workspace-toolbox" data-panel-link="import">
-            <span class="hero-link-kicker" data-i18n="tabs.import.kicker">INPUT</span>
-            <strong data-i18n="tabs.import.label">Import</strong>
+            <span class="hero-link-kicker" data-i18n="tabs.import.kicker">主要</span>
+            <strong data-i18n="tabs.import.label">匯入</strong>
           </a>
           <a class="hero-link" href="#workspace-toolbox" data-panel-link="export">
-            <span class="hero-link-kicker" data-i18n="tabs.export.kicker">OUTPUT</span>
-            <strong data-i18n="tabs.export.label">Export</strong>
+            <span class="hero-link-kicker" data-i18n="tabs.export.kicker">主要</span>
+            <strong data-i18n="tabs.export.label">匯出</strong>
           </a>
         </nav>
-        <div class="hero-secondary-actions" aria-label="其他工具">
+        <div class="hero-secondary-actions" aria-label="其他工具" data-i18n-aria-label="controls.secondaryTools">
           <a class="hero-secondary-link" href="#workspace-toolbox" data-panel-link="format">
-            <strong data-i18n="tabs.format.label">Format</strong>
+            <strong data-i18n="tabs.format.label">格式整理</strong>
           </a>
         </div>
       </section>
 
       <section class="panel toolbox" id="workspace-toolbox">
         <div class="panel-head">
-          <p class="panel-kicker" data-i18n="toolbox.kicker">WORKBENCH</p>
+          <p class="panel-kicker" data-i18n="toolbox.kicker">操作區</p>
           <h2 id="toolbox-title" data-i18n="toolbox.import.title">匯入 Markdown</h2>
           <p id="toolbox-summary" class="panel-summary" data-i18n-html="toolbox.import.summary">把本機 Markdown 插入目前 Word 文件，或接手 launcher 剛交接的內容。</p>
         </div>
@@ -73,7 +73,7 @@
               <button id="import-btn" type="button" class="primary-action" data-i18n="import.primaryAction">插入 Markdown 到文件</button>
             </div>
 
-            <div id="drop-zone" class="drop-zone" aria-label="拖放 .md 檔案到此處">
+            <div id="drop-zone" class="drop-zone" aria-label="將 .md 檔案拖放到這裡" data-i18n-aria-label="controls.dropzone">
               <span class="drop-zone-mark">.md</span>
               <strong data-i18n="import.dropzoneTitle">拖放檔案到這裡</strong>
               <span data-i18n="import.dropzoneBody">也可以使用上方按鈕選取本機 Markdown 檔。</span>
@@ -110,9 +110,84 @@
 
       <section class="panel panel-reference">
         <div class="panel-head">
-          <p class="panel-kicker" data-i18n="reference.kicker">REFERENCE</p>
-          <h2 data-i18n="reference.title">Format 字符轉換參考</h2>
+          <p class="panel-kicker" data-i18n="reference.kicker">參考</p>
+          <h2 data-i18n="reference.title">格式轉換參考</h2>
           <p class="panel-summary" data-i18n="reference.summary">這裡整理本專案在 Word 與 Markdown 之間較常見的字符與版式對應，方便編修時對照。</p>
+        </div>
+
+        <div class="reference-demo">
+          <div class="reference-demo-head">
+            <p class="panel-kicker" data-i18n="reference.demo.kicker">範例</p>
+            <h3 data-i18n="reference.demo.title">實際顯示效果</h3>
+            <p class="panel-summary" data-i18n="reference.demo.summary">以下範例用常見 Markdown 寫法對照在 Word 內較接近的呈現效果，方便快速判斷格式是否符合預期。</p>
+          </div>
+          <div class="reference-demo-grid">
+            <article class="reference-demo-card">
+              <span class="reference-demo-label" data-i18n="reference.demo.heading.label">標題</span>
+              <code class="reference-demo-code"># 文件主標題</code>
+              <div class="reference-demo-render">
+                <h4 data-i18n="reference.demo.heading.render">文件主標題</h4>
+                <p data-i18n="reference.demo.heading.note">在 Word 中通常會對應到標題樣式。</p>
+              </div>
+            </article>
+
+            <article class="reference-demo-card">
+              <span class="reference-demo-label" data-i18n="reference.demo.quote.label">引用</span>
+              <code class="reference-demo-code">&gt; 這是一段重點引用</code>
+              <div class="reference-demo-render">
+                <blockquote data-i18n="reference.demo.quote.render">這是一段重點引用</blockquote>
+              </div>
+            </article>
+
+            <article class="reference-demo-card">
+              <span class="reference-demo-label" data-i18n="reference.demo.emphasis.label">強調</span>
+              <code class="reference-demo-code">**bold**&#10;_italic_&#10;`inline code`</code>
+              <div class="reference-demo-render reference-demo-emphasis">
+                <p>
+                  <strong data-i18n="reference.demo.emphasis.bold">粗體文字</strong>
+                </p>
+                <p>
+                  <em data-i18n="reference.demo.emphasis.italic">斜體文字</em>
+                </p>
+                <p>
+                  <code data-i18n="reference.demo.emphasis.code">inline code</code>
+                </p>
+              </div>
+            </article>
+
+            <article class="reference-demo-card">
+              <span class="reference-demo-label" data-i18n="reference.demo.list.label">清單</span>
+              <code class="reference-demo-code">- 第一項&#10;- 第二項&#10;- 第三項</code>
+              <div class="reference-demo-render">
+                <ul>
+                  <li data-i18n="reference.demo.list.item1">第一項</li>
+                  <li data-i18n="reference.demo.list.item2">第二項</li>
+                  <li data-i18n="reference.demo.list.item3">第三項</li>
+                </ul>
+              </div>
+            </article>
+
+            <article class="reference-demo-card">
+              <span class="reference-demo-label" data-i18n="reference.demo.table.label">表格</span>
+              <code class="reference-demo-code">| 欄位 | 值 |&#10;| --- | --- |&#10;| 狀態 | 完成 |</code>
+              <div class="reference-demo-render">
+                <table class="reference-demo-table">
+                  <thead>
+                    <tr>
+                      <th data-i18n="reference.demo.table.col1">欄位</th>
+                      <th data-i18n="reference.demo.table.col2">值</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td data-i18n="reference.demo.table.row1col1">狀態</td>
+                      <td data-i18n="reference.demo.table.row1col2">完成</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </article>
+          </div>
         </div>
 
         <div class="reference-grid">
@@ -122,6 +197,7 @@
               <li data-i18n-html="reference.cards.structure.item1"><code>#</code> 到 <code>######</code> 對應 Word Heading 1 到 Heading 6</li>
               <li data-i18n="reference.cards.structure.item2">一般段落會保留為標準內文段落</li>
               <li data-i18n="reference.cards.structure.item3">空行會切成新的 Word 段落</li>
+              <li data-i18n-html="reference.cards.structure.item4"><code>---</code> 常見於表示水平分隔線</li>
             </ul>
           </article>
 
@@ -140,6 +216,16 @@
               <li data-i18n-html="reference.cards.blocks.item1"><code>- item</code> 轉成項目符號清單</li>
               <li data-i18n-html="reference.cards.blocks.item2"><code>1. item</code> 轉成編號清單</li>
               <li data-i18n-html="reference.cards.blocks.item3"><code>```code```</code> 保留為程式碼區塊語意</li>
+              <li data-i18n-html="reference.cards.blocks.item4"><code>&gt; quote</code> 可用來表示引用區塊</li>
+            </ul>
+          </article>
+
+          <article class="reference-card">
+            <h3 data-i18n="reference.cards.tables.title">表格與延伸</h3>
+            <ul class="reference-list">
+              <li data-i18n-html="reference.cards.tables.item1"><code>| head | cell |</code> 這類 pipe table 屬於常見 GFM 延伸</li>
+              <li data-i18n="reference.cards.tables.item2">本專案使用的 marked 解析器支援常見表格語法</li>
+              <li data-i18n="reference.cards.tables.item3">匯出時表格仍會依 Turndown 與 Word 結構回寫</li>
             </ul>
           </article>
 

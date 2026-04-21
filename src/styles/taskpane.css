@@ -496,6 +496,116 @@ body::before {
   gap: 12px;
 }
 
+.reference-demo {
+  display: grid;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+
+.reference-demo-head {
+  display: grid;
+  gap: 4px;
+}
+
+.reference-demo-head h3 {
+  margin: 0;
+  font-size: 1rem;
+  color: var(--ink);
+}
+
+.reference-demo-grid {
+  display: grid;
+  gap: 10px;
+}
+
+.reference-demo-card {
+  display: grid;
+  gap: 10px;
+  padding: 14px;
+  border: 1px solid var(--switch-border);
+  border-radius: 12px;
+  background: var(--card-surface);
+}
+
+.reference-demo-label {
+  color: var(--field-label);
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.reference-demo-code {
+  display: block;
+  white-space: pre-wrap;
+  line-height: 1.5;
+}
+
+.reference-demo-render {
+  display: grid;
+  gap: 8px;
+  padding: 12px;
+  border: 1px solid var(--accent-border);
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.68);
+  color: var(--ink);
+}
+
+.reference-demo-render h4,
+.reference-demo-render p,
+.reference-demo-render blockquote,
+.reference-demo-render ul,
+.reference-demo-render table {
+  margin: 0;
+}
+
+.reference-demo-render h4 {
+  font-size: 1rem;
+  font-family: var(--font-display);
+}
+
+.reference-demo-render blockquote {
+  padding-left: 10px;
+  border-left: 3px solid var(--accent);
+  color: var(--muted);
+}
+
+.reference-demo-render ul {
+  padding-left: 18px;
+}
+
+.reference-demo-emphasis {
+  display: grid;
+  gap: 7px;
+}
+
+.reference-demo-emphasis code {
+  display: inline-block;
+  padding: 3px 7px;
+  border-radius: 4px;
+  background: color-mix(in srgb, var(--accent-surface) 62%, white 38%);
+  color: var(--accent-deep);
+  font-size: 0.84rem;
+}
+
+.reference-demo-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.82rem;
+}
+
+.reference-demo-table th,
+.reference-demo-table td {
+  padding: 6px 8px;
+  border: 1px solid var(--switch-border);
+  text-align: left;
+}
+
+.reference-demo-table th {
+  background: var(--accent-surface);
+  color: var(--accent-deep);
+}
+
 .reference-card {
   padding: 14px;
   border: 1px solid var(--switch-border);
@@ -740,6 +850,8 @@ html[data-theme="dark"] .hero-link strong,
 html[data-theme="microsoft"] .hero-link strong,
 html[data-theme="dark"] .reference-card h3,
 html[data-theme="microsoft"] .reference-card h3,
+html[data-theme="dark"] .reference-demo-head h3,
+html[data-theme="microsoft"] .reference-demo-head h3,
 html[data-theme="dark"] .drop-zone strong,
 html[data-theme="microsoft"] .drop-zone strong {
   color: #f4f8fc;
@@ -751,11 +863,29 @@ html[data-theme="dark"] .helper,
 html[data-theme="microsoft"] .helper,
 html[data-theme="dark"] .reference-list,
 html[data-theme="microsoft"] .reference-list,
+html[data-theme="dark"] .reference-demo-render,
+html[data-theme="microsoft"] .reference-demo-render,
 html[data-theme="dark"] .format-lead p,
 html[data-theme="microsoft"] .format-lead p,
 html[data-theme="dark"] .drop-zone,
 html[data-theme="microsoft"] .drop-zone {
   color: var(--muted);
+}
+
+html[data-theme="dark"] .reference-demo-render,
+html[data-theme="microsoft"] .reference-demo-render {
+  background: rgba(18, 24, 34, 0.72);
+}
+
+html[data-theme="dark"] .reference-demo-emphasis code,
+html[data-theme="microsoft"] .reference-demo-emphasis code {
+  background: color-mix(in srgb, var(--panel) 76%, var(--accent) 24%);
+  color: var(--text-strong);
+}
+
+html[data-theme="dark"] .reference-demo-table th,
+html[data-theme="microsoft"] .reference-demo-table th {
+  color: #eef6ff;
 }
 
 .helper.visible {
