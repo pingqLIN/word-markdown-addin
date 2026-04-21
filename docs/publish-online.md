@@ -44,10 +44,21 @@ npm run online
 1. 安裝 npm 相依
 2. 產生正式 HTTPS 版 manifest
 3. 輸出到 `dist/manifest.store.xml`
+4. 建立可部署到靜態主機的 `dist/site/`
 
 ## 輸出檔案
 
 - `dist/manifest.store.xml`
+- `dist/site/taskpane.html`
+- `dist/site/js/*`
+- `dist/site/styles/*`
+- `dist/site/lib/*`
+- `dist/site/locales/*`
+- `dist/site/assets/*`
+
+建議搭配測試樣本：
+
+- [samples/official-smoke-sample.md](Q:\Projects\word-markdown-addin\samples\official-smoke-sample.md)
 
 若要覆寫 metadata，也可以先設定：
 
@@ -68,8 +79,21 @@ $env:ADDIN_DESCRIPTION = "Import and export Markdown files in Microsoft Word."
    - `/styles/taskpane.css`
    - `/lib/marked.min.js`
    - `/lib/turndown.min.js`
+   - `/locales/zh-TW.json`
+   - `/locales/en-US.json`
    - `/assets/icon-16.png`
    - `/assets/icon-32.png`
    - `/assets/icon-80.png`
 4. 不要把 Windows shell 關聯描述成線上版功能。
 5. 用正式 host 重新產生 manifest 後，再做 Word Desktop 與 Word Online smoke test。
+
+## 部署建議
+
+1. 先把 `dist/site/` 內容部署到你的正式 HTTPS host 根目錄。
+2. 再使用 `dist/manifest.store.xml` 做 Word Desktop / Word Online 載入與後續上架或內部分發。
+3. 若主機不是部署在根目錄，請先確保對外路徑仍能對應到 manifest 內的 `/taskpane.html`、`/js/*`、`/styles/*`、`/lib/*`、`/locales/*`、`/assets/*`。
+
+更完整的實機驗證步驟請看：
+
+- [docs/online-smoke-test.md](Q:\Projects\word-markdown-addin\docs\online-smoke-test.md)
+- [docs/github-pages.md](Q:\Projects\word-markdown-addin\docs\github-pages.md)

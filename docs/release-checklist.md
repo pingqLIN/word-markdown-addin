@@ -20,12 +20,18 @@
 
 - `manifest.xml` 用於本機 sideload
 - `dist/manifest.store.xml` 用於線上版或上架流程
+- `dist/site/` 用於正式 HTTPS host 的靜態網站部署
 - 正式版 manifest 必須全部指向 HTTPS
 - icon、taskpane、js、css、lib 路徑都可由正式 host 提供
+- 若走 GitHub Pages，確認 `dist/site/` 內包含 `index.html`、`.nojekyll`、`manifest.store.xml`
 
 ## 4. 核心驗證
 
+- `npm test`
+- `npm run build:site`
+- 檢查 `.github/workflows/deploy-pages.yml`
 - `node --check scripts/render-manifest.js`
+- `node --check scripts/build-static-site.js`
 - `node --check scripts/dev-server.js`
 - `node --check scripts/setup-auto.js`
 - `node --check scripts/sideload.js`
@@ -34,6 +40,7 @@
 ## 5. 單機版 smoke test
 
 - `npm run single-machine`
+- 參考 `samples/official-smoke-sample.md`
 - 從 Word 開啟 taskpane
 - 手動選檔匯入 `.md`
 - 拖放 `.md` 匯入
@@ -44,6 +51,9 @@
 
 - 設定正式 `MANIFEST_HOST`
 - 執行 `npm run online`
+- 部署 `dist/site/` 到正式 HTTPS host
+- 參考 `docs/online-smoke-test.md`
+- 使用 `samples/official-smoke-sample.md`
 - 用正式 HTTPS manifest 載入 add-in
 - 測試 Word Desktop
 - 測試 Word Online

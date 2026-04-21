@@ -7,6 +7,7 @@
   "scripts": {
     "render-manifest": "node scripts/render-manifest.js",
     "render-manifest:store": "node scripts/render-manifest.js --output dist/manifest.store.xml --require-https",
+    "build:site": "node scripts/build-static-site.js",
     "start": "npm run render-manifest && npm run dev-server",
     "start:local": "node scripts/start-local.js",
     "setup": "node scripts/setup-auto.js",
@@ -16,8 +17,10 @@
     "dev": "npm run start",
     "build": "echo \"No build step required for this static manifest sample.\"",
     "build:store": "npm run render-manifest:store",
+    "build:online": "npm run build:store && npm run build:site",
+    "test": "node --test",
     "single-machine": "npm run setup:with-md-association && npm run sideload",
-    "online": "npm install --no-audit --no-fund && npm run build:store"
+    "online": "npm install --no-audit --no-fund && npm run build:online"
   },
   "engines": {
     "node": ">=20"
