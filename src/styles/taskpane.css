@@ -162,8 +162,8 @@ body::before {
 .workspace {
   position: relative;
   display: grid;
-  gap: 18px;
-  padding: 18px 16px 22px;
+  gap: 14px;
+  padding: 14px 14px 18px;
 }
 
 .hero,
@@ -177,7 +177,7 @@ body::before {
 }
 
 .hero {
-  padding: 12px 14px;
+  padding: 10px 12px 12px;
   border-radius: var(--radius-xl);
   background:
     var(--hero-surface),
@@ -200,22 +200,22 @@ body::before {
   display: flex;
   align-items: start;
   justify-content: space-between;
-  gap: 10px;
-  margin-bottom: 8px;
+  gap: 8px;
+  margin-bottom: 6px;
 }
 
 .hero-meta {
   display: grid;
-  gap: 4px;
+  gap: 2px;
   flex: 1 1 auto;
 }
 
 .eyebrow,
 .panel-kicker {
-  margin: 0 0 8px;
+  margin: 0 0 4px;
   letter-spacing: 0.18em;
   text-transform: uppercase;
-  font-size: 0.68rem;
+  font-size: 0.64rem;
   font-weight: 700;
   color: var(--accent);
 }
@@ -234,18 +234,18 @@ body::before {
 
 .hero h1 {
   max-width: none;
-  line-height: 0.92;
-  font-size: clamp(1.38rem, 3vw, 1.78rem);
+  line-height: 0.9;
+  font-size: clamp(1.16rem, 2.6vw, 1.54rem);
 }
 
 .hero-badge {
   flex-shrink: 0;
-  padding: 5px 9px;
+  padding: 4px 8px;
   border: 1px solid var(--accent-border);
   border-radius: 10px;
   background: var(--accent-surface);
   color: var(--accent-deep);
-  font-size: 0.67rem;
+  font-size: 0.63rem;
   font-weight: 700;
   letter-spacing: 0.08em;
 }
@@ -255,7 +255,7 @@ body::before {
   flex-wrap: wrap;
   align-items: center;
   justify-content: end;
-  gap: 8px;
+  gap: 6px;
 }
 
 .hero-controls-top {
@@ -267,7 +267,7 @@ body::before {
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  padding: 4px;
+  padding: 3px;
   border: 1px solid var(--switch-border);
   border-radius: 10px;
   background: var(--switch-surface);
@@ -276,16 +276,16 @@ body::before {
 .theme-switch {
   display: inline-flex;
   align-items: center;
-  gap: 8px;
-  padding: 4px 2px;
+  gap: 6px;
+  padding: 2px 0;
 }
 
 .theme-dot-button {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 28px;
-  height: 28px;
+  width: 24px;
+  height: 24px;
   padding: 0;
   border: 1px solid transparent;
   border-radius: 999px;
@@ -306,8 +306,8 @@ body::before {
 }
 
 .theme-dot {
-  width: 14px;
-  height: 14px;
+  width: 12px;
+  height: 12px;
   border-radius: 999px;
   border: 1px solid rgba(255, 255, 255, 0.28);
   box-shadow:
@@ -328,12 +328,12 @@ body::before {
 }
 
 .switch-button {
-  padding: 6px 10px;
+  padding: 5px 9px;
   border: 0;
   border-radius: 8px;
   background: transparent;
   color: var(--switch-ink);
-  font-size: 0.72rem;
+  font-size: 0.68rem;
   font-weight: 800;
   letter-spacing: 0.08em;
   box-shadow: none;
@@ -354,16 +354,18 @@ body::before {
 .hero-links {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 10px;
-  margin-top: 12px;
+  gap: 8px;
+  margin-top: 10px;
 }
 
 .hero-link {
-  display: grid;
-  gap: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   min-width: 0;
-  padding: 10px 11px 11px;
-  border-radius: 12px;
+  min-height: 52px;
+  padding: 8px 10px;
+  border-radius: 10px;
   border: 1px solid var(--switch-border);
   background: var(--link-surface);
   color: var(--switch-ink);
@@ -385,9 +387,13 @@ body::before {
 }
 
 .hero-link strong {
-  font-size: 1rem;
+  font-size: 0.94rem;
   font-weight: 800;
   letter-spacing: -0.02em;
+}
+
+.hero-link-kicker {
+  display: none;
 }
 
 .hero-link:hover,
@@ -740,8 +746,8 @@ code {
 
 @media (max-width: 480px) {
   .workspace {
-    gap: 16px;
-    padding: 14px 12px 18px;
+    gap: 12px;
+    padding: 12px 10px 16px;
   }
 
   .hero,
@@ -759,22 +765,22 @@ code {
     display: inline-flex;
   }
 
-  .hero-topline {
-    grid-template-columns: 1fr;
-    display: grid;
-  }
-
-  .hero-controls {
-    align-items: flex-start;
-    justify-content: flex-start;
-  }
-
   .hero-controls {
     gap: 6px;
+    justify-content: flex-end;
   }
 
   .hero-links {
-    grid-template-columns: 1fr;
-    gap: 8px;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 6px;
+  }
+
+  .hero-link {
+    min-height: 44px;
+    padding: 7px 8px;
+  }
+
+  .hero-link strong {
+    font-size: 0.86rem;
   }
 }
