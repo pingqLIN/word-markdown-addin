@@ -1,6 +1,7 @@
 import { spawn } from "node:child_process";
 import { resolve } from "node:path";
 import { setTimeout as delay } from "node:timers/promises";
+import { requestStatus } from "./http-probe.js";
 import {
   buildProbeUrls,
   DEFAULT_LOCAL_HOST,
@@ -73,12 +74,8 @@ const runCommand = (command, commandArgs, env = process.env) => new Promise((res
 });
 
 const isUrlReady = async (url) => {
-  try {
-    const response = await fetch(url, { method: "GET" });
-    return response.ok;
-  } catch {
-    return false;
-  }
+  const response = await requestStatus(url);
+  return response.ok;
 };
 
 const isAnyUrlReady = async (urls) => {
@@ -93,13 +90,9 @@ const isAnyUrlReady = async (urls) => {
 
 const isCompatibleServerReady = async (urls) => {
   for (const url of urls) {
-    try {
-      const response = await fetch(url, { method: "GET" });
-      if (response.status === 200 || response.status === 204) {
-        return true;
-      }
-    } catch {
-      // Ignore individual probe failures and continue.
+    const response = await requestStatus(url);
+    if (response.status === 200 || response.status === 204) {
+      return true;
     }
   }
 

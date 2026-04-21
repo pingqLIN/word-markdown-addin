@@ -7,9 +7,27 @@ const downloadButton = document.getElementById("download-btn");
 const dropZone = document.getElementById("drop-zone");
 const mdAutoImportButton = document.getElementById("md-auto-import-btn");
 const mdAutoImportHelper = document.getElementById("md-auto-import-helper");
+const toolboxTitle = document.getElementById("toolbox-title");
+const toolboxSummary = document.getElementById("toolbox-summary");
+const panelLinks = Array.from(document.querySelectorAll("[data-panel-link]"));
+const toolViews = Array.from(document.querySelectorAll("[data-tool-view]"));
 const pendingMarkdownState = {
   fileName: "",
   markdown: "",
+};
+const toolViewMeta = {
+  import: {
+    title: "匯入 Markdown",
+    summary: "把本機 Markdown 插入目前 Word 文件，或接手 launcher 剛交接的內容。",
+  },
+  export: {
+    title: "匯出 Markdown",
+    summary: "從目前文件抽出 Markdown，先預覽，再決定是否下載成檔案。",
+  },
+  format: {
+    title: "格式整理",
+    summary: "把純文字 Markdown 重新套用成 Word 版式，並處理待匯入的 launcher 內容。",
+  },
 };
 
 const logTaskpaneEvent = async (message, extra = null) => {
@@ -81,6 +99,30 @@ const ensureOffice = () => {
 
 const setStatus = (message) => {
   statusElement.textContent = message || "";
+};
+
+const activateToolView = (viewName) => {
+  const targetViewName = toolViewMeta[viewName] ? viewName : "import";
+
+  panelLinks.forEach((link) => {
+    const isActive = link.dataset.panelLink === targetViewName;
+    link.classList.toggle("is-active", isActive);
+    link.setAttribute("aria-current", isActive ? "page" : "false");
+  });
+
+  toolViews.forEach((view) => {
+    const isActive = view.dataset.toolView === targetViewName;
+    view.hidden = !isActive;
+    view.classList.toggle("is-active", isActive);
+  });
+
+  if (toolboxTitle) {
+    toolboxTitle.textContent = toolViewMeta[targetViewName].title;
+  }
+
+  if (toolboxSummary) {
+    toolboxSummary.textContent = toolViewMeta[targetViewName].summary;
+  }
 };
 
 const setErrorStatus = (error) => {
@@ -395,6 +437,20 @@ Office.onReady(() => {
   void logTaskpaneEvent("Office.onReady:ready");
 
   const mdDetected = detectMarkdownDocument();
+  activateToolView(mdDetected ? "format" : "import");
+
+  panelLinks.forEach((link) => {
+    link.addEventListener("click", (event) => {
+      event.preventDefault();
+      const targetView = link.dataset.panelLink || "import";
+      activateToolView(targetView);
+      document.getElementById("workspace-toolbox")?.scrollIntoView({
+        behavior: "smooth",
+        block: "start",
+      });
+    });
+  });
+
   importButton.addEventListener("click", () => {
     mdFileInput.click();
   });

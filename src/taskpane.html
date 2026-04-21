@@ -13,63 +13,122 @@
   <body>
     <main class="workspace">
       <section class="hero">
-        <p class="eyebrow">EDITORIAL TOOLPANE</p>
-        <div class="hero-heading">
-          <h1>Word Markdown Companion</h1>
+        <div class="hero-topline">
+          <p class="eyebrow">EDITORIAL TOOLPANE</p>
           <span class="hero-badge">Word × Markdown</span>
         </div>
-        <p class="hero-copy">
-          讓文件在 Word 與 <code>.md</code> 之間保持流動。匯入、整理、匯出，都留在同一個工作檯面上。
-        </p>
-        <div class="hero-notes" aria-hidden="true">
-          <span>Import</span>
-          <span>Format</span>
-          <span>Export</span>
+        <div class="hero-heading">
+          <h1>Word Markdown Companion</h1>
+          <p class="hero-copy">
+            在 Word 內完成匯入、整理與匯出 <code>.md</code>。
+          </p>
+        </div>
+        <nav class="hero-links" aria-label="跳到工具區">
+          <a class="hero-link is-active" href="#workspace-toolbox" data-panel-link="import">Import</a>
+          <a class="hero-link" href="#workspace-toolbox" data-panel-link="export">Export</a>
+          <a class="hero-link" href="#workspace-toolbox" data-panel-link="format">Format</a>
+        </nav>
+      </section>
+
+      <section class="panel toolbox" id="workspace-toolbox">
+        <div class="panel-head">
+          <p class="panel-kicker">WORKBENCH</p>
+          <h2 id="toolbox-title">匯入 Markdown</h2>
+          <p id="toolbox-summary" class="panel-summary">把本機 Markdown 插入目前 Word 文件，或接手 launcher 剛交接的內容。</p>
+        </div>
+
+        <div class="toolbox-views">
+          <section class="tool-view is-active" data-tool-view="import">
+            <label class="field-label" for="md-file">選取來源檔案</label>
+            <input id="md-file" class="file-input" type="file" accept=".md,.markdown,text/markdown" />
+
+            <div class="action-stack">
+              <button id="import-btn" type="button">插入 Markdown 到文件</button>
+            </div>
+
+            <div id="drop-zone" class="drop-zone" aria-label="拖放 .md 檔案到此處">
+              <span class="drop-zone-mark">.md</span>
+              <strong>拖放檔案到這裡</strong>
+              <span>也可以使用上方按鈕選取本機 Markdown 檔。</span>
+            </div>
+
+            <p class="helper">支援 <code>.md</code> / <code>.markdown</code>，內容會插入目前游標位置。</p>
+          </section>
+
+          <section class="tool-view" data-tool-view="export" hidden>
+            <div class="action-row">
+              <button id="export-btn" type="button">從目前文件產生 Markdown</button>
+              <button id="download-btn" type="button" class="ghost" disabled>下載為 Markdown 檔</button>
+            </div>
+
+            <label class="field-label" for="export-preview">輸出預覽</label>
+            <textarea id="export-preview" readonly rows="10" placeholder="匯出後的 Markdown 會出現在這裡。"></textarea>
+            <p class="helper">若文件為空，預覽與下載內容也會是空白。</p>
+          </section>
+
+          <section class="tool-view" data-tool-view="format" hidden>
+            <div class="format-lead">
+              <p>將文件中的純 Markdown 字符整理成 Word 版式，或接手 launcher 交來的檔案內容。</p>
+            </div>
+
+            <div class="action-stack">
+              <button id="md-auto-import-btn" type="button" class="secondary" hidden>將目前文件格式化為 Markdown</button>
+            </div>
+
+            <p id="md-auto-import-helper" class="helper"></p>
+            <p class="helper">適合剛開啟的純文字 Markdown 文件，或需要重新套用本專案轉換規則時使用。</p>
+          </section>
         </div>
       </section>
 
-      <section class="panel panel-import">
+      <section class="panel panel-reference">
         <div class="panel-head">
-          <p class="panel-kicker">INPUT</p>
-          <h2>匯入 Markdown</h2>
+          <p class="panel-kicker">REFERENCE</p>
+          <h2>Format 字符轉換參考</h2>
+          <p class="panel-summary">這裡整理本專案在 Word 與 Markdown 之間較常見的字符與版式對應，方便編修時對照。</p>
         </div>
 
-        <label class="field-label" for="md-file">選取來源檔案</label>
-        <input id="md-file" class="file-input" type="file" accept=".md,.markdown,text/markdown" />
+        <div class="reference-grid">
+          <article class="reference-card">
+            <h3>段落與標題</h3>
+            <ul class="reference-list">
+              <li><code>#</code> 到 <code>######</code> 對應 Word Heading 1 到 Heading 6</li>
+              <li>一般段落會保留為標準內文段落</li>
+              <li>空行會切成新的 Word 段落</li>
+            </ul>
+          </article>
 
-        <div class="action-stack">
-          <button id="import-btn" type="button">插入 Markdown 到文件</button>
-          <button id="md-auto-import-btn" type="button" class="secondary" hidden>將目前文件格式化為 Markdown</button>
+          <article class="reference-card">
+            <h3>強調字符</h3>
+            <ul class="reference-list">
+              <li><code>**bold**</code> 轉成粗體</li>
+              <li><code>_italic_</code> 轉成斜體</li>
+              <li><code>`inline code`</code> 會保留成等寬字呈現</li>
+            </ul>
+          </article>
+
+          <article class="reference-card">
+            <h3>清單與區塊</h3>
+            <ul class="reference-list">
+              <li><code>- item</code> 轉成項目符號清單</li>
+              <li><code>1. item</code> 轉成編號清單</li>
+              <li><code>```code```</code> 保留為程式碼區塊語意</li>
+            </ul>
+          </article>
+
+          <article class="reference-card">
+            <h3>連結與匯出</h3>
+            <ul class="reference-list">
+              <li><code>[title](url)</code> 轉成 Word 連結</li>
+              <li>匯出時會以 Turndown 規則回寫成 Markdown</li>
+              <li>目前腳本會移除 <code>script</code> 與 <code>style</code> 內容</li>
+            </ul>
+          </article>
         </div>
-
-        <p id="md-auto-import-helper" class="helper"></p>
-
-        <div id="drop-zone" class="drop-zone" aria-label="拖放 .md 檔案到此處">
-          <span class="drop-zone-mark">.md</span>
-          <strong>拖放檔案到這裡</strong>
-          <span>也可以使用上方按鈕選取本機 Markdown 檔。</span>
-        </div>
-
-        <p class="helper">支援 <code>.md</code> / <code>.markdown</code>，內容會插入目前游標位置。</p>
-      </section>
-
-      <section class="panel panel-export">
-        <div class="panel-head">
-          <p class="panel-kicker">OUTPUT</p>
-          <h2>匯出 Markdown</h2>
-        </div>
-
-        <div class="action-row">
-          <button id="export-btn" type="button">從目前文件產生 Markdown</button>
-          <button id="download-btn" type="button" class="ghost" disabled>下載為 Markdown 檔</button>
-        </div>
-
-        <label class="field-label" for="export-preview">輸出預覽</label>
-        <textarea id="export-preview" readonly rows="10" placeholder="匯出後的 Markdown 會出現在這裡。"></textarea>
-        <p class="helper">若文件為空，預覽與下載內容也會是空白。</p>
       </section>
 
       <p id="status" class="status" aria-live="polite"></p>
     </main>
   </body>
 </html>
+

@@ -2,6 +2,7 @@ import { appendFile, mkdir, readFile, writeFile } from "node:fs/promises";
 import { spawn } from "node:child_process";
 import { resolve, basename, extname, join } from "node:path";
 import { fileURLToPath } from "node:url";
+import { requestStatus } from "./http-probe.js";
 import { DEFAULT_LOCAL_HOST, normalizeHost, readRuntimeHost } from "./runtime-config.js";
 
 const defaultWordPath = join(
@@ -42,25 +43,13 @@ const logEvent = async (message) => {
 };
 
 const isEndpointReady = async () => {
-  try {
-    const pageResponse = await fetch(devServerUrl, {
-      method: "GET",
-      cache: "no-store",
-    });
-
-    if (!pageResponse.ok) {
-      return false;
-    }
-
-    const compatibilityResponse = await fetch(compatibilityUrl, {
-      method: "GET",
-      cache: "no-store",
-    });
-
-    return compatibilityResponse.status === 200 || compatibilityResponse.status === 204;
-  } catch {
+  const pageResponse = await requestStatus(devServerUrl);
+  if (!pageResponse.ok) {
     return false;
   }
+
+  const compatibilityResponse = await requestStatus(compatibilityUrl);
+  return compatibilityResponse.status === 200 || compatibilityResponse.status === 204;
 };
 
 const startDetached = (command, args, cwd) => {
