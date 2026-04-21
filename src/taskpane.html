@@ -16,18 +16,24 @@
         <div class="hero-topline">
           <div class="hero-meta">
             <p class="eyebrow" data-i18n="hero.eyebrow">EDITORIAL TOOLPANE</p>
-            <div class="hero-utility-row">
-              <span class="hero-badge" data-i18n="hero.badge">Word × Markdown</span>
-              <div class="hero-controls">
-                <div class="pill-switch" role="group" aria-label="Theme switcher">
-                  <button type="button" class="switch-button is-active" data-theme-switch="warm" data-i18n="theme.warm">Warm Editorial</button>
-                  <button type="button" class="switch-button" data-theme-switch="dark" data-i18n="theme.dark">Inverse Dark</button>
-                </div>
-                <div class="pill-switch" role="group" aria-label="Language switcher">
-                  <button type="button" class="switch-button is-active" data-locale-switch="zh-TW">繁中</button>
-                  <button type="button" class="switch-button" data-locale-switch="en-US">EN</button>
-                </div>
-              </div>
+            <span class="hero-badge" data-i18n="hero.badge">Word × Markdown</span>
+          </div>
+          <div class="hero-controls hero-controls-top">
+            <div class="theme-switch" role="group" aria-label="Theme switcher">
+              <button
+                type="button"
+                class="theme-dot-button is-active"
+                data-theme-switch="warm"
+              >
+                <span class="theme-dot theme-dot-warm" aria-hidden="true"></span>
+              </button>
+              <button type="button" class="theme-dot-button" data-theme-switch="dark">
+                <span class="theme-dot theme-dot-dark" aria-hidden="true"></span>
+              </button>
+            </div>
+            <div class="pill-switch" role="group" aria-label="Language switcher">
+              <button type="button" class="switch-button is-active" data-locale-switch="zh-TW">繁中</button>
+              <button type="button" class="switch-button" data-locale-switch="en-US">EN</button>
             </div>
           </div>
         </div>

@@ -184,6 +184,17 @@ const applyTranslations = () => {
     button.classList.toggle("is-active", isActive);
     button.setAttribute("aria-pressed", isActive ? "true" : "false");
   });
+
+  themeButtons.forEach((button) => {
+    const themeName = button.dataset.themeSwitch;
+    if (!themeName) {
+      return;
+    }
+
+    const themeLabel = getTranslation(`theme.${themeName}`, themeName);
+    button.setAttribute("aria-label", themeLabel);
+    button.setAttribute("title", themeLabel);
+  });
 };
 
 const getToolViewMeta = (viewName) => ({
