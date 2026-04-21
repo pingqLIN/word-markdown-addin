@@ -1,0 +1,114 @@
+{
+  "hero": {
+    "eyebrow": "EDITORIAL TOOLPANE",
+    "badge": "Word × Markdown",
+    "title": "Word Markdown Companion",
+    "copy": "Handle <code>.md</code> import, formatting, and export directly inside Word."
+  },
+  "tabs": {
+    "import": {
+      "kicker": "INPUT",
+      "label": "Import"
+    },
+    "export": {
+      "kicker": "OUTPUT",
+      "label": "Export"
+    },
+    "format": {
+      "kicker": "FORMAT",
+      "label": "Format"
+    }
+  },
+  "toolbox": {
+    "kicker": "WORKBENCH",
+    "import": {
+      "title": "Import Markdown",
+      "summary": "Bring local Markdown into the current Word document or continue with content handed over by the launcher."
+    },
+    "export": {
+      "title": "Export Markdown",
+      "summary": "Generate Markdown from the current document, review it first, then download when it looks right."
+    },
+    "format": {
+      "title": "Format Document",
+      "summary": "Apply Word formatting to plain Markdown text and handle launcher-provided content in the same workspace."
+    }
+  },
+  "import": {
+    "fileLabel": "Choose a source file",
+    "primaryAction": "Insert Markdown into document",
+    "dropzoneTitle": "Drop a file here",
+    "dropzoneBody": "You can also choose a local Markdown file with the button above.",
+    "helper": "Supports <code>.md</code> / <code>.markdown</code>; content will be inserted at the current cursor position."
+  },
+  "export": {
+    "primaryAction": "Generate Markdown from current document",
+    "secondaryAction": "Download Markdown file",
+    "previewLabel": "Preview output",
+    "previewPlaceholder": "Exported Markdown will appear here.",
+    "helper": "If the document is empty, both the preview and download output will be empty."
+  },
+  "format": {
+    "lead": "Turn plain Markdown symbols in the document into Word formatting, or process content handed over by the launcher.",
+    "primaryAction": "Format current document as Markdown",
+    "helper": "Best for plain-text Markdown documents that were just opened or when you want to re-apply this project's conversion rules."
+  },
+  "reference": {
+    "kicker": "REFERENCE",
+    "title": "Format conversion reference",
+    "summary": "A quick reference for the common Markdown and Word mappings used by this project.",
+    "cards": {
+      "structure": {
+        "title": "Structure and headings",
+        "item1": "<code>#</code> through <code>######</code> map to Word Heading 1 through Heading 6",
+        "item2": "Regular paragraphs stay as standard body paragraphs",
+        "item3": "Blank lines split into new Word paragraphs"
+      },
+      "emphasis": {
+        "title": "Emphasis markers",
+        "item1": "<code>**bold**</code> becomes bold text",
+        "item2": "<code>_italic_</code> becomes italic text",
+        "item3": "<code>`inline code`</code> keeps a monospace presentation"
+      },
+      "blocks": {
+        "title": "Lists and blocks",
+        "item1": "<code>- item</code> becomes a bulleted list",
+        "item2": "<code>1. item</code> becomes a numbered list",
+        "item3": "<code>```code```</code> keeps code-block semantics"
+      },
+      "links": {
+        "title": "Links and export",
+        "item1": "<code>[title](url)</code> becomes a Word hyperlink",
+        "item2": "Export uses Turndown rules to convert content back to Markdown",
+        "item3": "Current scripts remove <code>script</code> and <code>style</code> content"
+      }
+    }
+  },
+  "status": {
+    "ready": "Ready. Import, export, or format Markdown from the same workspace.",
+    "unexpectedError": "An unexpected error occurred. Please try again.",
+    "officeNotReady": "Office.js has not finished loading. Confirm the task pane can reach the Microsoft-hosted office.js runtime.",
+    "officeUnavailable": "Office.context is unavailable. Open this inside a Word task pane.",
+    "importing": "Importing…",
+    "exporting": "Exporting…",
+    "downloadAfterExport": "Export Markdown before downloading it.",
+    "downloadReady": "Export complete. You can now download the Markdown file.",
+    "documentEmpty": "The document is empty, so there is nothing to export.",
+    "formattingExistingDocument": "Formatting the current document based on its Markdown text…",
+    "pendingFileMissing": "There is no pending Markdown file to import.",
+    "pendingImportSuccess": "Imported the Markdown file that was just opened.",
+    "selectMarkdownFirst": "Choose a .md file first.",
+    "onlyMarkdownSupported": "Only .md / .markdown files are supported.",
+    "fileReadFailed": "The file could not be read.",
+    "importSuccess": "Markdown imported.",
+    "dropzoneNoFile": "No usable file was detected.",
+    "pendingImportDetected": "Pending Markdown content was detected. Use the action button to insert it into the current document.",
+    "pendingImportedFile": "Detected Markdown handed over by the launcher: {fileName}",
+    "pendingImportedGeneric": "Detected Markdown handed over by the launcher.",
+    "markdownDocumentDetected": "A Markdown document was detected. Click to convert the current plain text into Word formatting.",
+    "noConvertibleContent": "There is currently no content that can be converted.",
+    "formatSuccess": "The current document was reformatted using Markdown rules.",
+    "cannotReadPending": "Unable to read the pending Markdown file.",
+    "saveAutoShowFailed": "Unable to save the auto-show taskpane setting."
+  }
+}

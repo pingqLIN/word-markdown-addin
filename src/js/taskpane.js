@@ -11,24 +11,18 @@ const toolboxTitle = document.getElementById("toolbox-title");
 const toolboxSummary = document.getElementById("toolbox-summary");
 const panelLinks = Array.from(document.querySelectorAll("[data-panel-link]"));
 const toolViews = Array.from(document.querySelectorAll("[data-tool-view]"));
+const localeButtons = Array.from(document.querySelectorAll("[data-locale-switch]"));
+
+const supportedLocales = ["zh-TW", "en-US"];
+const defaultLocale = "zh-TW";
 const pendingMarkdownState = {
   fileName: "",
   markdown: "",
 };
-const toolViewMeta = {
-  import: {
-    title: "匯入 Markdown",
-    summary: "把本機 Markdown 插入目前 Word 文件，或接手 launcher 剛交接的內容。",
-  },
-  export: {
-    title: "匯出 Markdown",
-    summary: "從目前文件抽出 Markdown，先預覽，再決定是否下載成檔案。",
-  },
-  format: {
-    title: "格式整理",
-    summary: "把純文字 Markdown 重新套用成 Word 版式，並處理待匯入的 launcher 內容。",
-  },
-};
+
+let activeToolView = "import";
+let currentLocale = defaultLocale;
+let localeMessages = {};
 
 const logTaskpaneEvent = async (message, extra = null) => {
   const detail =
@@ -51,13 +45,118 @@ const logTaskpaneEvent = async (message, extra = null) => {
   }
 };
 
+const getTranslation = (path, fallback = "") => {
+  const resolved = path
+    .split(".")
+    .reduce(
+      (value, key) => (value && typeof value === "object" ? value[key] : undefined),
+      localeMessages,
+    );
+
+  return typeof resolved === "string" ? resolved : fallback;
+};
+
+const interpolate = (template, values = {}) =>
+  String(template).replace(/\{(\w+)\}/g, (_, key) => values[key] ?? "");
+
+const t = (path, values = {}, fallback = "") =>
+  interpolate(getTranslation(path, fallback), values);
+
+const detectPreferredLocale = () => {
+  const candidates = [
+    String(window.Office?.context?.displayLanguage || "").trim(),
+    String(window.navigator?.language || "").trim(),
+  ];
+
+  for (const locale of candidates) {
+    if (!locale) {
+      continue;
+    }
+
+    const directMatch = supportedLocales.find(
+      (supportedLocale) => supportedLocale.toLowerCase() === locale.toLowerCase(),
+    );
+    if (directMatch) {
+      return directMatch;
+    }
+
+    if (locale.toLowerCase().startsWith("zh")) {
+      return "zh-TW";
+    }
+
+    if (locale.toLowerCase().startsWith("en")) {
+      return "en-US";
+    }
+  }
+
+  return defaultLocale;
+};
+
+const loadLocaleMessages = async (locale) => {
+  const normalizedLocale = supportedLocales.includes(locale) ? locale : defaultLocale;
+  const response = await fetch(`locales/${normalizedLocale}.json`, {
+    cache: "no-store",
+  });
+
+  if (!response.ok) {
+    throw new Error(`Failed to load locale: ${normalizedLocale}`);
+  }
+
+  localeMessages = await response.json();
+  currentLocale = normalizedLocale;
+  document.documentElement.lang = normalizedLocale === "zh-TW" ? "zh-Hant" : normalizedLocale;
+};
+
+const applyTranslations = () => {
+  document.querySelectorAll("[data-i18n]").forEach((element) => {
+    const key = element.dataset.i18n;
+    if (!key) {
+      return;
+    }
+
+    element.textContent = getTranslation(key, element.textContent);
+  });
+
+  document.querySelectorAll("[data-i18n-html]").forEach((element) => {
+    const key = element.dataset.i18nHtml;
+    if (!key) {
+      return;
+    }
+
+    element.innerHTML = getTranslation(key, element.innerHTML);
+  });
+
+  document.querySelectorAll("[data-i18n-placeholder]").forEach((element) => {
+    const key = element.dataset.i18nPlaceholder;
+    if (!key) {
+      return;
+    }
+
+    element.setAttribute(
+      "placeholder",
+      getTranslation(key, element.getAttribute("placeholder") || ""),
+    );
+  });
+
+  localeButtons.forEach((button) => {
+    const isActive = button.dataset.localeSwitch === currentLocale;
+    button.classList.toggle("is-active", isActive);
+    button.setAttribute("aria-pressed", isActive ? "true" : "false");
+  });
+};
+
+const getToolViewMeta = (viewName) => ({
+  title: t(`toolbox.${viewName}.title`),
+  summary: t(`toolbox.${viewName}.summary`),
+});
+
 const requireMarkdownLibraries = () => {
   if (typeof window.marked?.parse !== "function") {
-    throw new Error("marked 函式庫未載入，請檢查 src/lib/marked.min.js。");
+    throw new Error("marked library is unavailable.");
   }
 
   if (typeof window.TurndownService !== "function") {
-    throw new Error("turndown 函式庫未載入，請檢查 src/lib/turndown.min.js。");
+    throw new Error("turndown library is unavailable.");
   }
 };
 
@@ -90,10 +189,10 @@ const markdownToWord = (text) =>
 
 const ensureOffice = () => {
   if (!window.Office) {
-    throw new Error("Office.js 尚未載入完成");
+    throw new Error(t("status.officeNotReady"));
   }
   if (!window.Office.context || !window.Office.context.document) {
-    throw new Error("Office.context 不可用，請在 Word 任務窗格中執行。");
+    throw new Error(t("status.officeUnavailable"));
   }
 };
 
@@ -101,8 +200,20 @@ const setStatus = (message) => {
   statusElement.textContent = message || "";
 };
 
+const setErrorStatus = (error) => {
+  const message =
+    error && typeof error.message === "string"
+      ? error.message
+      : t("status.unexpectedError");
+  setStatus(message);
+};
+
 const activateToolView = (viewName) => {
-  const targetViewName = toolViewMeta[viewName] ? viewName : "import";
+  const targetViewName = ["import", "export", "format"].includes(viewName)
+    ? viewName
+    : "import";
+  const toolViewMeta = getToolViewMeta(targetViewName);
+  activeToolView = targetViewName;
 
   panelLinks.forEach((link) => {
     const isActive = link.dataset.panelLink === targetViewName;
@@ -117,20 +228,12 @@ const activateToolView = (viewName) => {
   });
 
   if (toolboxTitle) {
-    toolboxTitle.textContent = toolViewMeta[targetViewName].title;
+    toolboxTitle.textContent = toolViewMeta.title;
   }
 
   if (toolboxSummary) {
-    toolboxSummary.textContent = toolViewMeta[targetViewName].summary;
+    toolboxSummary.textContent = toolViewMeta.summary;
   }
-};
-
-const setErrorStatus = (error) => {
-  const message =
-    error && typeof error.message === "string"
-      ? error.message
-      : "發生未預期錯誤，請稍後再試。";
-  setStatus(message);
 };
 
 const requireOfficeRuntime = () => {
@@ -138,9 +241,7 @@ const requireOfficeRuntime = () => {
     typeof window.Office !== "object" ||
     typeof window.Office.onReady !== "function"
   ) {
-    throw new Error(
-      "Office.js 未載入完成，請確認任務窗格可連到 Microsoft hosted office.js。"
-    );
+    throw new Error(t("status.officeNotReady"));
   }
 };
 
@@ -183,7 +284,7 @@ const formatExistingMarkdownDocument = async () => {
   });
 
   if (!markdown.trim()) {
-    return "文件內目前沒有可轉換的內容。";
+    return t("status.noConvertibleContent");
   }
 
   const html = toWordMarkdown(markdown);
@@ -193,7 +294,8 @@ const formatExistingMarkdownDocument = async () => {
     body.insertHtml(html, Word.InsertLocation.end);
     await context.sync();
   });
-  return "已將目前文件按 Markdown 格式寫回 Word。";
+
+  return t("status.formatSuccess");
 };
 
 const exportWordToMarkdown = async () => {
@@ -259,7 +361,7 @@ const fetchPendingMarkdown = async () => {
   }
 
   if (!response.ok) {
-    throw new Error("無法讀取待匯入的 Markdown 檔案。");
+    throw new Error(t("status.cannotReadPending"));
   }
 
   const payload = await response.json();
@@ -287,7 +389,7 @@ const enableDocumentAutoShowTaskpane = async () => {
         return;
       }
 
-      reject(result.error || new Error("無法儲存自動開啟 taskpane 設定。"));
+      reject(result.error || new Error(t("status.saveAutoShowFailed")));
     });
   });
 };
@@ -314,11 +416,11 @@ const triggerDownload = (content) => {
 
 const exportMarkdownFile = async () => {
   try {
-    setStatus("正在匯出…");
+    setStatus(t("status.exporting"));
     const markdown = await exportWordToMarkdown();
     exportPreview.value = markdown;
     setDownloadButtonEnabled(Boolean(markdown));
-    setStatus(markdown ? "匯出成功，可點「下載為 Markdown 檔」儲存。" : "文件目前為空，沒有可匯出的內容。");
+    setStatus(markdown ? t("status.downloadReady") : t("status.documentEmpty"));
     return markdown;
   } catch (error) {
     setErrorStatus(error);
@@ -329,7 +431,7 @@ const exportMarkdownFile = async () => {
 const handleDownload = async () => {
   try {
     if (!exportPreview.value) {
-      setStatus("請先匯出 Markdown 後再下載。");
+      setStatus(t("status.downloadAfterExport"));
       return;
     }
     triggerDownload(exportPreview.value);
@@ -340,7 +442,7 @@ const handleDownload = async () => {
 
 const handleAutoImport = async () => {
   try {
-    setStatus("正在依據現有文件內容建立 Markdown 格式…");
+    setStatus(t("status.formattingExistingDocument"));
     const message = await formatExistingMarkdownDocument();
     setStatus(message);
   } catch (error) {
@@ -351,12 +453,12 @@ const handleAutoImport = async () => {
 const handlePendingMarkdownImport = async () => {
   try {
     if (!pendingMarkdownState.markdown) {
-      setStatus("目前沒有待匯入的 Markdown 檔案。");
+      setStatus(t("status.pendingFileMissing"));
       await logTaskpaneEvent("handlePendingMarkdownImport:no-pending-markdown");
       return;
     }
 
-    setStatus(`正在匯入 ${pendingMarkdownState.fileName || "Markdown 檔案"}…`);
+    setStatus(t("status.importing"));
     await logTaskpaneEvent("handlePendingMarkdownImport:start", {
       fileName: pendingMarkdownState.fileName || "",
       markdownLength: pendingMarkdownState.markdown.length,
@@ -369,7 +471,7 @@ const handlePendingMarkdownImport = async () => {
     pendingMarkdownState.fileName = "";
     pendingMarkdownState.markdown = "";
     setAutoImportState(false);
-    setStatus("已匯入剛開啟的 Markdown 檔案。");
+    setStatus(t("status.pendingImportSuccess"));
     await logTaskpaneEvent("handlePendingMarkdownImport:success");
   } catch (error) {
     setErrorStatus(error);
@@ -381,13 +483,13 @@ const handlePendingMarkdownImport = async () => {
 
 const handleMdFile = (file) => {
   if (!file) {
-    setStatus("請先選擇 .md 檔案。");
+    setStatus(t("status.selectMarkdownFirst"));
     return;
   }
 
   const ext = file.name.split(".").pop()?.toLowerCase();
   if (ext !== "md" && ext !== "markdown") {
-    setStatus("僅支援 .md / .markdown 檔案。");
+    setStatus(t("status.onlyMarkdownSupported"));
     return;
   }
 
@@ -397,13 +499,13 @@ const handleMdFile = (file) => {
       const markdown = event.target?.result?.toString() || "";
       await insertMarkdownIntoWord(markdown);
       await enableDocumentAutoShowTaskpane();
-      setStatus("已匯入 Markdown。");
+      setStatus(t("status.importSuccess"));
     } catch (error) {
       setErrorStatus(error);
     }
   };
   reader.onerror = () => {
-    setStatus("無法讀取檔案。");
+    setStatus(t("status.fileReadFailed"));
   };
   reader.readAsText(file);
 };
@@ -413,7 +515,7 @@ const onDropFiles = (event) => {
   dropZone.classList.remove("active");
   const files = event.dataTransfer && event.dataTransfer.files;
   if (!files || !files.length) {
-    setStatus("未偵測到可用檔案。");
+    setStatus(t("status.dropzoneNoFile"));
     return;
   }
   handleMdFile(files[0]);
@@ -422,7 +524,15 @@ const onDropFiles = (event) => {
 requireOfficeRuntime();
 void logTaskpaneEvent("taskpane-script-loaded");
 
-Office.onReady(() => {
+Office.onReady(async () => {
+  try {
+    await loadLocaleMessages(detectPreferredLocale());
+  } catch {
+    await loadLocaleMessages(defaultLocale);
+  }
+
+  applyTranslations();
+
   try {
     requireMarkdownLibraries();
   } catch (error) {
@@ -438,6 +548,28 @@ Office.onReady(() => {
 
   const mdDetected = detectMarkdownDocument();
   activateToolView(mdDetected ? "format" : "import");
+
+  localeButtons.forEach((button) => {
+    button.addEventListener("click", async () => {
+      const nextLocale = button.dataset.localeSwitch;
+      if (!nextLocale || nextLocale === currentLocale) {
+        return;
+      }
+
+      try {
+        await loadLocaleMessages(nextLocale);
+        applyTranslations();
+        activateToolView(activeToolView);
+        const mdHelperText = mdDetected
+          ? t("status.markdownDocumentDetected")
+          : "";
+        setAutoImportState(mdDetected, mdHelperText, t("format.primaryAction"));
+        setStatus(t("status.ready"));
+      } catch (error) {
+        setErrorStatus(error);
+      }
+    });
+  });
 
   panelLinks.forEach((link) => {
     link.addEventListener("click", (event) => {
@@ -481,7 +613,7 @@ Office.onReady(() => {
     dropZone.classList.remove("active");
   });
   dropZone.addEventListener("drop", onDropFiles);
-  setStatus("初始化完成，可匯入或匯出 Markdown。");
+  setStatus(t("status.ready"));
   setDownloadButtonEnabled(false);
 
   void (async () => {
@@ -503,9 +635,9 @@ Office.onReady(() => {
         setAutoImportState(
           true,
           pendingMarkdownState.fileName
-            ? `偵測到剛由 launcher 交接的 Markdown：${pendingMarkdownState.fileName}`
-            : "偵測到剛由 launcher 交接的 Markdown 檔案。",
-          "匯入剛開啟的 Markdown 檔",
+            ? t("status.pendingImportedFile", { fileName: pendingMarkdownState.fileName })
+            : t("status.pendingImportedGeneric"),
+          t("format.primaryAction"),
         );
 
         if (!existingText.trim()) {
@@ -514,21 +646,21 @@ Office.onReady(() => {
           return;
         }
 
-        setStatus("已偵測到待匯入 Markdown 檔，可點按鈕插入到目前文件。");
+        setStatus(t("status.pendingImportDetected"));
         await logTaskpaneEvent("pending-check:manual-import-required");
         return;
       }
 
       await logTaskpaneEvent("pending-check:none");
       const mdHelperText = mdDetected
-        ? "偵測到 Markdown 文件，點擊可將目前純文字內容直接轉為 Word 格式。"
+        ? t("status.markdownDocumentDetected")
         : "";
-      setAutoImportState(mdDetected, mdHelperText, "將目前文件格式化為 Markdown");
+      setAutoImportState(mdDetected, mdHelperText, t("format.primaryAction"));
     } catch (error) {
       const mdHelperText = mdDetected
-        ? "偵測到 Markdown 文件，點擊可將目前純文字內容直接轉為 Word 格式。"
+        ? t("status.markdownDocumentDetected")
         : "";
-      setAutoImportState(mdDetected, mdHelperText, "將目前文件格式化為 Markdown");
+      setAutoImportState(mdDetected, mdHelperText, t("format.primaryAction"));
       console.error(error);
       await logTaskpaneEvent("pending-check:error", {
         message: error?.message || String(error),
