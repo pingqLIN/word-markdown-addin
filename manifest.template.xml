@@ -50,7 +50,7 @@
                     <Description resid="OpenMd.Tooltip" />
                   </Supertip>
                   <Action xsi:type="ShowTaskpane">
-                    <TaskpaneId>WordMarkdownTaskpane</TaskpaneId>
+                    <TaskpaneId>Office.AutoShowTaskpaneWithDocument</TaskpaneId>
                     <SourceLocation resid="Taskpane.Url" />
                   </Action>
                   <Icon>

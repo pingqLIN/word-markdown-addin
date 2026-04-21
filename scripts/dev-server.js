@@ -2,9 +2,13 @@ import http from "node:http";
 import { stat, readFile, rm, appendFile, mkdir } from "node:fs/promises";
 import { createHash } from "node:crypto";
 import path from "node:path";
+import { DEFAULT_LOCAL_HOST, getPortFromHost, normalizeHost, readRuntimeHost } from "./runtime-config.js";
 
-const PORT = 3000;
 const ROOT = process.cwd();
+const runtimeHost = normalizeHost(
+  process.env.MANIFEST_HOST || (await readRuntimeHost(ROOT)) || DEFAULT_LOCAL_HOST,
+);
+const PORT = Number(process.env.PORT || getPortFromHost(runtimeHost));
 const PENDING_MARKDOWN_PATH = path.join(
   ROOT,
   ".local",
@@ -86,7 +90,7 @@ const readRequestBody = async (req) =>
 
 const server = http.createServer(async (req, res) => {
   try {
-    const url = new URL(req.url || "", `http://localhost:${PORT}`);
+    const url = new URL(req.url || "", runtimeHost);
 
     if (url.pathname === "/api/pending-markdown") {
       if (req.method === "DELETE") {
@@ -202,7 +206,7 @@ const server = http.createServer(async (req, res) => {
 
 server.on("error", (error) => {
   if (error.code === "EADDRINUSE") {
-    console.error("Port 3000 is already in use. Stop the existing process or rerun with a different MANIFEST_HOST.");
+    console.error(`Port ${PORT} is already in use. Stop the existing process or rerun with a different MANIFEST_HOST.`);
     process.exit(1);
   }
 
@@ -211,5 +215,5 @@ server.on("error", (error) => {
 });
 
 server.listen(PORT, () => {
-  console.log(`Word Markdown Add-in dev server running: http://localhost:${PORT}`);
+  console.log(`Word Markdown Add-in dev server running: ${runtimeHost}`);
 });

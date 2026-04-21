@@ -1,7 +1,7 @@
 import { mkdir, readFile, writeFile } from "node:fs/promises";
 import path from "node:path";
+import { DEFAULT_LOCAL_HOST, normalizeHost, readRuntimeHost } from "./runtime-config.js";
 
-const defaultHost = "http://localhost:3000";
 const defaultManifestId = "e6c1ec6a-3b55-4ed6-8a57-1d3de4f6b4d1";
 const defaultProviderName = "Internal";
 const defaultDisplayName = "Word Markdown Companion";
@@ -39,9 +39,9 @@ const outputPath = path.resolve(
   process.cwd(),
   readOption("output") || "manifest.xml",
 );
-const addinHost = (readOption("host") || process.env.MANIFEST_HOST || defaultHost).replace(
-  /\/+$/,
-  "",
+const runtimeHost = await readRuntimeHost();
+const addinHost = normalizeHost(
+  readOption("host") || process.env.MANIFEST_HOST || runtimeHost || DEFAULT_LOCAL_HOST,
 );
 const requireHttps = hasFlag("require-https");
 const supportUrl = (readOption("support-url") || process.env.SUPPORT_URL || `${addinHost}/`).replace(

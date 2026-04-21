@@ -1,41 +1,42 @@
 import { spawn } from "node:child_process";
 import { readFile } from "node:fs/promises";
-import net from "node:net";
 import { resolve } from "node:path";
 import { setTimeout as delay } from "node:timers/promises";
+import {
+  buildProbeUrls,
+  DEFAULT_LOCAL_HOST,
+  findAvailableLocalHost,
+  isLocalHttpHost,
+  normalizeHost,
+  readRuntimeHost,
+  writeRuntimeHost,
+} from "./runtime-config.js";
 
 const NPM_COMMAND = process.platform === "win32" ? "npm.cmd" : "npm";
-const defaultHost = "http://localhost:3000";
 const developerRegistryKey = "HKCU\\Software\\Microsoft\\Office\\16.0\\WEF\\Developer";
 const args = process.argv.slice(2);
 
-let addinHost = process.env.MANIFEST_HOST || defaultHost;
+let addinHost = process.env.MANIFEST_HOST || DEFAULT_LOCAL_HOST;
+let hostWasExplicitlyProvided = Boolean(process.env.MANIFEST_HOST);
 
 for (let index = 0; index < args.length; index += 1) {
   const token = args[index];
   if (token === "--host" && index + 1 < args.length) {
     addinHost = args[index + 1];
+    hostWasExplicitlyProvided = true;
     index += 1;
     continue;
   }
   if (token.startsWith("--host=")) {
     addinHost = token.slice("--host=".length);
+    hostWasExplicitlyProvided = true;
   }
 }
 
-const normalizedHost = addinHost.replace(/\/+$/, "");
-const manifestEnv = { ...process.env, MANIFEST_HOST: normalizedHost };
 const manifestPath = resolve(process.cwd(), "manifest.xml");
-const serverProbeUrls = [
-  "http://localhost:3000/taskpane.html",
-  "http://127.0.0.1:3000/taskpane.html",
-  "http://[::1]:3000/taskpane.html",
-];
-const serverCompatibilityUrls = [
-  "http://localhost:3000/api/pending-markdown",
-  "http://127.0.0.1:3000/api/pending-markdown",
-  "http://[::1]:3000/api/pending-markdown",
-];
+const buildServerProbeUrls = (host) => buildProbeUrls(host, "/taskpane.html");
+const buildServerCompatibilityUrls = (host) =>
+  buildProbeUrls(host, "/api/pending-markdown");
 
 const quoteWindowsArgument = (value) =>
   /[\s"]/u.test(value) ? `"${value.replace(/"/gu, "\"\"")}"` : value;
@@ -156,32 +157,9 @@ const isCompatibleServerReady = async (urls) => {
   return false;
 };
 
-const isPortInUse = (port, host) => new Promise((resolvePort) => {
-  const socket = net.createConnection({ port, host });
-
-  socket.once("connect", () => {
-    socket.destroy();
-    resolvePort(true);
-  });
-
-  socket.once("error", () => {
-    resolvePort(false);
-  });
-});
-
-const isLocalPortInUse = async (port) => {
-  for (const host of ["127.0.0.1", "localhost", "::1"]) {
-    if (await isPortInUse(port, host)) {
-      return true;
-    }
-  }
-
-  return false;
-};
-
 const waitForUrl = async (urls, attempts = 30, intervalMs = 1000) => {
   for (let attempt = 0; attempt < attempts; attempt += 1) {
-    if (await isAnyUrlReady(urls) && await isCompatibleServerReady(serverCompatibilityUrls)) {
+    if (await isAnyUrlReady(urls)) {
       return;
     }
 
@@ -234,7 +212,46 @@ process.on("SIGTERM", () => {
   process.exit(0);
 });
 
+const resolveLocalHost = async () => {
+  const storedHost = await readRuntimeHost();
+  const candidateHosts = [
+    normalizeHost(addinHost),
+    storedHost,
+    DEFAULT_LOCAL_HOST,
+  ].filter(Boolean);
+
+  for (const candidateHost of [...new Set(candidateHosts)]) {
+    if (!isLocalHttpHost(candidateHost)) {
+      continue;
+    }
+
+    const probeUrls = buildServerProbeUrls(candidateHost);
+    const compatibilityUrls = buildServerCompatibilityUrls(candidateHost);
+
+    if (await isAnyUrlReady(probeUrls) && await isCompatibleServerReady(compatibilityUrls)) {
+      await writeRuntimeHost(candidateHost);
+      return candidateHost;
+    }
+  }
+
+  const nextHost = await findAvailableLocalHost();
+  await writeRuntimeHost(nextHost);
+  return nextHost;
+};
+
 try {
+  let normalizedHost = normalizeHost(addinHost);
+
+  if (!hostWasExplicitlyProvided && isLocalHttpHost(normalizedHost)) {
+    normalizedHost = await resolveLocalHost();
+  } else if (isLocalHttpHost(normalizedHost)) {
+    await writeRuntimeHost(normalizedHost);
+  }
+
+  const manifestEnv = { ...process.env, MANIFEST_HOST: normalizedHost };
+  const serverProbeUrls = buildServerProbeUrls(normalizedHost);
+  const serverCompatibilityUrls = buildServerCompatibilityUrls(normalizedHost);
+
   if (process.platform !== "win32") {
     throw new Error("desktop sideload is currently implemented only for Windows Office.");
   }
@@ -242,31 +259,28 @@ try {
   console.log("Word Markdown Add-in sideload");
   console.log(`- MANIFEST_HOST: ${normalizedHost}`);
 
-  if (normalizedHost === defaultHost && !await hasWebViewLoopbackExemption()) {
+  if (isLocalHttpHost(normalizedHost) && !await hasWebViewLoopbackExemption()) {
     console.warn("Warning: Microsoft Edge WebView loopback exemption was not detected.");
-    console.warn("If Word later shows 'We can't open this add-in from localhost', run this in an elevated terminal:");
+    console.warn(`If Word later shows 'We can't open this add-in from ${normalizedHost}', run this in an elevated terminal:`);
     console.warn('  CheckNetIsolation LoopbackExempt -a -n="microsoft.win32webviewhost_cw5n1h2txyewy"');
   }
 
   console.log("Generating manifest.xml...");
   await runCommand(NPM_COMMAND, ["run", "render-manifest"], manifestEnv);
 
-  if (normalizedHost === defaultHost) {
+  if (isLocalHttpHost(normalizedHost)) {
     if (await isAnyUrlReady(serverProbeUrls)) {
       if (!await isCompatibleServerReady(serverCompatibilityUrls)) {
-        throw new Error("An older dev server is already running on http://localhost:3000. Stop the existing node process and rerun sideload so the updated Markdown bridge API is available.");
+        throw new Error(`An older dev server is already running on ${normalizedHost}. Stop the existing node process and rerun sideload so the updated Markdown bridge API is available.`);
       }
 
-      console.log("Detected an existing local dev server on http://localhost:3000.");
+      console.log(`Detected an existing local dev server on ${normalizedHost}.`);
     } else {
       console.log("Starting local dev server...");
       serverProcess = startProcess(NPM_COMMAND, ["run", "dev-server"], manifestEnv);
       try {
         await waitForUrl(serverProbeUrls);
       } catch (error) {
-        if (await isLocalPortInUse(3000)) {
-          throw new Error("port 3000 is already in use by another process, but it is not serving this add-in. Stop that process or rerun with --host http://localhost:<free-port>.");
-        }
         throw error;
       }
     }

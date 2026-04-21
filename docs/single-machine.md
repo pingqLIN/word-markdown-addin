@@ -29,26 +29,29 @@ npm run single-machine
 1. 安裝 npm 相依
 2. 產生本機版 `manifest.xml`
 3. 啟用 `.md` 關聯與 launcher bridge
-4. 啟動或重用本機 `localhost:3000` dev server
+4. 從 `3000` 起自動選一個可用 localhost port，並啟動或重用對應的 dev server
 5. 將 add-in sideload 到 Word Desktop
 
 執行完成後：
 
 - 關掉所有 Word 視窗再重開
+- Word 會把匯入 taskpane 設成預設 pane，通常在安裝後或文件再次開啟時自動顯示
 - 若 ribbon 沒立即出現 add-in，先到 Word 的 Add-ins 手動開一次
 
 ## 單機版依賴
 
-- `http://localhost:3000`
+- `http://localhost:<auto-selected-port>`
 - Windows registry
 - Office sideload registry
 - `.local/pending-open.json` bridge
+- `.local/runtime.json`
 
 ## 重要限制
 
 - 這不是 Word 原生支援 Markdown 開檔。
 - `.md` 不能直接被當成 Word 文件打開；必須先經過 launcher bridge。
 - 某些 Word / WebView 環境仍可能對 `http://localhost` 有限制。
+- 自動開啟 taskpane 屬於 Office 端 best-effort 行為，不同安裝管道與文件狀態可能略有差異。
 - 若桌面版 Word 出現 `We can't open this add-in from localhost`，仍需替 WebView 開 loopback exemption。
 
 ## 適合用途

@@ -228,6 +228,28 @@ const fetchPendingMarkdown = async () => {
   return payload;
 };
 
+const enableDocumentAutoShowTaskpane = async () => {
+  ensureOffice();
+
+  const settings = window.Office.context?.document?.settings;
+  if (!settings || typeof settings.set !== "function") {
+    return;
+  }
+
+  settings.set("Office.AutoShowTaskpaneWithDocument", true);
+
+  await new Promise((resolvePromise, reject) => {
+    settings.saveAsync((result) => {
+      if (result.status === Office.AsyncResultStatus.Succeeded) {
+        resolvePromise();
+        return;
+      }
+
+      reject(result.error || new Error("無法儲存自動開啟 taskpane 設定。"));
+    });
+  });
+};
+
 const clearPendingMarkdown = async () => {
   await fetch("/api/pending-markdown", {
     method: "DELETE",
@@ -298,6 +320,7 @@ const handlePendingMarkdownImport = async () => {
       markdownLength: pendingMarkdownState.markdown.length,
     });
     await insertMarkdownIntoWord(pendingMarkdownState.markdown);
+    await enableDocumentAutoShowTaskpane();
     await clearPendingMarkdown();
     await logTaskpaneEvent("handlePendingMarkdownImport:cleared-pending");
 
@@ -331,6 +354,7 @@ const handleMdFile = (file) => {
     try {
       const markdown = event.target?.result?.toString() || "";
       await insertMarkdownIntoWord(markdown);
+      await enableDocumentAutoShowTaskpane();
       setStatus("已匯入 Markdown。");
     } catch (error) {
       setErrorStatus(error);

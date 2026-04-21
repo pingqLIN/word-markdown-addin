@@ -2,6 +2,7 @@ import { appendFile, mkdir, readFile, writeFile } from "node:fs/promises";
 import { spawn } from "node:child_process";
 import { resolve, basename, extname, join } from "node:path";
 import { fileURLToPath } from "node:url";
+import { DEFAULT_LOCAL_HOST, normalizeHost, readRuntimeHost } from "./runtime-config.js";
 
 const defaultWordPath = join(
   process.env.ProgramFiles || "C:\\Program Files",
@@ -20,11 +21,14 @@ if (!markdownPathArg) {
 }
 
 const repoRoot = resolve(fileURLToPath(new URL("..", import.meta.url)));
+const runtimeHost = normalizeHost(
+  (await readRuntimeHost(repoRoot)) || process.env.MANIFEST_HOST || DEFAULT_LOCAL_HOST,
+);
 const pendingDirectory = join(repoRoot, ".local");
 const pendingPath = join(pendingDirectory, "pending-open.json");
 const launcherLogPath = join(pendingDirectory, "launcher.log");
-const devServerUrl = "http://localhost:3000/taskpane.html";
-const compatibilityUrl = "http://localhost:3000/api/pending-markdown";
+const devServerUrl = `${runtimeHost}/taskpane.html`;
+const compatibilityUrl = `${runtimeHost}/api/pending-markdown`;
 
 const wait = (ms) => new Promise((resolveWait) => setTimeout(resolveWait, ms));
 

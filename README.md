@@ -40,6 +40,6 @@ npm run online
 
 ## 重要說明
 
-- `單機版` 依賴 `localhost`、Windows registry 與 Word Desktop sideload。
+- `單機版` 依賴 `localhost`、Windows registry 與 Word Desktop sideload，會從 `3000` 起自動選可用 port。
 - `線上版` 只輸出正式版 manifest 到 `dist/manifest.store.xml`，不包含本機 shell integration。
 - 已停用但保留的舊流程檔案會放在 `.clean/legacy/`。

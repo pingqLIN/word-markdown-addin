@@ -1,10 +1,10 @@
 import { spawn } from "node:child_process";
+import { DEFAULT_LOCAL_HOST, normalizeHost, readRuntimeHost } from "./runtime-config.js";
 
 const NPM_COMMAND = process.platform === "win32" ? "npm.cmd" : "npm";
-const defaultHost = "http://localhost:3000";
 const args = process.argv.slice(2);
 
-let addinHost = process.env.MANIFEST_HOST || defaultHost;
+let addinHost = process.env.MANIFEST_HOST || (await readRuntimeHost()) || DEFAULT_LOCAL_HOST;
 
 for (let index = 0; index < args.length; index += 1) {
   const token = args[index];
@@ -47,7 +47,7 @@ const runCommand = (command, cmdArgs, env) => new Promise((resolve, reject) => {
   });
 });
 
-const normalizedHost = addinHost.replace(/\/+$/, "");
+const normalizedHost = normalizeHost(addinHost);
 const manifestEnv = { ...process.env, MANIFEST_HOST: normalizedHost };
 
 console.log(`Word Markdown Add-in local start`);
