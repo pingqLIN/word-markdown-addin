@@ -1,0 +1,183 @@
+{
+  "meta": {
+    "title": "Word × Markdown 助手"
+  },
+  "hero": {
+    "eyebrow": "文件工具面板",
+    "badge": "Word × Markdown",
+    "title": "Word × Markdown 助手",
+    "copy": "在 Word 內完成匯入、整理與匯出 <code>.md</code>。"
+  },
+  "controls": {
+    "themeSwitcher": "主題切換",
+    "fontScaleSwitcher": "字級切換",
+    "languageSwitcher": "語言切換",
+    "primaryTools": "主要工具",
+    "secondaryTools": "其他工具",
+    "dropzone": "將 .md 檔案拖放到這裡"
+  },
+  "fontScale": {
+    "sm": "較小字級",
+    "md": "標準字級",
+    "lg": "較大字級"
+  },
+  "theme": {
+    "kicker": "主題",
+    "warm": "暖調編輯",
+    "dark": "反向暗色"
+  },
+  "locale": {
+    "kicker": "語系"
+  },
+  "tabs": {
+    "import": {
+      "kicker": "主要",
+      "label": "匯入"
+    },
+    "export": {
+      "kicker": "主要",
+      "label": "匯出"
+    },
+    "format": {
+      "kicker": "FORMAT",
+      "label": "格式整理"
+    }
+  },
+  "toolbox": {
+    "kicker": "操作區",
+    "import": {
+      "title": "匯入 Markdown",
+      "summary": "把本機 Markdown 插入目前 Word 文件，或接手 launcher 剛交接的內容。"
+    },
+    "export": {
+      "title": "匯出 Markdown",
+      "summary": "從目前文件抽出 Markdown，先預覽，再決定是否下載成檔案。"
+    },
+    "format": {
+      "title": "格式整理",
+      "summary": "把純文字 Markdown 重新套用成 Word 版式，並處理待匯入的 launcher 內容。"
+    }
+  },
+  "import": {
+    "fileLabel": "選取來源檔案",
+    "primaryAction": "匯入 Markdown 到文件",
+    "dropzoneTitle": "拖放檔案到這裡",
+    "dropzoneBody": "也可以使用上方按鈕選取本機 Markdown 檔。",
+    "helper": "支援 <code>.md</code> / <code>.markdown</code>，內容會插入目前游標位置。"
+  },
+  "export": {
+    "primaryAction": "將目前文件轉成 Markdown",
+    "saveAsAction": "選擇位置另存 MD 檔",
+    "copyAction": "一鍵複製全文",
+    "previewLabel": "輸出預覽",
+    "previewPlaceholder": "匯出後的 Markdown 會出現在這裡。",
+    "helper": "若文件為空，預覽與下載內容也會是空白。"
+  },
+  "format": {
+    "lead": "把文件中的純 Markdown 標記整理成 Word 版式，或接手 launcher 交來的檔案內容。",
+    "primaryAction": "將 Markdown 文字套用為 Word 版式",
+    "helper": "適合剛開啟的純文字 Markdown 文件，或需要重新套用本專案轉換規則時使用。"
+  },
+  "reference": {
+    "title": "格式轉換參考",
+    "summary": "這裡整理本專案在 Word 與 Markdown 之間較常見的標記與版式對應，並參考常見 Markdown 寫法與 GFM 延伸語法。",
+    "demo": {
+      "summary": "以下範例用常見 Markdown 寫法對照在 Word 內較接近的呈現效果，方便快速判斷格式是否符合預期。",
+      "heading": {
+        "label": "標題",
+        "render": "文件主標題",
+        "note": "在 Word 中通常會對應到標題樣式。"
+      },
+      "quote": {
+        "label": "引用",
+        "render": "這是一段重點引用"
+      },
+      "emphasis": {
+        "label": "強調",
+        "bold": "粗體文字",
+        "italic": "斜體文字",
+        "code": "inline code"
+      },
+      "list": {
+        "label": "清單",
+        "item1": "第一項",
+        "item2": "第二項",
+        "item3": "第三項"
+      },
+      "table": {
+        "label": "表格",
+        "col1": "欄位",
+        "col2": "值",
+        "row1col1": "狀態",
+        "row1col2": "完成"
+      }
+    },
+    "cards": {
+      "structure": {
+        "title": "段落與標題",
+        "item1": "<code>#</code> 到 <code>######</code> 對應 Word Heading 1 到 Heading 6",
+        "item2": "一般段落會保留為標準內文段落",
+        "item3": "空行會切成新的 Word 段落",
+        "item4": "<code>---</code> 常見於表示水平分隔線"
+      },
+      "emphasis": {
+        "title": "強調標記",
+        "item1": "<code>**bold**</code> 轉成粗體",
+        "item2": "<code>_italic_</code> 轉成斜體",
+        "item3": "<code>`inline code`</code> 會保留成等寬字呈現"
+      },
+      "blocks": {
+        "title": "清單與區塊",
+        "item1": "<code>- item</code> 轉成項目符號清單",
+        "item2": "<code>1. item</code> 轉成編號清單",
+        "item3": "<code>```code```</code> 保留為程式碼區塊語意",
+        "item4": "<code>&gt; quote</code> 可用來表示引用區塊"
+      },
+      "tables": {
+        "title": "表格與延伸",
+        "item1": "<code>| head | cell |</code> 這類 pipe table 屬於常見 GFM 延伸",
+        "item2": "本專案使用的 marked 解析器支援常見表格語法",
+        "item3": "匯出時表格仍會依 Turndown 與 Word 結構回寫"
+      },
+      "links": {
+        "title": "連結與匯出",
+        "item1": "<code>[title](url)</code> 轉成 Word 連結",
+        "item2": "匯出時會以 Turndown 規則回寫成 Markdown",
+        "item3": "目前腳本會移除 <code>script</code> 與 <code>style</code> 內容"
+      }
+    }
+  },
+  "status": {
+    "ready": "初始化完成，可匯入、匯出或整理 Markdown。",
+    "unexpectedError": "發生未預期錯誤，請稍後再試。",
+    "officeNotReady": "Office.js 未載入完成，請確認任務窗格可連到 Microsoft hosted office.js。",
+    "officeUnavailable": "Office.context 不可用，請在 Word 任務窗格中執行。",
+    "importing": "正在匯入…",
+    "exporting": "正在匯出…",
+    "downloadAfterExport": "請先匯出 Markdown，再進行另存。",
+    "copyAfterExport": "請先匯出 Markdown，再進行複製。",
+    "downloadReady": "匯出成功，現在可另存或複製 Markdown 內容。",
+    "copyReady": "已複製整份 Markdown 內容。",
+    "copyFailed": "無法複製 Markdown 內容。",
+    "savePickerUnavailable": "目前環境不支援選擇位置另存，已改用一般下載。",
+    "saveAsReady": "已另存 Markdown：{fileName}",
+    "saveAsCancelled": "已取消另存操作。",
+    "documentEmpty": "文件目前為空，沒有可匯出的內容。",
+    "formattingExistingDocument": "正在依據現有文件內容建立 Markdown 格式…",
+    "pendingFileMissing": "目前沒有待匯入的 Markdown 檔案。",
+    "pendingImportSuccess": "已匯入剛開啟的 Markdown 檔案。",
+    "selectMarkdownFirst": "請先選擇 .md 檔案。",
+    "onlyMarkdownSupported": "僅支援 .md / .markdown 檔案。",
+    "fileReadFailed": "無法讀取檔案。",
+    "importSuccess": "已匯入 Markdown。",
+    "dropzoneNoFile": "未偵測到可用檔案。",
+    "pendingImportDetected": "已偵測到待匯入 Markdown 檔，可點按鈕插入到目前文件。",
+    "pendingImportedFile": "偵測到剛由 launcher 交接的 Markdown：{fileName}",
+    "pendingImportedGeneric": "偵測到剛由 launcher 交接的 Markdown 檔案。",
+    "markdownDocumentDetected": "偵測到 Markdown 文件，點擊可將目前純文字內容直接轉為 Word 格式。",
+    "noConvertibleContent": "文件內目前沒有可轉換的內容。",
+    "formatSuccess": "已將目前文件按 Markdown 格式寫回 Word。",
+    "cannotReadPending": "無法讀取待匯入的 Markdown 檔案。",
+    "saveAutoShowFailed": "無法儲存自動開啟 taskpane 設定。"
+  }
+}

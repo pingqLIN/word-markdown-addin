@@ -1,0 +1,42 @@
+{
+  "builtAt": "2026-04-21T22:59:41.779Z",
+  "outputDir": "dist/site",
+  "files": [
+    {
+      "source": "src/taskpane.html",
+      "target": "taskpane.html"
+    },
+    {
+      "source": "src/js",
+      "target": "js"
+    },
+    {
+      "source": "src/styles",
+      "target": "styles"
+    },
+    {
+      "source": "src/lib",
+      "target": "lib"
+    },
+    {
+      "source": "src/locales",
+      "target": "locales"
+    },
+    {
+      "source": "assets",
+      "target": "assets"
+    },
+    {
+      "source": "[generated]",
+      "target": "index.html"
+    },
+    {
+      "source": "[generated]",
+      "target": ".nojekyll"
+    },
+    {
+      "source": "dist/manifest.store.xml",
+      "target": "manifest.store.xml"
+    }
+  ]
+}
