@@ -3,7 +3,8 @@ const mdFileInput = document.getElementById("md-file");
 const importButton = document.getElementById("import-btn");
 const exportButton = document.getElementById("export-btn");
 const exportPreview = document.getElementById("export-preview");
-const downloadButton = document.getElementById("download-btn");
+const saveAsButton = document.getElementById("save-as-btn");
+const copyAllButton = document.getElementById("copy-all-btn");
 const dropZone = document.getElementById("drop-zone");
 const mdAutoImportButton = document.getElementById("md-auto-import-btn");
 const mdAutoImportHelper = document.getElementById("md-auto-import-helper");
@@ -442,7 +443,13 @@ const exportWordToMarkdown = async () => {
 };
 
 const setDownloadButtonEnabled = (enabled) => {
-  downloadButton.disabled = !enabled;
+  if (saveAsButton) {
+    saveAsButton.disabled = !enabled;
+  }
+
+  if (copyAllButton) {
+    copyAllButton.disabled = !enabled;
+  }
 };
 
 const setAutoImportState = (isVisible, helperText = "", buttonText = "") => {
@@ -531,6 +538,57 @@ const triggerDownload = (content) => {
   URL.revokeObjectURL(url);
 };
 
+const saveMarkdownWithPicker = async (content) => {
+  if (!window.showSaveFilePicker) {
+    triggerDownload(content);
+    setStatus(t("status.savePickerUnavailable"));
+    return;
+  }
+
+  const handle = await window.showSaveFilePicker({
+    suggestedName: createFilename(),
+    types: [
+      {
+        description: "Markdown",
+        accept: {
+          "text/markdown": [".md", ".markdown"],
+        },
+      },
+    ],
+  });
+
+  const writable = await handle.createWritable();
+  await writable.write(new Blob(["\uFEFF", content || ""], {
+    type: "text/markdown;charset=utf-8",
+  }));
+  await writable.close();
+  setStatus(t("status.saveAsReady", { fileName: handle.name || createFilename() }));
+};
+
+const copyMarkdownToClipboard = async (content) => {
+  const markdown = String(content || "");
+  if (!markdown) {
+    throw new Error(t("status.copyAfterExport"));
+  }
+
+  if (window.isSecureContext && navigator.clipboard?.writeText) {
+    await navigator.clipboard.writeText(markdown);
+    return;
+  }
+
+  exportPreview.focus();
+  exportPreview.select();
+  exportPreview.setSelectionRange(0, exportPreview.value.length);
+
+  const copied = document.execCommand("copy");
+  window.getSelection?.()?.removeAllRanges();
+  exportPreview.setSelectionRange(exportPreview.value.length, exportPreview.value.length);
+
+  if (!copied) {
+    throw new Error(t("status.copyFailed"));
+  }
+};
+
 const exportMarkdownFile = async () => {
   try {
     setStatus(t("status.exporting"));
@@ -545,13 +603,33 @@ const exportMarkdownFile = async () => {
   }
 };
 
-const handleDownload = async () => {
+const handleSaveAs = async () => {
   try {
     if (!exportPreview.value) {
       setStatus(t("status.downloadAfterExport"));
       return;
     }
-    triggerDownload(exportPreview.value);
+
+    await saveMarkdownWithPicker(exportPreview.value);
+  } catch (error) {
+    if (error?.name === "AbortError") {
+      setStatus(t("status.saveAsCancelled"));
+      return;
+    }
+
+    setErrorStatus(error);
+  }
+};
+
+const handleCopyAll = async () => {
+  try {
+    if (!exportPreview.value) {
+      setStatus(t("status.copyAfterExport"));
+      return;
+    }
+
+    await copyMarkdownToClipboard(exportPreview.value);
+    setStatus(t("status.copyReady"));
   } catch (error) {
     setErrorStatus(error);
   }
@@ -750,7 +828,12 @@ Office.onReady(async () => {
     }
   });
   exportButton.addEventListener("click", exportMarkdownFile);
-  downloadButton.addEventListener("click", handleDownload);
+  if (saveAsButton) {
+    saveAsButton.addEventListener("click", handleSaveAs);
+  }
+  if (copyAllButton) {
+    copyAllButton.addEventListener("click", handleCopyAll);
+  }
   dropZone.addEventListener("dragover", (event) => {
     event.preventDefault();
     dropZone.classList.add("active");

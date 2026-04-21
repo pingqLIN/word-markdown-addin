@@ -59,9 +59,9 @@
   --status-surface: linear-gradient(120deg, rgba(29, 36, 48, 0.9), rgba(42, 53, 69, 0.88));
   --status-solid: #1d2430;
   --status-text: rgba(255, 251, 244, 0.94);
-  --radius-xl: 18px;
-  --radius-lg: 12px;
-  --radius-md: 8px;
+  --radius-xl: 14px;
+  --radius-lg: 10px;
+  --radius-md: 6px;
   --font-display: "Iowan Old Style", "Palatino Linotype", "Book Antiqua", "Times New Roman", serif;
   --font-body: "Aptos", "Segoe UI", "Microsoft JhengHei UI", sans-serif;
   --font-mono: "Consolas", "Cascadia Code", "Courier New", monospace;
@@ -144,15 +144,15 @@ html {
 }
 
 html[data-font-scale="sm"] {
-  font-size: 15px;
+  font-size: 14px;
 }
 
 html[data-font-scale="md"] {
-  font-size: 16px;
+  font-size: 15px;
 }
 
 html[data-font-scale="lg"] {
-  font-size: 17px;
+  font-size: 16px;
 }
 
 body {
@@ -255,14 +255,14 @@ body::before {
 .hero h1 {
   max-width: none;
   line-height: 0.9;
-  font-size: clamp(1.16rem, 2.6vw, 1.54rem);
+  font-size: clamp(1.08rem, 2.4vw, 1.42rem);
 }
 
 .hero-badge {
   flex-shrink: 0;
   padding: 4px 8px;
   border: 1px solid var(--accent-border);
-  border-radius: 10px;
+  border-radius: 8px;
   background: var(--accent-surface);
   color: var(--accent-deep);
   font-size: 0.63rem;
@@ -289,7 +289,7 @@ body::before {
   gap: 6px;
   padding: 3px;
   border: 1px solid var(--switch-border);
-  border-radius: 10px;
+  border-radius: 8px;
   background: var(--switch-surface);
 }
 
@@ -306,7 +306,7 @@ body::before {
   gap: 4px;
   padding: 3px;
   border: 1px solid var(--switch-border);
-  border-radius: 10px;
+  border-radius: 8px;
   background: var(--switch-surface);
 }
 
@@ -314,7 +314,7 @@ body::before {
   min-width: 31px;
   padding: 5px 7px;
   border: 0;
-  border-radius: 8px;
+  border-radius: 6px;
   background: transparent;
   color: var(--switch-ink);
   font-size: 0.72rem;
@@ -385,7 +385,7 @@ body::before {
 .switch-button {
   padding: 5px 9px;
   border: 0;
-  border-radius: 8px;
+  border-radius: 6px;
   background: transparent;
   color: var(--switch-ink);
   font-size: 0.68rem;
@@ -420,7 +420,7 @@ body::before {
   min-width: 0;
   min-height: 52px;
   padding: 8px 10px;
-  border-radius: 10px;
+  border-radius: 8px;
   border: 1px solid var(--switch-border);
   background: var(--link-surface);
   color: var(--switch-ink);
@@ -483,7 +483,7 @@ body::before {
   gap: 0;
   padding: 5px 8px;
   border: 1px dashed var(--accent-border);
-  border-radius: 8px;
+  border-radius: 6px;
   background: transparent;
   color: var(--muted);
   text-decoration: none;
@@ -536,7 +536,7 @@ body::before {
 .format-lead {
   padding: 12px 14px;
   border: 1px solid var(--olive-border);
-  border-radius: 10px;
+  border-radius: 8px;
   background: linear-gradient(140deg, var(--olive-soft), rgba(255, 255, 255, 0.78));
 }
 
@@ -635,7 +635,7 @@ body::before {
 .reference-demo-emphasis code {
   display: inline-block;
   padding: 3px 7px;
-  border-radius: 4px;
+  border-radius: 3px;
   background: color-mix(in srgb, var(--accent-surface) 62%, white 38%);
   color: var(--accent-deep);
   font-size: 0.84rem;
@@ -702,7 +702,7 @@ body::before {
 }
 
 .panel h2 {
-  font-size: 1.35rem;
+  font-size: 1.24rem;
 }
 
 .field-label {
@@ -728,7 +728,7 @@ body::before {
 .file-input::file-selector-button {
   margin-right: 10px;
   border: 0;
-  border-radius: 8px;
+  border-radius: 6px;
   padding: 8px 12px;
   background: var(--accent-surface);
   color: var(--accent-deep);
@@ -745,7 +745,7 @@ body::before {
 button {
   appearance: none;
   border: 1px solid transparent;
-  border-radius: 8px;
+  border-radius: 6px;
   padding: 10px 14px;
   font: inherit;
   font-size: 0.95rem;
@@ -802,15 +802,13 @@ button.secondary:hover:not(:disabled) {
   background: var(--secondary-surface-hover);
 }
 
-button.ghost,
-#download-btn {
+button.ghost {
   border-color: var(--ghost-border);
   background: rgba(255, 255, 255, 0.62);
   color: var(--ink);
 }
 
-button.ghost:hover:not(:disabled),
-#download-btn:hover:not(:disabled) {
+button.ghost:hover:not(:disabled) {
   background: rgba(255, 255, 255, 0.9);
   border-color: var(--accent-border-hover);
   color: var(--accent-deep);
@@ -829,7 +827,7 @@ button:disabled {
   margin-top: 12px;
   padding: 16px;
   border: 1px dashed var(--accent-border-strong);
-  border-radius: 12px;
+  border-radius: 10px;
   background:
     linear-gradient(140deg, var(--accent-surface), rgba(255, 255, 255, 0.74)),
     rgba(255, 255, 255, 0.58);
@@ -851,7 +849,7 @@ button:disabled {
   align-items: center;
   justify-content: center;
   min-width: 52px;
-  border-radius: 8px;
+  border-radius: 6px;
   padding: 5px 10px;
   background: var(--accent-surface);
   color: var(--accent-deep);
@@ -874,7 +872,7 @@ textarea {
   resize: vertical;
   margin-top: 0;
   border: 1px solid var(--switch-border);
-  border-radius: 10px;
+  border-radius: 8px;
   padding: 14px;
   background:
     var(--editor-surface);
@@ -945,8 +943,6 @@ html[data-theme="dark"] .file-input,
 html[data-theme="microsoft"] .file-input,
 html[data-theme="dark"] button.ghost,
 html[data-theme="microsoft"] button.ghost,
-html[data-theme="dark"] #download-btn,
-html[data-theme="microsoft"] #download-btn,
 html[data-theme="dark"] .drop-zone,
 html[data-theme="microsoft"] .drop-zone {
   background: rgba(21, 30, 42, 0.94);
@@ -1024,8 +1020,12 @@ html[data-theme="microsoft"] .hero-badge {
     width: min(100%, 22rem);
   }
 
-  .tool-view[data-tool-view="export"] #download-btn {
-    width: min(100%, 16rem);
+  .tool-view[data-tool-view="export"] #save-as-btn {
+    width: min(100%, 18rem);
+  }
+
+  .tool-view[data-tool-view="export"] #copy-all-btn {
+    width: min(100%, 14rem);
   }
 
   .tool-view[data-tool-view="format"] {
@@ -1060,7 +1060,7 @@ html[data-theme="microsoft"] .hero-badge {
 .helper.visible {
   padding: 10px 12px;
   border: 1px solid var(--accent-border-hover);
-  border-radius: 10px;
+  border-radius: 8px;
   background: var(--helper-surface);
   color: var(--helper-highlight);
 }
@@ -1068,7 +1068,7 @@ html[data-theme="microsoft"] .hero-badge {
 .status {
   margin: 0;
   min-height: 52px;
-  border-radius: 12px;
+  border-radius: 10px;
   padding: 14px 16px;
   background: var(--status-surface), var(--status-solid);
   color: var(--status-text);
@@ -1094,7 +1094,7 @@ code {
   .hero,
   .panel,
   .status {
-    border-radius: 14px;
+    border-radius: 12px;
   }
 
   .hero-heading {
