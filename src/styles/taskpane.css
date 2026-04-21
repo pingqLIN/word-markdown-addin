@@ -353,7 +353,7 @@ body::before {
 
 .hero-links {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 8px;
   margin-top: 10px;
 }
@@ -414,6 +414,48 @@ body::before {
 
 .hero-link.is-active .hero-link-kicker {
   color: var(--link-active-kicker);
+}
+
+.hero-secondary-actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 6px;
+}
+
+.hero-secondary-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0;
+  padding: 5px 8px;
+  border: 1px dashed var(--accent-border);
+  border-radius: 8px;
+  background: transparent;
+  color: var(--muted);
+  text-decoration: none;
+  transition:
+    border-color 160ms ease,
+    color 160ms ease,
+    background-color 160ms ease;
+}
+
+.hero-secondary-link strong {
+  font-size: 0.82rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+
+.hero-secondary-link:hover,
+.hero-secondary-link:focus-visible {
+  border-color: var(--accent-border-hover);
+  background: var(--accent-surface);
+  color: var(--accent-deep);
+}
+
+.hero-secondary-link.is-active {
+  border-style: solid;
+  border-color: var(--accent-border-strong);
+  background: var(--accent-surface);
+  color: var(--accent-deep);
 }
 
 .panel-summary {
@@ -771,7 +813,7 @@ code {
   }
 
   .hero-links {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 6px;
   }
 
@@ -782,5 +824,9 @@ code {
 
   .hero-link strong {
     font-size: 0.86rem;
+  }
+
+  .hero-secondary-actions {
+    justify-content: flex-start;
   }
 }
