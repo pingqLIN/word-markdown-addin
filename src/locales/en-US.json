@@ -5,6 +5,14 @@
     "title": "Word Markdown Companion",
     "copy": "Handle <code>.md</code> import, formatting, and export directly inside Word."
   },
+  "theme": {
+    "kicker": "THEME",
+    "warm": "Warm Editorial",
+    "dark": "Inverse Dark"
+  },
+  "locale": {
+    "kicker": "LANG"
+  },
   "tabs": {
     "import": {
       "kicker": "INPUT",

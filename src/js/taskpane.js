@@ -12,9 +12,13 @@ const toolboxSummary = document.getElementById("toolbox-summary");
 const panelLinks = Array.from(document.querySelectorAll("[data-panel-link]"));
 const toolViews = Array.from(document.querySelectorAll("[data-tool-view]"));
 const localeButtons = Array.from(document.querySelectorAll("[data-locale-switch]"));
+const themeButtons = Array.from(document.querySelectorAll("[data-theme-switch]"));
 
 const supportedLocales = ["zh-TW", "en-US"];
 const defaultLocale = "zh-TW";
+const supportedThemes = ["warm", "dark"];
+const defaultTheme = "warm";
+const themeStorageKey = "wordMarkdownTheme";
 const pendingMarkdownState = {
   fileName: "",
   markdown: "",
@@ -22,6 +26,7 @@ const pendingMarkdownState = {
 
 let activeToolView = "import";
 let currentLocale = defaultLocale;
+let currentTheme = defaultTheme;
 let localeMessages = {};
 
 const logTaskpaneEvent = async (message, extra = null) => {
@@ -90,6 +95,42 @@ const detectPreferredLocale = () => {
   }
 
   return defaultLocale;
+};
+
+const detectPreferredTheme = () => {
+  try {
+    const savedTheme = String(window.localStorage?.getItem(themeStorageKey) || "").trim();
+    if (savedTheme === "microsoft") {
+      return "dark";
+    }
+    if (supportedThemes.includes(savedTheme)) {
+      return savedTheme;
+    }
+  } catch {
+    return defaultTheme;
+  }
+
+  return defaultTheme;
+};
+
+const applyTheme = (theme, { persist = true } = {}) => {
+  const normalizedTheme = supportedThemes.includes(theme) ? theme : defaultTheme;
+  currentTheme = normalizedTheme;
+  document.documentElement.dataset.theme = normalizedTheme;
+
+  if (persist) {
+    try {
+      window.localStorage?.setItem(themeStorageKey, normalizedTheme);
+    } catch {
+      // Ignore storage failures. The active theme still applies for this session.
+    }
+  }
+
+  themeButtons.forEach((button) => {
+    const isActive = button.dataset.themeSwitch === normalizedTheme;
+    button.classList.toggle("is-active", isActive);
+    button.setAttribute("aria-pressed", isActive ? "true" : "false");
+  });
 };
 
 const loadLocaleMessages = async (locale) => {
@@ -521,6 +562,10 @@ const onDropFiles = (event) => {
   handleMdFile(files[0]);
 };
 
+applyTheme(detectPreferredTheme(), {
+  persist: false,
+});
+
 requireOfficeRuntime();
 void logTaskpaneEvent("taskpane-script-loaded");
 
@@ -568,6 +613,17 @@ Office.onReady(async () => {
       } catch (error) {
         setErrorStatus(error);
       }
+    });
+  });
+
+  themeButtons.forEach((button) => {
+    button.addEventListener("click", () => {
+      const nextTheme = button.dataset.themeSwitch;
+      if (!nextTheme || nextTheme === currentTheme) {
+        return;
+      }
+
+      applyTheme(nextTheme);
     });
   });
 

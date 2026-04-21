@@ -16,18 +16,23 @@
         <div class="hero-topline">
           <div class="hero-meta">
             <p class="eyebrow" data-i18n="hero.eyebrow">EDITORIAL TOOLPANE</p>
-            <span class="hero-badge" data-i18n="hero.badge">Word × Markdown</span>
-          </div>
-          <div class="locale-switch" role="group" aria-label="Language switcher">
-            <button type="button" class="locale-button is-active" data-locale-switch="zh-TW">繁中</button>
-            <button type="button" class="locale-button" data-locale-switch="en-US">EN</button>
+            <div class="hero-utility-row">
+              <span class="hero-badge" data-i18n="hero.badge">Word × Markdown</span>
+              <div class="hero-controls">
+                <div class="pill-switch" role="group" aria-label="Theme switcher">
+                  <button type="button" class="switch-button is-active" data-theme-switch="warm" data-i18n="theme.warm">Warm Editorial</button>
+                  <button type="button" class="switch-button" data-theme-switch="dark" data-i18n="theme.dark">Inverse Dark</button>
+                </div>
+                <div class="pill-switch" role="group" aria-label="Language switcher">
+                  <button type="button" class="switch-button is-active" data-locale-switch="zh-TW">繁中</button>
+                  <button type="button" class="switch-button" data-locale-switch="en-US">EN</button>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
         <div class="hero-heading">
           <h1 data-i18n="hero.title">Word Markdown Companion</h1>
-          <p class="hero-copy" data-i18n="hero.copy">
-            在 Word 內完成匯入、整理與匯出 <code>.md</code>。
-          </p>
         </div>
         <nav class="hero-links" aria-label="跳到工具區">
           <a class="hero-link is-active" href="#workspace-toolbox" data-panel-link="import">

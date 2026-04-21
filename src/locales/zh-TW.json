@@ -5,6 +5,14 @@
     "title": "Word Markdown Companion",
     "copy": "在 Word 內完成匯入、整理與匯出 <code>.md</code>。"
   },
+  "theme": {
+    "kicker": "主題",
+    "warm": "暖調編輯",
+    "dark": "反向暗色"
+  },
+  "locale": {
+    "kicker": "語系"
+  },
   "tabs": {
     "import": {
       "kicker": "INPUT",
