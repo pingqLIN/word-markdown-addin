@@ -13,12 +13,16 @@ const panelLinks = Array.from(document.querySelectorAll("[data-panel-link]"));
 const toolViews = Array.from(document.querySelectorAll("[data-tool-view]"));
 const localeButtons = Array.from(document.querySelectorAll("[data-locale-switch]"));
 const themeButtons = Array.from(document.querySelectorAll("[data-theme-switch]"));
+const fontScaleButtons = Array.from(document.querySelectorAll("[data-font-scale]"));
 
 const supportedLocales = ["zh-TW", "en-US"];
 const defaultLocale = "zh-TW";
 const supportedThemes = ["warm", "dark"];
 const defaultTheme = "warm";
+const supportedFontScales = ["sm", "md", "lg"];
+const defaultFontScale = "md";
 const themeStorageKey = "wordMarkdownTheme";
+const fontScaleStorageKey = "wordMarkdownFontScale";
 const pendingMarkdownState = {
   fileName: "",
   markdown: "",
@@ -27,6 +31,7 @@ const pendingMarkdownState = {
 let activeToolView = "import";
 let currentLocale = defaultLocale;
 let currentTheme = defaultTheme;
+let currentFontScale = defaultFontScale;
 let localeMessages = {};
 
 const logTaskpaneEvent = async (message, extra = null) => {
@@ -113,6 +118,19 @@ const detectPreferredTheme = () => {
   return defaultTheme;
 };
 
+const detectPreferredFontScale = () => {
+  try {
+    const savedFontScale = String(window.localStorage?.getItem(fontScaleStorageKey) || "").trim();
+    if (supportedFontScales.includes(savedFontScale)) {
+      return savedFontScale;
+    }
+  } catch {
+    return defaultFontScale;
+  }
+
+  return defaultFontScale;
+};
+
 const applyTheme = (theme, { persist = true } = {}) => {
   const normalizedTheme = supportedThemes.includes(theme) ? theme : defaultTheme;
   currentTheme = normalizedTheme;
@@ -128,6 +146,28 @@ const applyTheme = (theme, { persist = true } = {}) => {
 
   themeButtons.forEach((button) => {
     const isActive = button.dataset.themeSwitch === normalizedTheme;
+    button.classList.toggle("is-active", isActive);
+    button.setAttribute("aria-pressed", isActive ? "true" : "false");
+  });
+};
+
+const applyFontScale = (fontScale, { persist = true } = {}) => {
+  const normalizedFontScale = supportedFontScales.includes(fontScale)
+    ? fontScale
+    : defaultFontScale;
+  currentFontScale = normalizedFontScale;
+  document.documentElement.dataset.fontScale = normalizedFontScale;
+
+  if (persist) {
+    try {
+      window.localStorage?.setItem(fontScaleStorageKey, normalizedFontScale);
+    } catch {
+      // Ignore storage failures. The active size still applies for this session.
+    }
+  }
+
+  fontScaleButtons.forEach((button) => {
+    const isActive = button.dataset.fontScale === normalizedFontScale;
     button.classList.toggle("is-active", isActive);
     button.setAttribute("aria-pressed", isActive ? "true" : "false");
   });
@@ -208,6 +248,17 @@ const applyTranslations = () => {
     const themeLabel = getTranslation(`theme.${themeName}`, themeName);
     button.setAttribute("aria-label", themeLabel);
     button.setAttribute("title", themeLabel);
+  });
+
+  fontScaleButtons.forEach((button) => {
+    const fontScale = button.dataset.fontScale;
+    if (!fontScale) {
+      return;
+    }
+
+    const label = getTranslation(`fontScale.${fontScale}`, button.textContent || fontScale);
+    button.setAttribute("aria-label", label);
+    button.setAttribute("title", label);
   });
 };
 
@@ -590,6 +641,9 @@ const onDropFiles = (event) => {
 applyTheme(detectPreferredTheme(), {
   persist: false,
 });
+applyFontScale(detectPreferredFontScale(), {
+  persist: false,
+});
 
 requireOfficeRuntime();
 void logTaskpaneEvent("taskpane-script-loaded");
@@ -649,6 +703,17 @@ Office.onReady(async () => {
       }
 
       applyTheme(nextTheme);
+    });
+  });
+
+  fontScaleButtons.forEach((button) => {
+    button.addEventListener("click", () => {
+      const nextFontScale = button.dataset.fontScale;
+      if (!nextFontScale || nextFontScale === currentFontScale) {
+        return;
+      }
+
+      applyFontScale(nextFontScale);
     });
   });
 

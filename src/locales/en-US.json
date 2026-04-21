@@ -10,10 +10,16 @@
   },
   "controls": {
     "themeSwitcher": "Theme switcher",
+    "fontScaleSwitcher": "Font size switcher",
     "languageSwitcher": "Language switcher",
     "primaryTools": "Primary tools",
     "secondaryTools": "Secondary tools",
     "dropzone": "Drop a .md file here"
+  },
+  "fontScale": {
+    "sm": "Smaller type",
+    "md": "Default type",
+    "lg": "Larger type"
   },
   "theme": {
     "kicker": "THEME",
@@ -72,12 +78,9 @@
     "helper": "Best for plain-text Markdown documents that were just opened or when you want to re-apply this project's conversion rules."
   },
   "reference": {
-    "kicker": "REFERENCE",
     "title": "Format conversion reference",
     "summary": "A quick reference for the common Markdown and Word mappings used by this project, including familiar Markdown patterns and GFM-style extensions.",
     "demo": {
-      "kicker": "DEMO",
-      "title": "Rendered examples",
       "summary": "These side-by-side examples show familiar Markdown syntax and the closest Word-style result you should expect inside this task pane workflow.",
       "heading": {
         "label": "Heading",

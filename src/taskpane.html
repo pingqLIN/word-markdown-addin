@@ -31,6 +31,11 @@
                 <span class="theme-dot theme-dot-dark" aria-hidden="true"></span>
               </button>
             </div>
+            <div class="font-scale-switch" role="group" aria-label="字級切換" data-i18n-aria-label="controls.fontScaleSwitcher">
+              <button type="button" class="font-scale-button is-active" data-font-scale="sm">A-</button>
+              <button type="button" class="font-scale-button" data-font-scale="md">A</button>
+              <button type="button" class="font-scale-button" data-font-scale="lg">A+</button>
+            </div>
             <div class="pill-switch" role="group" aria-label="語言切換" data-i18n-aria-label="controls.languageSwitcher">
               <button type="button" class="switch-button is-active" data-locale-switch="zh-TW">繁中</button>
               <button type="button" class="switch-button" data-locale-switch="en-US">EN</button>
@@ -109,18 +114,13 @@
       </section>
 
       <section class="panel panel-reference">
-        <div class="panel-head">
-          <p class="panel-kicker" data-i18n="reference.kicker">參考</p>
+        <div class="panel-head panel-head-article">
           <h2 data-i18n="reference.title">格式轉換參考</h2>
           <p class="panel-summary" data-i18n="reference.summary">這裡整理本專案在 Word 與 Markdown 之間較常見的字符與版式對應，方便編修時對照。</p>
         </div>
 
         <div class="reference-demo">
-          <div class="reference-demo-head">
-            <p class="panel-kicker" data-i18n="reference.demo.kicker">範例</p>
-            <h3 data-i18n="reference.demo.title">實際顯示效果</h3>
-            <p class="panel-summary" data-i18n="reference.demo.summary">以下範例用常見 Markdown 寫法對照在 Word 內較接近的呈現效果，方便快速判斷格式是否符合預期。</p>
-          </div>
+          <p class="reference-lead" data-i18n="reference.demo.summary">以下範例用常見 Markdown 寫法對照在 Word 內較接近的呈現效果，方便快速判斷格式是否符合預期。</p>
           <div class="reference-demo-grid">
             <article class="reference-demo-card">
               <span class="reference-demo-label" data-i18n="reference.demo.heading.label">標題</span>

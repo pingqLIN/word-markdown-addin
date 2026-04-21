@@ -10,10 +10,16 @@
   },
   "controls": {
     "themeSwitcher": "主題切換",
+    "fontScaleSwitcher": "字級切換",
     "languageSwitcher": "語言切換",
     "primaryTools": "主要工具",
     "secondaryTools": "其他工具",
     "dropzone": "將 .md 檔案拖放到這裡"
+  },
+  "fontScale": {
+    "sm": "較小字級",
+    "md": "標準字級",
+    "lg": "較大字級"
   },
   "theme": {
     "kicker": "主題",
@@ -72,12 +78,9 @@
     "helper": "適合剛開啟的純文字 Markdown 文件，或需要重新套用本專案轉換規則時使用。"
   },
   "reference": {
-    "kicker": "參考",
     "title": "格式轉換參考",
     "summary": "這裡整理本專案在 Word 與 Markdown 之間較常見的標記與版式對應，並參考常見 Markdown 寫法與 GFM 延伸語法。",
     "demo": {
-      "kicker": "範例",
-      "title": "實際顯示效果",
       "summary": "以下範例用常見 Markdown 寫法對照在 Word 內較接近的呈現效果，方便快速判斷格式是否符合預期。",
       "heading": {
         "label": "標題",
