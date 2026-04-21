@@ -14,6 +14,7 @@
 - [docs/single-machine.md](docs/single-machine.md)
 - [docs/publish-online.md](docs/publish-online.md)
 - [docs/release-checklist.md](docs/release-checklist.md)
+- [docs/skill-list.md](docs/skill-list.md)
 
 ## 一步完成指令
 
