@@ -1,77 +1,81 @@
-# Word Markdown Companion Add-in
+# Word Markdown Companion
 
-這個 repo 目前同時維護兩種模式：
+Public Microsoft Word add-in for importing and exporting Markdown `.md` files inside Word.
 
-- `單機版`
-  - 給 Windows + Word Desktop + sideload 測試
-  - 包含 `.md` 關聯與 launcher bridge
+This repo keeps two tracks in parallel:
+
 - `線上版`
-  - 給正式 HTTPS 網域上的 Office Add-in 部署或上架流程
-  - 不包含 Windows shell 關聯
+  - 正式公開路徑
+  - 依賴 HTTPS host、manifest 與 Office Add-in 標準分發
+- `單機版`
+  - Windows + Word Desktop 本機 helper 路徑
+  - 給開發、測試與 sideload 使用，不是公開發佈主路徑
 
-## 入口文件
+## 已上線網址
+
+- Public site: `https://github.colorgeek.co/word-markdown-addin/`
+- Install page: `https://github.colorgeek.co/word-markdown-addin/install.html`
+- Manifest: `https://github.colorgeek.co/word-markdown-addin/manifest.store.xml`
+- Task pane: `https://github.colorgeek.co/word-markdown-addin/taskpane.html`
+- GitHub repo: `https://github.com/pingqLIN/word-markdown-addin`
+
+## Mascot
+
+![Word Markdown Companion mascot](assets/mascot/word-markdown-companion-url-hero.jpg)
+
+- 生成來源：[assets/mascot/word-markdown-companion-url-hero.md](assets/mascot/word-markdown-companion-url-hero.md)
+- 圖檔：[assets/mascot/word-markdown-companion-url-hero.jpg](assets/mascot/word-markdown-companion-url-hero.jpg)
+
+## 線上版安裝
+
+目前公開版請從 install page 開始：
+
+- 個人安裝：下載 manifest，然後在 Word 的 `My Add-ins` / `Upload My Add-in` 載入
+- Tenant Admin 安裝：在 Microsoft 365 admin center 使用 manifest URL 部署
+
+真正的 Microsoft 官方 click-and-run 一鍵安裝，必須等這個 add-in 取得 Marketplace asset ID 後才能啟用。現在的 `install.html` 已經把這個入口預留好了。
+
+## 建置公開版
+
+```powershell
+cd Q:\Projects\word-markdown-addin
+$env:MANIFEST_HOST = "https://github.colorgeek.co/word-markdown-addin"
+$env:SUPPORT_URL = "https://github.com/pingqLIN/word-markdown-addin"
+npm run build:online
+```
+
+輸出內容：
+
+- `dist/manifest.store.xml`
+- `dist/site/index.html`
+- `dist/site/install.html`
+- `dist/site/taskpane.html`
+- `dist/site/js/*`
+- `dist/site/styles/*`
+- `dist/site/lib/*`
+- `dist/site/locales/*`
+- `dist/site/assets/*`
+
+## 文件入口
+
+### 公開版 / 線上版
+
+- [docs/online-install.md](docs/online-install.md)
+- [docs/publish-online.md](docs/publish-online.md)
+- [docs/github-pages.md](docs/github-pages.md)
+- [docs/online-smoke-test.md](docs/online-smoke-test.md)
+
+### 本機版
 
 - [docs/single-machine.md](docs/single-machine.md)
-- [docs/publish-online.md](docs/publish-online.md)
-- [docs/online-smoke-test.md](docs/online-smoke-test.md)
-- [docs/github-pages.md](docs/github-pages.md)
+
+### 維護 / 測試
+
 - [docs/release-checklist.md](docs/release-checklist.md)
 - [docs/skill-list.md](docs/skill-list.md)
 
-## 一步完成指令
+## 補充
 
-### 單機版
-
-```bash
-npm run single-machine
-```
-
-### 線上版
-
-先設定正式 HTTPS host：
-
-```powershell
-$env:MANIFEST_HOST = "https://your-addin-host.example"
-$env:SUPPORT_URL = "https://your-addin-host.example/support"
-```
-
-再執行：
-
-```bash
-npm run online
-```
-
-這會輸出：
-
-- `dist/manifest.store.xml`
-- `dist/site/`
-
-### GitHub Pages
-
-這個 repo 目前採 `gh-pages` branch 發佈，不依賴 GitHub Actions。發佈時：
-
-- 先設定 GitHub Pages 實際網址為 `MANIFEST_HOST`
-- 執行 `npm run build:online`
-- 把 `dist/site/` 內容發佈到 `gh-pages` branch root
-- Pages 站點會提供：
-  - `index.html`
-  - `manifest.store.xml`
-  - `taskpane.html`
-  - `js/*`, `styles/*`, `lib/*`, `locales/*`, `assets/*`
-
-## 重要說明
-
-- `單機版` 依賴 `localhost`、Windows registry 與 Word Desktop sideload，會從 `3000` 起自動選可用 port。
-- `線上版` 會輸出正式版 manifest 與可直接部署到靜態主機的 `dist/site/`，不包含本機 shell integration。
-- 已停用但保留的舊流程檔案會放在 `.clean/legacy/`。
-
-## 驗證
-
-```bash
-npm test
-```
-
-- 驗證 manifest 生成
-- 驗證線上版靜態網站工件輸出
-- 驗證本機 dev server 的靜態資源與 API
-- 驗證 release checklist 內的核心 `node --check` 檔案
+- GitHub Pages 目前是公開靜態 host，不是獨立 Web App。
+- 線上版不包含 Windows `.md` 關聯、registry 或 `localhost` bridge。
+- 若之後取得 Marketplace asset ID，只要重新建置 `install.html`，就能升級成真正的官方一鍵安裝頁。

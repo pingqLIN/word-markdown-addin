@@ -1,29 +1,34 @@
 # GitHub Pages 發佈說明
 
-這份文件描述如何把本專案做成 `全公開 + GitHub Pages`。
+這份文件描述目前這個 repo 如何用 `全公開 + GitHub Pages` 提供 Office Add-in 靜態資源。
 
 ## 目前採用的方式
 
 本 repo 目前採 `branch publish`，不依賴 GitHub Actions workflow。
 
-原因很單純：
+原因：
 
-- 這個 repo 的 Pages 內容本質上就是 `dist/site/` 純靜態檔
-- GitHub 官方也建議在不需要自訂 build flow 時，直接用 branch 當 publishing source
-- 目前帳號的 Actions 執行會被 billing lock 擋住，workflow 發佈不可用
+- Pages 內容本質上就是 `dist/site/` 純靜態檔
+- 目前帳號的 Actions 執行會被 billing lock 擋住
+- `gh-pages` branch root 發佈已足夠支撐這個 add-in 的公開 host
 
-## 目標
+## 目前正式入口
 
-公開後主要會有兩個入口：
-
-- Repo：
+- Repo:
   - `https://github.com/pingqLIN/word-markdown-addin`
-- GitHub Pages：
-  - 以 GitHub Pages API 回報的 `html_url` 為準
+- GitHub Pages:
+  - `https://github.colorgeek.co/word-markdown-addin/`
+- Install page:
+  - `https://github.colorgeek.co/word-markdown-addin/install.html`
+- Manifest:
+  - `https://github.colorgeek.co/word-markdown-addin/manifest.store.xml`
+- Task pane:
+  - `https://github.colorgeek.co/word-markdown-addin/taskpane.html`
 
-其中 Pages 站點會提供：
+## Pages 站點會提供的內容
 
 - `index.html`
+- `install.html`
 - `manifest.store.xml`
 - `taskpane.html`
 - `js/*`
@@ -34,17 +39,32 @@
 
 ## 發佈流程
 
-1. 先查出 Pages 實際網址：
+1. 先確認 Pages 設定：
 
 ```powershell
 gh api repos/pingqLIN/word-markdown-addin/pages
 ```
 
-2. 把 `html_url` 換成 HTTPS，設成 `MANIFEST_HOST`：
+預期至少要看到：
+
+- `html_url = https://github.colorgeek.co/word-markdown-addin/`
+- `source.branch = gh-pages`
+- `source.path = /`
+- `build_type = legacy`
+
+2. 設定建置用公開網址：
 
 ```powershell
 $env:MANIFEST_HOST = "https://github.colorgeek.co/word-markdown-addin"
 $env:SUPPORT_URL = "https://github.com/pingqLIN/word-markdown-addin"
+```
+
+若未來取得 Marketplace asset ID，可再加：
+
+```powershell
+$env:MARKETPLACE_ASSET_ID = "WA000000000"
+$env:MARKETPLACE_ADDIN_TITLE = "Word Markdown Companion"
+$env:MARKETPLACE_LINK_LANGUAGE = "en-US"
 ```
 
 3. 產生公開站點工件：
@@ -55,21 +75,22 @@ npm run build:online
 
 4. 把 `dist/site/` 全部內容發到 `gh-pages` branch root。
 
-5. 把 GitHub Pages publishing source 設成：
+## Pages 路徑規則
 
-- branch: `gh-pages`
-- path: `/`
-- build type: `legacy`
-
-## Pages 路徑
-
-task pane URL 會跟著 `MANIFEST_HOST`：
+- `manifest.store.xml` 必須指回同一個 Pages host
+- task pane URL 必須是：
 
 ```text
 https://github.colorgeek.co/word-markdown-addin/taskpane.html
 ```
 
-manifest 也必須指向同一個 host，否則 Word 會載到錯的 task pane URL。
+- install page URL 會是：
+
+```text
+https://github.colorgeek.co/word-markdown-addin/install.html
+```
+
+也就是說，使用者應該先到 `install.html`，Word 再透過 manifest 去載 `taskpane.html`。
 
 ## 公開前檢查
 
@@ -80,10 +101,11 @@ manifest 也必須指向同一個 host，否則 Word 會載到錯的 task pane U
 
 ## 公開後檢查
 
-1. Repo visibility 變成 `Public`
-2. Pages source 變成 `gh-pages /`
+1. Repo visibility 是 `Public`
+2. Pages source 是 `gh-pages /`
 3. Pages 站點可開：
    - `/`
+   - `/install.html`
    - `/manifest.store.xml`
    - `/taskpane.html`
 4. `manifest.store.xml` 內的網址都指向 GitHub Pages

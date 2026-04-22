@@ -13,6 +13,7 @@ test("build-static-site generates a hostable site bundle with expected files", a
   try {
     const requiredFiles = [
       "index.html",
+      "install.html",
       ".nojekyll",
       "manifest.store.xml",
       "taskpane.html",
@@ -38,7 +39,16 @@ test("build-static-site generates a hostable site bundle with expected files", a
       outputDir,
       "--manifest",
       manifestPath,
-    ]);
+    ], {
+      env: {
+        DISPLAY_NAME: "Word Markdown Companion",
+        MANIFEST_HOST: "https://github.colorgeek.co/word-markdown-addin",
+        MARKETPLACE_ADDIN_TITLE: "Word Markdown Companion",
+        MARKETPLACE_ASSET_ID: "WA200006278",
+        MARKETPLACE_LINK_LANGUAGE: "en-US",
+        SUPPORT_URL: "https://github.com/pingqLIN/word-markdown-addin",
+      },
+    });
 
     for (const relativePath of requiredFiles) {
       const candidatePath = path.join(outputDir, relativePath);
@@ -48,7 +58,16 @@ test("build-static-site generates a hostable site bundle with expected files", a
 
     const landingContents = await readFile(path.join(outputDir, "index.html"), "utf8");
     assert.match(landingContents, /Word Markdown Companion/);
+    assert.match(landingContents, /install\.html/);
     assert.match(landingContents, /manifest\.store\.xml/);
+
+    const installContents = await readFile(path.join(outputDir, "install.html"), "utf8");
+    assert.match(
+      installContents,
+      /https:\/\/github\.colorgeek\.co\/word-markdown-addin\/manifest\.store\.xml/,
+    );
+    assert.match(installContents, /Open in Word on the web/);
+    assert.match(installContents, /WA200006278/);
 
     const taskpaneContents = await readFile(path.join(outputDir, "taskpane.html"), "utf8");
     assert.match(taskpaneContents, /js\/taskpane\.js/);
