@@ -1,5 +1,5 @@
 {
-  "builtAt": "2026-04-21T22:59:41.779Z",
+  "builtAt": "2026-04-22T00:50:10.821Z",
   "outputDir": "dist/site",
   "files": [
     {
@@ -29,6 +29,10 @@
     {
       "source": "[generated]",
       "target": "index.html"
+    },
+    {
+      "source": "[generated]",
+      "target": "install.html"
     },
     {
       "source": "[generated]",

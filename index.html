@@ -104,31 +104,24 @@
         <p>這個站點提供 Word Office Add-in 的公開靜態資源。真正的 Office task pane 入口是 <code>taskpane.html</code>，一般瀏覽器訪客請從這裡下載 manifest 或查看 repo 文件，不要直接把本站當成完整 Web App。</p>
         <p class="muted">This public site hosts the Office add-in assets. The task pane is intended to run inside Microsoft Word, not as a standalone browser app.</p>
         <div class="actions">
-          <a class="button button-primary" href="./manifest.store.xml">下載 Manifest</a>
+          <a class="button button-primary" href="./install.html">快速安裝</a>
+          <a class="button button-secondary" href="./manifest.store.xml">下載 Manifest</a>
           <a class="button button-secondary" href="./taskpane.html">直接開 taskpane.html</a>
           <a class="button button-secondary" href="https://github.com/pingqLIN/word-markdown-addin">GitHub Repo</a>
         </div>
+        <p class="muted">目前公開頁面與安裝入口都部署在同一個 GitHub Pages host，請優先從安裝頁開始。</p>
         <div class="grid">
           <article class="card">
-            <strong>預設公開網址</strong>
+            <strong>Pages 首頁</strong>
             <p class="muted"><code>https://github.colorgeek.co/word-markdown-addin</code></p>
           </article>
           <article class="card">
-            <strong>主要檔案</strong>
-            <ul>
-              <li><code>manifest.store.xml</code></li>
-              <li><code>taskpane.html</code></li>
-              <li><code>js/taskpane.js</code></li>
-              <li><code>locales/*.json</code></li>
-            </ul>
+            <strong>Manifest</strong>
+            <p class="muted"><code>https://github.colorgeek.co/word-markdown-addin/manifest.store.xml</code></p>
           </article>
           <article class="card">
-            <strong>使用方式</strong>
-            <ul>
-              <li>先用 manifest 載入 Word add-in</li>
-              <li>再在 Word 內開啟 task pane</li>
-              <li>手動匯入或匯出 Markdown</li>
-            </ul>
+            <strong>Task pane</strong>
+            <p class="muted"><code>https://github.colorgeek.co/word-markdown-addin/taskpane.html</code></p>
           </article>
         </div>
       </section>
