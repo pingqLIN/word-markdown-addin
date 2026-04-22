@@ -1,5 +1,5 @@
 {
-  "builtAt": "2026-04-22T00:50:10.821Z",
+  "builtAt": "2026-04-22T03:06:01.470Z",
   "outputDir": "dist/site",
   "files": [
     {
@@ -33,6 +33,14 @@
     {
       "source": "[generated]",
       "target": "install.html"
+    },
+    {
+      "source": "[generated]",
+      "target": "support.html"
+    },
+    {
+      "source": "[generated]",
+      "target": "privacy.html"
     },
     {
       "source": "[generated]",

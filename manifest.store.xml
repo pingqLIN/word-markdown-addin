@@ -6,15 +6,15 @@
   xsi:type="TaskPaneApp">
   <Id>e6c1ec6a-3b55-4ed6-8a57-1d3de4f6b4d1</Id>
   <Version>1.0.0.1</Version>
-  <ProviderName>Internal</ProviderName>
+  <ProviderName>pingqLIN</ProviderName>
   <DefaultLocale>en-US</DefaultLocale>
   <DisplayName DefaultValue="Word Markdown Companion"/>
   <Description DefaultValue="Import and export Markdown files in Microsoft Word with one click."/>
   <IconUrl DefaultValue="https://github.colorgeek.co/word-markdown-addin/assets/icon-32.png"/>
-  <HighResolutionIconUrl DefaultValue="https://github.colorgeek.co/word-markdown-addin/assets/icon-80.png"/>
-  <SupportUrl DefaultValue="https://github.com/pingqLIN/word-markdown-addin"/>
+  <HighResolutionIconUrl DefaultValue="https://github.colorgeek.co/word-markdown-addin/assets/icon-64.png"/>
+  <SupportUrl DefaultValue="https://github.colorgeek.co/word-markdown-addin/support.html"/>
   <AppDomains>
-    <AppDomain>https://github.colorgeek.co/word-markdown-addin</AppDomain>
+    <AppDomain>https://github.colorgeek.co</AppDomain>
   </AppDomains>
   <Hosts>
     <Host Name="Document"/>
@@ -26,11 +26,15 @@
   </Requirements>
   <DefaultSettings>
     <SourceLocation DefaultValue="https://github.colorgeek.co/word-markdown-addin/taskpane.html"/>
-    <RequestedHeight>450</RequestedHeight>
   </DefaultSettings>
   <Permissions>ReadWriteDocument</Permissions>
 
-  <VersionOverrides xmlns="http://schemas.microsoft.com/office/taskpaneappversionoverrides" xsi:type="TaskPaneApp">
+  <VersionOverrides xmlns="http://schemas.microsoft.com/office/taskpaneappversionoverrides" xsi:type="VersionOverridesV1_0">
+    <Requirements>
+      <bt:Sets DefaultMinVersion="1.1">
+        <bt:Set Name="AddinCommands" MinVersion="1.1"/>
+      </bt:Sets>
+    </Requirements>
     <Hosts>
       <Host xsi:type="Document">
         <DesktopFormFactor>
@@ -49,15 +53,15 @@
                     <Title resid="OpenMd.Label" />
                     <Description resid="OpenMd.Tooltip" />
                   </Supertip>
-                  <Action xsi:type="ShowTaskpane">
-                    <TaskpaneId>Office.AutoShowTaskpaneWithDocument</TaskpaneId>
-                    <SourceLocation resid="Taskpane.Url" />
-                  </Action>
                   <Icon>
                     <bt:Image size="16" resid="Icon.16x16"/>
                     <bt:Image size="32" resid="Icon.32x32"/>
                     <bt:Image size="80" resid="Icon.80x80"/>
                   </Icon>
+                  <Action xsi:type="ShowTaskpane">
+                    <TaskpaneId>Office.AutoShowTaskpaneWithDocument</TaskpaneId>
+                    <SourceLocation resid="Taskpane.Url" />
+                  </Action>
                 </Control>
                 <Control id="ExportMd" xsi:type="Button">
                   <Label resid="ExportMd.Label" />
@@ -65,15 +69,15 @@
                     <Title resid="ExportMd.Label" />
                     <Description resid="ExportMd.Tooltip" />
                   </Supertip>
-                  <Action xsi:type="ShowTaskpane">
-                    <TaskpaneId>WordMarkdownTaskpane</TaskpaneId>
-                    <SourceLocation resid="Taskpane.Url" />
-                  </Action>
                   <Icon>
                     <bt:Image size="16" resid="Icon.16x16"/>
                     <bt:Image size="32" resid="Icon.32x32"/>
                     <bt:Image size="80" resid="Icon.80x80"/>
                   </Icon>
+                  <Action xsi:type="ShowTaskpane">
+                    <TaskpaneId>WordMarkdownTaskpane</TaskpaneId>
+                    <SourceLocation resid="Taskpane.Url" />
+                  </Action>
                 </Control>
               </Group>
               <Label resid="WordMarkdownTab.Label" />
@@ -83,14 +87,14 @@
       </Host>
     </Hosts>
     <Resources>
-      <bt:Urls>
-        <bt:Url id="Taskpane.Url" DefaultValue="https://github.colorgeek.co/word-markdown-addin/taskpane.html"/>
-      </bt:Urls>
       <bt:Images>
         <bt:Image id="Icon.16x16" DefaultValue="https://github.colorgeek.co/word-markdown-addin/assets/icon-16.png"/>
         <bt:Image id="Icon.32x32" DefaultValue="https://github.colorgeek.co/word-markdown-addin/assets/icon-32.png"/>
         <bt:Image id="Icon.80x80" DefaultValue="https://github.colorgeek.co/word-markdown-addin/assets/icon-80.png"/>
       </bt:Images>
+      <bt:Urls>
+        <bt:Url id="Taskpane.Url" DefaultValue="https://github.colorgeek.co/word-markdown-addin/taskpane.html"/>
+      </bt:Urls>
       <bt:ShortStrings>
         <bt:String id="WordMarkdownTab.Label" DefaultValue="Markdown" />
         <bt:String id="WordMarkdownGroup.Label" DefaultValue="Markdown Tools" />
