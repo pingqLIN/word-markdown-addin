@@ -31,7 +31,7 @@
 
 ```powershell
 $env:MANIFEST_HOST = "https://github.colorgeek.co/word-markdown-addin"
-$env:SUPPORT_URL = "https://github.com/pingqLIN/word-markdown-addin"
+$env:SUPPORT_URL = "https://github.colorgeek.co/word-markdown-addin/support.html"
 ```
 
 如果未來取得 Marketplace asset ID，也可以一起設定：
@@ -55,12 +55,15 @@ npm run online
 3. 輸出到 `dist/manifest.store.xml`
 4. 建立可部署到靜態主機的 `dist/site/`
 5. 生成公開 landing page 與 install page
+6. 生成公開 support / privacy page
 
 ## 輸出檔案
 
 - `dist/manifest.store.xml`
 - `dist/site/index.html`
 - `dist/site/install.html`
+- `dist/site/support.html`
+- `dist/site/privacy.html`
 - `dist/site/taskpane.html`
 - `dist/site/js/*`
 - `dist/site/styles/*`
@@ -84,10 +87,12 @@ $env:ADDIN_DESCRIPTION = "Import and export Markdown files in Microsoft Word."
 ## 上架前檢查重點
 
 1. `MANIFEST_HOST` 必須是正式 HTTPS 網域。
-2. `SUPPORT_URL` 必須是正式 HTTPS 網址。
+2. `SUPPORT_URL` 必須是正式 HTTPS 網址，建議直接指向 `support.html`。
 3. 正式 host 必須能提供：
    - `/index.html`
    - `/install.html`
+   - `/support.html`
+   - `/privacy.html`
    - `/taskpane.html`
    - `/js/taskpane.js`
    - `/styles/taskpane.css`
@@ -97,6 +102,7 @@ $env:ADDIN_DESCRIPTION = "Import and export Markdown files in Microsoft Word."
    - `/locales/en-US.json`
    - `/assets/icon-16.png`
    - `/assets/icon-32.png`
+   - `/assets/icon-64.png`
    - `/assets/icon-80.png`
 4. 不要把 Windows shell 關聯描述成線上版功能。
 5. 用正式 host 重新產生 manifest 後，再做 Word Desktop 與 Word Online smoke test。
@@ -106,7 +112,8 @@ $env:ADDIN_DESCRIPTION = "Import and export Markdown files in Microsoft Word."
 1. 先把 `dist/site/` 內容部署到正式 HTTPS host 根目錄。
 2. 再使用 `dist/manifest.store.xml` 做 Word Desktop / Word Online 載入與後續上架或內部分發。
 3. install page 應優先對外公開，讓使用者從 `install.html` 而不是 `taskpane.html` 開始。
-4. 若主機不是部署在根目錄，請先確保對外路徑仍能對應到 manifest 內的 `/taskpane.html`、`/js/*`、`/styles/*`、`/lib/*`、`/locales/*`、`/assets/*`。
+4. manifest 的 support URL 應指向可公開存取的 `support.html`，不要只留 repo root。
+5. 若主機不是部署在根目錄，請先確保對外路徑仍能對應到 manifest 內的 `/taskpane.html`、`/js/*`、`/styles/*`、`/lib/*`、`/locales/*`、`/assets/*`。
 
 更完整的實機驗證步驟請看：
 

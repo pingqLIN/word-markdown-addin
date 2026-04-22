@@ -19,6 +19,7 @@
     "build:store": "npm run render-manifest:store",
     "build:online": "npm run build:store && npm run build:site",
     "test": "node --test",
+    "project-loop:state": "node scripts/project-loop-state.js",
     "single-machine": "npm run setup:with-md-association && npm run sideload",
     "online": "npm install --no-audit --no-fund && npm run build:online"
   },

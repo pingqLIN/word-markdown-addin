@@ -14,6 +14,8 @@ test("build-static-site generates a hostable site bundle with expected files", a
     const requiredFiles = [
       "index.html",
       "install.html",
+      "support.html",
+      "privacy.html",
       ".nojekyll",
       "manifest.store.xml",
       "taskpane.html",
@@ -25,6 +27,7 @@ test("build-static-site generates a hostable site bundle with expected files", a
       "locales/en-US.json",
       "assets/icon-16.png",
       "assets/icon-32.png",
+      "assets/icon-64.png",
       "assets/icon-80.png",
       "build-metadata.json",
     ];
@@ -46,7 +49,10 @@ test("build-static-site generates a hostable site bundle with expected files", a
         MARKETPLACE_ADDIN_TITLE: "Word Markdown Companion",
         MARKETPLACE_ASSET_ID: "WA200006278",
         MARKETPLACE_LINK_LANGUAGE: "en-US",
-        SUPPORT_URL: "https://github.com/pingqLIN/word-markdown-addin",
+        PUBLIC_REPO_URL: "https://github.com/pingqLIN/word-markdown-addin",
+        PUBLIC_SUPPORT_URL: "https://github.colorgeek.co/word-markdown-addin/support.html",
+        PRIVACY_URL: "https://github.colorgeek.co/word-markdown-addin/privacy.html",
+        SUPPORT_URL: "https://github.colorgeek.co/word-markdown-addin/support.html",
       },
     });
 
@@ -60,6 +66,8 @@ test("build-static-site generates a hostable site bundle with expected files", a
     assert.match(landingContents, /Word Markdown Companion/);
     assert.match(landingContents, /install\.html/);
     assert.match(landingContents, /manifest\.store\.xml/);
+    assert.match(landingContents, /support\.html/);
+    assert.match(landingContents, /privacy\.html/);
 
     const installContents = await readFile(path.join(outputDir, "install.html"), "utf8");
     assert.match(
@@ -68,6 +76,16 @@ test("build-static-site generates a hostable site bundle with expected files", a
     );
     assert.match(installContents, /Open in Word on the web/);
     assert.match(installContents, /WA200006278/);
+    assert.match(installContents, /support\.html/);
+    assert.match(installContents, /privacy\.html/);
+
+    const supportContents = await readFile(path.join(outputDir, "support.html"), "utf8");
+    assert.match(supportContents, /GitHub Issues/);
+    assert.match(supportContents, /official-smoke-sample\.md/);
+
+    const privacyContents = await readFile(path.join(outputDir, "privacy.html"), "utf8");
+    assert.match(privacyContents, /localStorage/);
+    assert.match(privacyContents, /pending-open\.json/);
 
     const taskpaneContents = await readFile(path.join(outputDir, "taskpane.html"), "utf8");
     assert.match(taskpaneContents, /js\/taskpane\.js/);

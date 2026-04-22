@@ -22,17 +22,19 @@
 - `dist/manifest.store.xml` 用於線上版或上架流程
 - `dist/site/` 用於正式 HTTPS host 的靜態網站部署
 - 正式版 manifest 必須全部指向 HTTPS
+- 正式版 manifest 的 `SupportUrl` 應指向公開可用的 `support.html`
 - icon、taskpane、js、css、lib 路徑都可由正式 host 提供
-- 若走 GitHub Pages，確認 `dist/site/` 內包含 `index.html`、`.nojekyll`、`manifest.store.xml`
+- 若走 GitHub Pages，確認 `dist/site/` 內包含 `index.html`、`install.html`、`support.html`、`privacy.html`、`.nojekyll`、`manifest.store.xml`
 
 ## 4. 核心驗證
 
 - `npm test`
 - `npm run build:site`
-- 檢查 `.github/workflows/deploy-pages.yml`
+- `gh api repos/pingqLIN/word-markdown-addin/pages`
 - `node --check scripts/render-manifest.js`
 - `node --check scripts/build-static-site.js`
 - `node --check scripts/dev-server.js`
+- `node --check scripts/project-loop-state.js`
 - `node --check scripts/setup-auto.js`
 - `node --check scripts/sideload.js`
 - `node --check src/js/taskpane.js`
@@ -50,6 +52,7 @@
 ## 6. 線上版 smoke test
 
 - 設定正式 `MANIFEST_HOST`
+- 設定正式 `SUPPORT_URL` 指向 `support.html`
 - 執行 `npm run online`
 - 部署 `dist/site/` 到正式 HTTPS host
 - 參考 `docs/online-smoke-test.md`
@@ -66,6 +69,7 @@
 - worktree 已整理
 - 文件與功能一致
 - 正式版 manifest 已生成
+- `support.html` / `privacy.html` 已跟公開 host 一起部署
 - Windows 單機版 smoke test 通過
 - 線上版 smoke test 通過
 - 已知限制已寫清楚

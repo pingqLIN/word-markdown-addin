@@ -11,10 +11,10 @@
   <DisplayName DefaultValue="{{DISPLAY_NAME}}"/>
   <Description DefaultValue="{{DESCRIPTION}}"/>
   <IconUrl DefaultValue="{{ADDIN_HOST}}/assets/icon-32.png"/>
-  <HighResolutionIconUrl DefaultValue="{{ADDIN_HOST}}/assets/icon-80.png"/>
+  <HighResolutionIconUrl DefaultValue="{{ADDIN_HOST}}/assets/icon-64.png"/>
   <SupportUrl DefaultValue="{{SUPPORT_URL}}"/>
   <AppDomains>
-    <AppDomain>{{ADDIN_HOST}}</AppDomain>
+    <AppDomain>{{ADDIN_APP_DOMAIN}}</AppDomain>
   </AppDomains>
   <Hosts>
     <Host Name="Document"/>
@@ -26,11 +26,15 @@
   </Requirements>
   <DefaultSettings>
     <SourceLocation DefaultValue="{{ADDIN_HOST}}/taskpane.html"/>
-    <RequestedHeight>450</RequestedHeight>
   </DefaultSettings>
   <Permissions>ReadWriteDocument</Permissions>
 
-  <VersionOverrides xmlns="http://schemas.microsoft.com/office/taskpaneappversionoverrides" xsi:type="TaskPaneApp">
+  <VersionOverrides xmlns="http://schemas.microsoft.com/office/taskpaneappversionoverrides" xsi:type="VersionOverridesV1_0">
+    <Requirements>
+      <bt:Sets DefaultMinVersion="1.1">
+        <bt:Set Name="AddinCommands" MinVersion="1.1"/>
+      </bt:Sets>
+    </Requirements>
     <Hosts>
       <Host xsi:type="Document">
         <DesktopFormFactor>
@@ -49,15 +53,15 @@
                     <Title resid="OpenMd.Label" />
                     <Description resid="OpenMd.Tooltip" />
                   </Supertip>
-                  <Action xsi:type="ShowTaskpane">
-                    <TaskpaneId>Office.AutoShowTaskpaneWithDocument</TaskpaneId>
-                    <SourceLocation resid="Taskpane.Url" />
-                  </Action>
                   <Icon>
                     <bt:Image size="16" resid="Icon.16x16"/>
                     <bt:Image size="32" resid="Icon.32x32"/>
                     <bt:Image size="80" resid="Icon.80x80"/>
                   </Icon>
+                  <Action xsi:type="ShowTaskpane">
+                    <TaskpaneId>Office.AutoShowTaskpaneWithDocument</TaskpaneId>
+                    <SourceLocation resid="Taskpane.Url" />
+                  </Action>
                 </Control>
                 <Control id="ExportMd" xsi:type="Button">
                   <Label resid="ExportMd.Label" />
@@ -65,15 +69,15 @@
                     <Title resid="ExportMd.Label" />
                     <Description resid="ExportMd.Tooltip" />
                   </Supertip>
-                  <Action xsi:type="ShowTaskpane">
-                    <TaskpaneId>WordMarkdownTaskpane</TaskpaneId>
-                    <SourceLocation resid="Taskpane.Url" />
-                  </Action>
                   <Icon>
                     <bt:Image size="16" resid="Icon.16x16"/>
                     <bt:Image size="32" resid="Icon.32x32"/>
                     <bt:Image size="80" resid="Icon.80x80"/>
                   </Icon>
+                  <Action xsi:type="ShowTaskpane">
+                    <TaskpaneId>WordMarkdownTaskpane</TaskpaneId>
+                    <SourceLocation resid="Taskpane.Url" />
+                  </Action>
                 </Control>
               </Group>
               <Label resid="WordMarkdownTab.Label" />
@@ -83,14 +87,14 @@
       </Host>
     </Hosts>
     <Resources>
-      <bt:Urls>
-        <bt:Url id="Taskpane.Url" DefaultValue="{{ADDIN_HOST}}/taskpane.html"/>
-      </bt:Urls>
       <bt:Images>
         <bt:Image id="Icon.16x16" DefaultValue="{{ADDIN_HOST}}/assets/icon-16.png"/>
         <bt:Image id="Icon.32x32" DefaultValue="{{ADDIN_HOST}}/assets/icon-32.png"/>
         <bt:Image id="Icon.80x80" DefaultValue="{{ADDIN_HOST}}/assets/icon-80.png"/>
       </bt:Images>
+      <bt:Urls>
+        <bt:Url id="Taskpane.Url" DefaultValue="{{ADDIN_HOST}}/taskpane.html"/>
+      </bt:Urls>
       <bt:ShortStrings>
         <bt:String id="WordMarkdownTab.Label" DefaultValue="Markdown" />
         <bt:String id="WordMarkdownGroup.Label" DefaultValue="Markdown Tools" />

@@ -15,7 +15,7 @@
 
 ```powershell
 $env:MANIFEST_HOST = "https://your-addin-host.example"
-$env:SUPPORT_URL = "https://your-addin-host.example/support"
+$env:SUPPORT_URL = "https://your-addin-host.example/support.html"
 ```
 
 2. 已執行：
@@ -148,6 +148,7 @@ npm run online
 - `/locales/en-US.json`
 - `/assets/icon-16.png`
 - `/assets/icon-32.png`
+- `/assets/icon-64.png`
 - `/assets/icon-80.png`
 
 ### 匯入失敗

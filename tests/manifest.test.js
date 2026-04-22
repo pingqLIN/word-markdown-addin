@@ -29,7 +29,10 @@ test("render-manifest generates an HTTPS store manifest without template placeho
 
     assert.match(contents, /https:\/\/addin\.example\.test\/taskpane\.html/);
     assert.match(contents, /https:\/\/support\.example\.test\/help/);
+    assert.match(contents, /<AppDomain>https:\/\/addin\.example\.test<\/AppDomain>/);
     assert.match(contents, /<Id>00000000-0000-0000-0000-000000000000<\/Id>/);
+    assert.match(contents, /VersionOverridesV1_0/);
+    assert.match(contents, /AddinCommands/);
     assert.equal(contents.includes("{{"), false, "Manifest should not contain unresolved placeholders.");
   } finally {
     await rm(tempDir, { recursive: true, force: true });
@@ -50,4 +53,30 @@ test("render-manifest rejects non-HTTPS store hosts", async () => {
       ),
     /requires HTTPS/i,
   );
+});
+
+test("render-manifest uses public-facing defaults for HTTPS store builds", async () => {
+  const tempDir = await mkdtemp(path.join(os.tmpdir(), "word-markdown-manifest-defaults-"));
+  const outputPath = path.join(tempDir, "manifest.store.xml");
+
+  try {
+    await runNodeCommand(
+      ["scripts/render-manifest.js", "--output", outputPath, "--require-https"],
+      {
+        env: {
+          MANIFEST_HOST: "https://github.colorgeek.co/word-markdown-addin",
+        },
+      },
+    );
+
+    const contents = await readFile(outputPath, "utf8");
+    assert.match(contents, /<ProviderName>pingqLIN<\/ProviderName>/);
+    assert.match(
+      contents,
+      /https:\/\/github\.colorgeek\.co\/word-markdown-addin\/support\.html/,
+    );
+    assert.match(contents, /<AppDomain>https:\/\/github\.colorgeek\.co<\/AppDomain>/);
+  } finally {
+    await rm(tempDir, { recursive: true, force: true });
+  }
 });

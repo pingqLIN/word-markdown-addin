@@ -3,7 +3,7 @@ import path from "node:path";
 import { DEFAULT_LOCAL_HOST, normalizeHost, readRuntimeHost } from "./runtime-config.js";
 
 const defaultManifestId = "e6c1ec6a-3b55-4ed6-8a57-1d3de4f6b4d1";
-const defaultProviderName = "Internal";
+const defaultProviderName = "pingqLIN";
 const defaultDisplayName = "Word Markdown Companion";
 const defaultDescription =
   "Import and export Markdown files in Microsoft Word with one click.";
@@ -44,12 +44,15 @@ const addinHost = normalizeHost(
   readOption("host") || process.env.MANIFEST_HOST || runtimeHost || DEFAULT_LOCAL_HOST,
 );
 const requireHttps = hasFlag("require-https");
-const supportUrl = (readOption("support-url") || process.env.SUPPORT_URL || `${addinHost}/`).replace(
+const defaultSupportUrl = requireHttps ? `${addinHost}/support.html` : `${addinHost}/`;
+const supportUrl = (readOption("support-url") || process.env.SUPPORT_URL || defaultSupportUrl).replace(
   /\/+$/,
   "/",
 );
+const appDomain = new URL(addinHost).origin;
 const replacements = {
   "{{ADDIN_HOST}}": addinHost,
+  "{{ADDIN_APP_DOMAIN}}": appDomain,
   "{{ADDIN_ID}}": readOption("id") || process.env.ADDIN_ID || defaultManifestId,
   "{{PROVIDER_NAME}}":
     readOption("provider") || process.env.PROVIDER_NAME || defaultProviderName,

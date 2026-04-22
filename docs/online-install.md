@@ -12,6 +12,10 @@
   - `https://github.colorgeek.co/word-markdown-addin/manifest.store.xml`
 - Task pane:
   - `https://github.colorgeek.co/word-markdown-addin/taskpane.html`
+- Support:
+  - `https://github.colorgeek.co/word-markdown-addin/support.html`
+- Privacy:
+  - `https://github.colorgeek.co/word-markdown-addin/privacy.html`
 - GitHub repo:
   - `https://github.com/pingqLIN/word-markdown-addin`
 
@@ -41,6 +45,7 @@
 - manifest 下載按鈕
 - manifest URL 複製按鈕
 - admin 部署用 URL 複製按鈕
+- support / privacy 頁面入口
 - 官方 Microsoft 安裝說明連結
 - 官方 admin deployment 文件連結
 
@@ -66,7 +71,7 @@ $env:MARKETPLACE_LINK_LANGUAGE = "en-US"
 ```powershell
 cd Q:\Projects\word-markdown-addin
 $env:MANIFEST_HOST = "https://github.colorgeek.co/word-markdown-addin"
-$env:SUPPORT_URL = "https://github.com/pingqLIN/word-markdown-addin"
+$env:SUPPORT_URL = "https://github.colorgeek.co/word-markdown-addin/support.html"
 npm run build:online
 ```
 
@@ -75,6 +80,8 @@ npm run build:online
 - `dist/manifest.store.xml`
 - `dist/site/index.html`
 - `dist/site/install.html`
+- `dist/site/support.html`
+- `dist/site/privacy.html`
 - `dist/site/taskpane.html`
 
 ## 重要區分

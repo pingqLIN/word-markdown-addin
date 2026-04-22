@@ -17,6 +17,8 @@ This repo keeps two tracks in parallel:
 - Install page: `https://github.colorgeek.co/word-markdown-addin/install.html`
 - Manifest: `https://github.colorgeek.co/word-markdown-addin/manifest.store.xml`
 - Task pane: `https://github.colorgeek.co/word-markdown-addin/taskpane.html`
+- Support: `https://github.colorgeek.co/word-markdown-addin/support.html`
+- Privacy: `https://github.colorgeek.co/word-markdown-addin/privacy.html`
 - GitHub repo: `https://github.com/pingqLIN/word-markdown-addin`
 
 ## Mascot
@@ -40,7 +42,7 @@ This repo keeps two tracks in parallel:
 ```powershell
 cd Q:\Projects\word-markdown-addin
 $env:MANIFEST_HOST = "https://github.colorgeek.co/word-markdown-addin"
-$env:SUPPORT_URL = "https://github.com/pingqLIN/word-markdown-addin"
+$env:SUPPORT_URL = "https://github.colorgeek.co/word-markdown-addin/support.html"
 npm run build:online
 ```
 
@@ -49,6 +51,8 @@ npm run build:online
 - `dist/manifest.store.xml`
 - `dist/site/index.html`
 - `dist/site/install.html`
+- `dist/site/support.html`
+- `dist/site/privacy.html`
 - `dist/site/taskpane.html`
 - `dist/site/js/*`
 - `dist/site/styles/*`
@@ -78,4 +82,5 @@ npm run build:online
 
 - GitHub Pages 目前是公開靜態 host，不是獨立 Web App。
 - 線上版不包含 Windows `.md` 關聯、registry 或 `localhost` bridge。
+- 線上版 manifest 應指向公開的 `support.html`，不要再回退到 repo root 或本機 helper 路徑。
 - 若之後取得 Marketplace asset ID，只要重新建置 `install.html`，就能升級成真正的官方一鍵安裝頁。

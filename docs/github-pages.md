@@ -24,11 +24,17 @@
   - `https://github.colorgeek.co/word-markdown-addin/manifest.store.xml`
 - Task pane:
   - `https://github.colorgeek.co/word-markdown-addin/taskpane.html`
+- Support:
+  - `https://github.colorgeek.co/word-markdown-addin/support.html`
+- Privacy:
+  - `https://github.colorgeek.co/word-markdown-addin/privacy.html`
 
 ## Pages 站點會提供的內容
 
 - `index.html`
 - `install.html`
+- `support.html`
+- `privacy.html`
 - `manifest.store.xml`
 - `taskpane.html`
 - `js/*`
@@ -56,7 +62,7 @@ gh api repos/pingqLIN/word-markdown-addin/pages
 
 ```powershell
 $env:MANIFEST_HOST = "https://github.colorgeek.co/word-markdown-addin"
-$env:SUPPORT_URL = "https://github.com/pingqLIN/word-markdown-addin"
+$env:SUPPORT_URL = "https://github.colorgeek.co/word-markdown-addin/support.html"
 ```
 
 若未來取得 Marketplace asset ID，可再加：
@@ -90,6 +96,12 @@ https://github.colorgeek.co/word-markdown-addin/taskpane.html
 https://github.colorgeek.co/word-markdown-addin/install.html
 ```
 
+- support page URL 會是：
+
+```text
+https://github.colorgeek.co/word-markdown-addin/support.html
+```
+
 也就是說，使用者應該先到 `install.html`，Word 再透過 manifest 去載 `taskpane.html`。
 
 ## 公開前檢查
@@ -106,6 +118,8 @@ https://github.colorgeek.co/word-markdown-addin/install.html
 3. Pages 站點可開：
    - `/`
    - `/install.html`
+   - `/support.html`
+   - `/privacy.html`
    - `/manifest.store.xml`
    - `/taskpane.html`
 4. `manifest.store.xml` 內的網址都指向 GitHub Pages

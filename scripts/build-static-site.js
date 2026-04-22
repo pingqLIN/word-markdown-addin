@@ -38,12 +38,24 @@ const mappings = [
 ];
 
 const buildSummary = [];
-const publicSiteUrl = String(process.env.MANIFEST_HOST || "").trim();
+const normalizedPublicSiteUrl = String(process.env.MANIFEST_HOST || "").trim().replace(/\/+$/, "");
+const publicSiteUrl = normalizedPublicSiteUrl;
 const publicRepoUrl = String(
-  process.env.SUPPORT_URL || "https://github.com/pingqLIN/word-markdown-addin",
+  process.env.PUBLIC_REPO_URL || "https://github.com/pingqLIN/word-markdown-addin",
 ).trim();
-const publicManifestUrl = publicSiteUrl ? `${publicSiteUrl.replace(/\/+$/, "")}/manifest.store.xml` : "./manifest.store.xml";
-const publicTaskpaneUrl = publicSiteUrl ? `${publicSiteUrl.replace(/\/+$/, "")}/taskpane.html` : "./taskpane.html";
+const publicIssuesUrl = String(
+  process.env.PUBLIC_ISSUES_URL || `${publicRepoUrl.replace(/\/+$/, "")}/issues`,
+).trim();
+const publicSupportUrl = String(
+  process.env.PUBLIC_SUPPORT_URL ||
+    (publicSiteUrl ? `${publicSiteUrl}/support.html` : "./support.html"),
+).trim();
+const publicPrivacyUrl = String(
+  process.env.PRIVACY_URL ||
+    (publicSiteUrl ? `${publicSiteUrl}/privacy.html` : "./privacy.html"),
+).trim();
+const publicManifestUrl = publicSiteUrl ? `${publicSiteUrl}/manifest.store.xml` : "./manifest.store.xml";
+const publicTaskpaneUrl = publicSiteUrl ? `${publicSiteUrl}/taskpane.html` : "./taskpane.html";
 const displayName = String(process.env.DISPLAY_NAME || "Word Markdown Companion").trim();
 const marketplaceAssetId = String(process.env.MARKETPLACE_ASSET_ID || "").trim().toUpperCase();
 const marketplaceAddinTitle = String(
@@ -185,7 +197,8 @@ const landingPage = `<!DOCTYPE html>
         <div class="actions">
           <a class="button button-primary" href="./install.html">快速安裝</a>
           <a class="button button-secondary" href="./manifest.store.xml">下載 Manifest</a>
-          <a class="button button-secondary" href="./taskpane.html">直接開 taskpane.html</a>
+          <a class="button button-secondary" href="./support.html">支援</a>
+          <a class="button button-secondary" href="./privacy.html">隱私</a>
           <a class="button button-secondary" href="${publicRepoUrl}">GitHub Repo</a>
         </div>
         <p class="muted">目前公開頁面與安裝入口都部署在同一個 GitHub Pages host，請優先從安裝頁開始。</p>
@@ -201,6 +214,14 @@ const landingPage = `<!DOCTYPE html>
           <article class="card">
             <strong>Task pane</strong>
             <p class="muted"><code>${publicTaskpaneUrl}</code></p>
+          </article>
+          <article class="card">
+            <strong>Support</strong>
+            <p class="muted"><code>${publicSupportUrl}</code></p>
+          </article>
+          <article class="card">
+            <strong>Privacy</strong>
+            <p class="muted"><code>${publicPrivacyUrl}</code></p>
           </article>
         </div>
       </section>
@@ -366,6 +387,14 @@ const installPage = `<!DOCTYPE html>
             <h2>Task pane URL</h2>
             <p class="muted"><code>${publicTaskpaneUrl}</code></p>
           </article>
+          <article class="card">
+            <h2>Support URL</h2>
+            <p class="muted"><code>${publicSupportUrl}</code></p>
+          </article>
+          <article class="card">
+            <h2>Privacy URL</h2>
+            <p class="muted"><code>${publicPrivacyUrl}</code></p>
+          </article>
         </div>
       </section>
 
@@ -411,6 +440,8 @@ const installPage = `<!DOCTYPE html>
           <li>用 <code>Import .md</code> 匯入 Markdown，或用 <code>Export .md</code> 做回寫測試。</li>
         </ol>
         <div class="button-row">
+          <a class="button button-secondary" href="./support.html">支援頁</a>
+          <a class="button button-secondary" href="./privacy.html">隱私頁</a>
           <a class="button button-secondary" href="./taskpane.html">檢視 taskpane.html</a>
           <a class="button button-secondary" href="${publicRepoUrl}">GitHub Repo</a>
         </div>
@@ -494,11 +525,368 @@ const installPage = `<!DOCTYPE html>
   </body>
 </html>
 `;
+const supportPage = `<!DOCTYPE html>
+<html lang="zh-Hant">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>${displayName} 支援</title>
+    <style>
+      :root {
+        color-scheme: light;
+        --bg: #f4f0e8;
+        --panel: rgba(255, 255, 255, 0.9);
+        --text: #1f1a16;
+        --muted: #63584d;
+        --accent: #b6552d;
+        --line: rgba(82, 63, 49, 0.15);
+      }
+      * { box-sizing: border-box; }
+      body {
+        margin: 0;
+        min-height: 100vh;
+        font-family: "Segoe UI", "Noto Sans TC", sans-serif;
+        color: var(--text);
+        background:
+          radial-gradient(circle at top left, rgba(230, 162, 98, 0.24), transparent 32rem),
+          linear-gradient(180deg, #f8f4ec 0%, var(--bg) 100%);
+      }
+      main {
+        max-width: 72rem;
+        margin: 0 auto;
+        padding: 3rem 1.5rem 4rem;
+      }
+      .stack {
+        display: grid;
+        gap: 1rem;
+      }
+      .panel {
+        background: var(--panel);
+        border: 1px solid var(--line);
+        border-radius: 1.5rem;
+        box-shadow: 0 18px 50px rgba(51, 35, 23, 0.08);
+        padding: 2rem;
+      }
+      .grid {
+        display: grid;
+        gap: 1rem;
+        grid-template-columns: repeat(auto-fit, minmax(18rem, 1fr));
+      }
+      .card {
+        border: 1px solid var(--line);
+        border-radius: 1rem;
+        padding: 1rem;
+        background: rgba(255, 255, 255, 0.72);
+      }
+      h1, h2, h3 {
+        margin: 0;
+      }
+      h1 {
+        font-size: clamp(2rem, 5vw, 3.2rem);
+        line-height: 1.05;
+      }
+      p, li {
+        line-height: 1.7;
+      }
+      .muted {
+        color: var(--muted);
+      }
+      .eyebrow {
+        font-size: 0.82rem;
+        font-weight: 700;
+        letter-spacing: 0.16em;
+        text-transform: uppercase;
+        color: var(--accent);
+      }
+      .actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.75rem;
+      }
+      .button {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 2.8rem;
+        padding: 0.8rem 1.1rem;
+        border-radius: 999px;
+        border: 1px solid transparent;
+        font-weight: 700;
+        text-decoration: none;
+      }
+      .button-primary {
+        background: var(--accent);
+        color: white;
+      }
+      .button-secondary {
+        border-color: var(--line);
+        color: var(--text);
+        background: rgba(255, 255, 255, 0.76);
+      }
+      code {
+        font-family: Consolas, "SFMono-Regular", monospace;
+        font-size: 0.92em;
+        word-break: break-all;
+      }
+      ol, ul {
+        margin: 0;
+        padding-left: 1.2rem;
+      }
+      @media (max-width: 640px) {
+        main { padding: 2rem 1rem 3rem; }
+        .panel { padding: 1.35rem; }
+      }
+    </style>
+  </head>
+  <body>
+    <main class="stack">
+      <section class="panel stack">
+        <p class="eyebrow">Support</p>
+        <h1>${displayName}</h1>
+        <p>這頁是公開線上版 add-in 的正式支援入口。若你遇到安裝、載入或 Markdown 匯入/匯出問題，請先確認 manifest 與 task pane 是否都來自目前正式的 GitHub Pages host，再回報問題。</p>
+        <div class="actions">
+          <a class="button button-primary" href="./install.html">快速安裝</a>
+          <a class="button button-secondary" href="${publicIssuesUrl}">GitHub Issues</a>
+          <a class="button button-secondary" href="${publicRepoUrl}">GitHub Repo</a>
+          <a class="button button-secondary" href="./privacy.html">隱私說明</a>
+        </div>
+      </section>
+
+      <section class="panel stack">
+        <h2>正式公開入口</h2>
+        <div class="grid">
+          <article class="card">
+            <h3>Support URL</h3>
+            <p class="muted"><code>${publicSupportUrl}</code></p>
+          </article>
+          <article class="card">
+            <h3>Manifest URL</h3>
+            <p class="muted"><code>${publicManifestUrl}</code></p>
+          </article>
+          <article class="card">
+            <h3>Task pane URL</h3>
+            <p class="muted"><code>${publicTaskpaneUrl}</code></p>
+          </article>
+          <article class="card">
+            <h3>Issue Tracker</h3>
+            <p class="muted"><code>${publicIssuesUrl}</code></p>
+          </article>
+        </div>
+      </section>
+
+      <section class="panel stack">
+        <h2>支援範圍</h2>
+        <div class="grid">
+          <article class="card stack">
+            <h3>公開線上版</h3>
+            <ul>
+              <li>Word task pane 載入</li>
+              <li>Markdown 匯入與匯出</li>
+              <li>manifest 分發與 GitHub Pages 靜態資源</li>
+            </ul>
+          </article>
+          <article class="card stack">
+            <h3>不在公開支援範圍內</h3>
+            <ul>
+              <li>Windows <code>.md</code> 檔案關聯</li>
+              <li>registry 覆寫</li>
+              <li>本機 <code>localhost</code> launcher bridge</li>
+            </ul>
+          </article>
+        </div>
+      </section>
+
+      <section class="panel stack">
+        <h2>回報問題前請先確認</h2>
+        <ol>
+          <li>你使用的 manifest URL 是否是 <code>${publicManifestUrl}</code>。</li>
+          <li>Word 內 task pane 的來源是否是 <code>${publicTaskpaneUrl}</code>，而不是 <code>localhost</code>。</li>
+          <li>是否可用 repo 內的 <code>samples/official-smoke-sample.md</code> 重現問題。</li>
+          <li>請記錄 Word Desktop 或 Word Online、版本、以及錯誤畫面或訊息。</li>
+        </ol>
+      </section>
+    </main>
+  </body>
+</html>
+`;
+const privacyPage = `<!DOCTYPE html>
+<html lang="zh-Hant">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>${displayName} 隱私說明</title>
+    <style>
+      :root {
+        color-scheme: light;
+        --bg: #f4f0e8;
+        --panel: rgba(255, 255, 255, 0.9);
+        --text: #1f1a16;
+        --muted: #63584d;
+        --accent: #b6552d;
+        --line: rgba(82, 63, 49, 0.15);
+      }
+      * { box-sizing: border-box; }
+      body {
+        margin: 0;
+        min-height: 100vh;
+        font-family: "Segoe UI", "Noto Sans TC", sans-serif;
+        color: var(--text);
+        background:
+          radial-gradient(circle at top left, rgba(230, 162, 98, 0.24), transparent 32rem),
+          linear-gradient(180deg, #f8f4ec 0%, var(--bg) 100%);
+      }
+      main {
+        max-width: 72rem;
+        margin: 0 auto;
+        padding: 3rem 1.5rem 4rem;
+      }
+      .stack {
+        display: grid;
+        gap: 1rem;
+      }
+      .panel {
+        background: var(--panel);
+        border: 1px solid var(--line);
+        border-radius: 1.5rem;
+        box-shadow: 0 18px 50px rgba(51, 35, 23, 0.08);
+        padding: 2rem;
+      }
+      .grid {
+        display: grid;
+        gap: 1rem;
+        grid-template-columns: repeat(auto-fit, minmax(18rem, 1fr));
+      }
+      .card {
+        border: 1px solid var(--line);
+        border-radius: 1rem;
+        padding: 1rem;
+        background: rgba(255, 255, 255, 0.72);
+      }
+      h1, h2, h3 {
+        margin: 0;
+      }
+      h1 {
+        font-size: clamp(2rem, 5vw, 3.2rem);
+        line-height: 1.05;
+      }
+      p, li {
+        line-height: 1.7;
+      }
+      .muted {
+        color: var(--muted);
+      }
+      .eyebrow {
+        font-size: 0.82rem;
+        font-weight: 700;
+        letter-spacing: 0.16em;
+        text-transform: uppercase;
+        color: var(--accent);
+      }
+      .actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.75rem;
+      }
+      .button {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 2.8rem;
+        padding: 0.8rem 1.1rem;
+        border-radius: 999px;
+        border: 1px solid transparent;
+        font-weight: 700;
+        text-decoration: none;
+      }
+      .button-primary {
+        background: var(--accent);
+        color: white;
+      }
+      .button-secondary {
+        border-color: var(--line);
+        color: var(--text);
+        background: rgba(255, 255, 255, 0.76);
+      }
+      code {
+        font-family: Consolas, "SFMono-Regular", monospace;
+        font-size: 0.92em;
+        word-break: break-all;
+      }
+      ul {
+        margin: 0;
+        padding-left: 1.2rem;
+      }
+      @media (max-width: 640px) {
+        main { padding: 2rem 1rem 3rem; }
+        .panel { padding: 1.35rem; }
+      }
+    </style>
+  </head>
+  <body>
+    <main class="stack">
+      <section class="panel stack">
+        <p class="eyebrow">Privacy</p>
+        <h1>${displayName}</h1>
+        <p>這份說明只涵蓋目前公開線上版的資料處理行為。這個專案沒有自建帳號系統，也不要求你把 Markdown 內容上傳到專案自管的後端；核心操作是在 Word task pane 與使用者裝置上完成。</p>
+        <div class="actions">
+          <a class="button button-primary" href="./install.html">快速安裝</a>
+          <a class="button button-secondary" href="./support.html">支援頁</a>
+          <a class="button button-secondary" href="${publicRepoUrl}">GitHub Repo</a>
+        </div>
+      </section>
+
+      <section class="panel stack">
+        <h2>這個 add-in 會處理哪些資料</h2>
+        <div class="grid">
+          <article class="card stack">
+            <h3>你主動匯入的 Markdown 檔案</h3>
+            <p class="muted">當你使用 <code>Import .md</code> 或拖放匯入時，檔案內容會在 task pane 內讀取，並插入目前的 Word 文件。</p>
+          </article>
+          <article class="card stack">
+            <h3>目前的 Word 文件內容</h3>
+            <p class="muted">當你使用 <code>Export .md</code> 或格式轉換功能時，task pane 會讀取目前文件內容，將它轉成 Markdown 供預覽、複製或下載。</p>
+          </article>
+          <article class="card stack">
+            <h3>本機 UI 偏好</h3>
+            <p class="muted">公開版 task pane 會用 <code>localStorage</code> 保存 theme 與 font scale 設定，以便下次開啟時沿用。</p>
+          </article>
+          <article class="card stack">
+            <h3>剪貼簿與下載</h3>
+            <p class="muted">只有在你主動點擊複製或另存功能時，才會寫入系統剪貼簿或觸發下載。</p>
+          </article>
+        </div>
+      </section>
+
+      <section class="panel stack">
+        <h2>公開線上版與單機 helper 的差異</h2>
+        <ul>
+          <li>公開線上版不需要 Windows registry 覆寫，也不依賴 <code>localhost</code> bridge。</li>
+          <li>單機 helper 模式可能會使用本機 <code>.local/pending-open.json</code> 與 <code>.local/taskpane.log</code>，那是 Windows 本機開發/測試流程，不是公開站點的預設路徑。</li>
+          <li>公開 GitHub Pages 站點本身不新增專案自管的分析追蹤端點。</li>
+        </ul>
+      </section>
+
+      <section class="panel stack">
+        <h2>補充說明</h2>
+        <ul>
+          <li>GitHub Pages 或其底層平台仍可能依其自身政策處理標準網站請求紀錄。</li>
+          <li>如果你不想保留本機 UI 偏好，可清除瀏覽器儲存資料或移除 add-in。</li>
+          <li>如果你對公開版資料處理有疑問，請改用 <code>${publicSupportUrl}</code> 提供的支援入口。</li>
+        </ul>
+      </section>
+    </main>
+  </body>
+</html>
+`;
 await writeFile(path.resolve(outputDir, "index.html"), landingPage, "utf8");
 await writeFile(path.resolve(outputDir, "install.html"), installPage, "utf8");
+await writeFile(path.resolve(outputDir, "support.html"), supportPage, "utf8");
+await writeFile(path.resolve(outputDir, "privacy.html"), privacyPage, "utf8");
 await writeFile(path.resolve(outputDir, ".nojekyll"), "", "utf8");
 buildSummary.push({ source: "[generated]", target: "index.html" });
 buildSummary.push({ source: "[generated]", target: "install.html" });
+buildSummary.push({ source: "[generated]", target: "support.html" });
+buildSummary.push({ source: "[generated]", target: "privacy.html" });
 buildSummary.push({ source: "[generated]", target: ".nojekyll" });
 
 try {
