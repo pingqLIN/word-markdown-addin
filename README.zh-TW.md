@@ -32,7 +32,9 @@ Word Markdown Companion 把 Markdown 匯入與匯出放進 Word task pane，同�
 
 ## 介面截圖
 
-![英文 task pane 截圖](assets/screenshots/taskpane-en.png)
+| Task pane 上半部 | Task pane 下半部 |
+|---|---|
+| ![英文 task pane 上半部截圖](assets/screenshots/taskpane-en-top.png) | ![英文 task pane 下半部截圖](assets/screenshots/taskpane-en-bottom.png) |
 
 目前英文 task pane 展示匯入流程、已本地化的檔案選擇器、拖放區與 Markdown 轉換參考。
 

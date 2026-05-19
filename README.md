@@ -32,7 +32,9 @@ Word Markdown Companion brings Markdown import and export into a Word task pane,
 
 ## Screenshots
 
-![English task pane screenshot](assets/screenshots/taskpane-en.png)
+| Task pane top | Task pane bottom |
+|---|---|
+| ![English task pane top screenshot](assets/screenshots/taskpane-en-top.png) | ![English task pane bottom screenshot](assets/screenshots/taskpane-en-bottom.png) |
 
 The current English task pane shows the import workflow, localized file picker, drop zone, and Markdown conversion reference.
 
