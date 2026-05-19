@@ -1,86 +1,163 @@
-# Word Markdown Companion
+[![Word Markdown Companion product banner](Banner.jpg)](https://github.colorgeek.co/word-markdown-addin/install.html)
 
-Public Microsoft Word add-in for importing and exporting Markdown `.md` files inside Word.
+# WORD MARKDOWN COMPANION
 
-This repo keeps two tracks in parallel:
+**Import, format, and export Markdown inside Microsoft Word**
 
-- `線上版`
-  - 正式公開路徑
-  - 依賴 HTTPS host、manifest 與 Office Add-in 標準分發
-- `單機版`
-  - Windows + Word Desktop 本機 helper 路徑
-  - 給開發、測試與 sideload 使用，不是公開發佈主路徑
+![Version](https://img.shields.io/badge/version-0.1.0-c6543c)
+![Platform](https://img.shields.io/badge/platform-Microsoft%20Word-2b579a)
+![Runtime](https://img.shields.io/badge/node-%3E%3D20-43853d)
+![License](https://img.shields.io/badge/license-MIT-blue)
 
-## 已上線網址
+[Live Site](https://github.colorgeek.co/word-markdown-addin/) ·
+[Install](https://github.colorgeek.co/word-markdown-addin/install.html) ·
+[Quick Start](#start-using) ·
+[Documentation](#documentation) ·
+[繁體中文](README.zh-TW.md)
 
-- Public site: `https://github.colorgeek.co/word-markdown-addin/`
-- Install page: `https://github.colorgeek.co/word-markdown-addin/install.html`
-- Manifest: `https://github.colorgeek.co/word-markdown-addin/manifest.store.xml`
-- Task pane: `https://github.colorgeek.co/word-markdown-addin/taskpane.html`
-- Support: `https://github.colorgeek.co/word-markdown-addin/support.html`
-- Privacy: `https://github.colorgeek.co/word-markdown-addin/privacy.html`
-- GitHub repo: `https://github.com/pingqLIN/word-markdown-addin`
+---
 
-## Mascot
+## Why Word Markdown Companion
 
-![Word Markdown Companion mascot](assets/mascot/word-markdown-companion-url-hero.jpg)
+Word Markdown Companion brings Markdown import and export into a Word task pane, with separate paths for public HTTPS deployment and Windows desktop sideload testing. Writers can keep `.md` files in their normal workflow, then move content into Word for editing, review, or handoff.
 
-- 生成來源：[assets/mascot/word-markdown-companion-url-hero.md](assets/mascot/word-markdown-companion-url-hero.md)
-- 圖檔：[assets/mascot/word-markdown-companion-url-hero.jpg](assets/mascot/word-markdown-companion-url-hero.jpg)
+| Benefit | What it gives you |
+|---|---|
+| **Markdown import** | Select or drop `.md` / `.markdown` files — insert rendered content into the current Word document |
+| **Markdown export** | Convert the current Word document to Markdown — preview, copy, download, or save |
+| **Public add-in path** | HTTPS manifest, support page, privacy page, static GitHub Pages host |
+| **Windows local path** | Localhost dev server, sideload manifest, optional `.md` shell handoff bridge |
 
-## 線上版安裝
+---
 
-目前公開版請從 install page 開始：
+## Screenshots
 
-- 個人安裝：下載 manifest，然後在 Word 的 `My Add-ins` / `Upload My Add-in` 載入
-- Tenant Admin 安裝：在 Microsoft 365 admin center 使用 manifest URL 部署
+![English task pane screenshot](assets/screenshots/taskpane-en.png)
 
-真正的 Microsoft 官方 click-and-run 一鍵安裝，必須等這個 add-in 取得 Marketplace asset ID 後才能啟用。現在的 `install.html` 已經把這個入口預留好了。
+The current English task pane shows the import workflow, localized file picker, drop zone, and Markdown conversion reference.
 
-## 建置公開版
+> **Brand artwork rule:** legacy mascot artwork is source material only, not a README display asset. Do not place the mascot directly in documentation or product surfaces; redesign it into approved banner, campaign, or product artwork before use.
+
+---
+
+## How It Works
+
+### 1. Install or sideload the manifest
+
+Use the public install page for the online track, or the Windows sideload command for local development.
+
+### 2. Open the task pane in Word
+
+The manifest points Word to `taskpane.html`, hosted publicly for the online track or served from localhost for the local track.
+
+### 3. Import, format, or export Markdown
+
+Use `Import .md`, drag-and-drop, `Format`, or `Export .md` from the same task pane workspace.
+
+---
+
+## Who It Is For
+
+| User | What it helps you finish |
+|---|---|
+| Markdown-first writers | Draft in `.md`, move content into Word for review or delivery |
+| Word-heavy teams | Receive Markdown source without leaving the Word editing surface |
+| Add-in testers | Validate Word Desktop and Word Online behavior from a single manifest track |
+| Windows local users | Test sideload, shell association, and launcher bridge flows without publishing |
+
+---
+
+## Support Matrix
+
+| Type | Support |
+|---|---|
+| Input | `.md`, `.markdown`, common Markdown, GFM-style tables |
+| Output | Markdown preview, clipboard copy, file download, save picker fallback |
+| Online host | GitHub Pages static site, HTTPS manifest, public support and privacy pages |
+| Word platforms | Word Desktop, Word Online, platforms allowed by Office manifest validation |
+| Local development | Windows Word Desktop sideload, localhost dev server, optional `.md` association |
+
+> **Important:** the online track does not include Windows registry edits, `.md` file association, `.local/pending-open.json`, or a localhost launcher bridge.
+
+---
+
+## Start Using
+
+Open the public install page:
+
+**[https://github.colorgeek.co/word-markdown-addin/install.html](https://github.colorgeek.co/word-markdown-addin/install.html)**
+
+### Public HTTPS Build
 
 ```powershell
+# Build the public Office Add-in bundle
 cd Q:\Projects\word-markdown-addin
 $env:MANIFEST_HOST = "https://github.colorgeek.co/word-markdown-addin"
 $env:SUPPORT_URL = "https://github.colorgeek.co/word-markdown-addin/support.html"
 npm run build:online
 ```
 
-輸出內容：
+### Windows Desktop Sideload
 
-- `dist/manifest.store.xml`
-- `dist/site/index.html`
-- `dist/site/install.html`
-- `dist/site/support.html`
-- `dist/site/privacy.html`
-- `dist/site/taskpane.html`
-- `dist/site/js/*`
-- `dist/site/styles/*`
-- `dist/site/lib/*`
-- `dist/site/locales/*`
-- `dist/site/assets/*`
+```powershell
+# Prepare the local helper path and sideload into Word Desktop
+cd Q:\Projects\word-markdown-addin
+npm run single-machine
+```
 
-## 文件入口
+### Development Checks
 
-### 公開版 / 線上版
+```powershell
+# Run the high-signal local validation suite
+npm test
 
-- [docs/online-install.md](docs/online-install.md)
-- [docs/publish-online.md](docs/publish-online.md)
-- [docs/github-pages.md](docs/github-pages.md)
-- [docs/online-smoke-test.md](docs/online-smoke-test.md)
+# Start the local task pane server for manual checks
+npm run dev-server
+```
 
-### 本機版
+---
 
-- [docs/single-machine.md](docs/single-machine.md)
+## Public URLs
 
-### 維護 / 測試
+| Surface | URL |
+|---|---|
+| Public site | `https://github.colorgeek.co/word-markdown-addin/` |
+| Install page | `https://github.colorgeek.co/word-markdown-addin/install.html` |
+| Manifest | `https://github.colorgeek.co/word-markdown-addin/manifest.store.xml` |
+| Task pane | `https://github.colorgeek.co/word-markdown-addin/taskpane.html` |
+| Support | `https://github.colorgeek.co/word-markdown-addin/support.html` |
+| Privacy | `https://github.colorgeek.co/word-markdown-addin/privacy.html` |
 
-- [docs/release-checklist.md](docs/release-checklist.md)
-- [docs/skill-list.md](docs/skill-list.md)
+---
 
-## 補充
+## Documentation
 
-- GitHub Pages 目前是公開靜態 host，不是獨立 Web App。
-- 線上版不包含 Windows `.md` 關聯、registry 或 `localhost` bridge。
-- 線上版 manifest 應指向公開的 `support.html`，不要再回退到 repo root 或本機 helper 路徑。
-- 若之後取得 Marketplace asset ID，只要重新建置 `install.html`，就能升級成真正的官方一鍵安裝頁。
+| Topic | File |
+|---|---|
+| Online install | [docs/online-install.md](docs/online-install.md) |
+| Online publishing | [docs/publish-online.md](docs/publish-online.md) |
+| GitHub Pages deployment | [docs/github-pages.md](docs/github-pages.md) |
+| Online smoke test | [docs/online-smoke-test.md](docs/online-smoke-test.md) |
+| Windows single-machine path | [docs/single-machine.md](docs/single-machine.md) |
+| Release checklist | [docs/release-checklist.md](docs/release-checklist.md) |
+| Skill list | [docs/skill-list.md](docs/skill-list.md) |
+
+---
+
+## AI-Assisted Development
+
+This project was developed with AI assistance.
+
+| Model | Role |
+|---|---|
+| OpenAI Codex CLI | Implementation, documentation, UI/i18n review |
+
+> **Disclaimer:** While the author has made every effort to review and validate
+> the AI-generated code, no guarantee can be made regarding its correctness, security,
+> or fitness for any particular purpose. Use at your own risk.
+
+---
+
+## License
+
+[MIT License](LICENSE)

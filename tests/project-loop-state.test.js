@@ -69,3 +69,49 @@ test("project-loop-state persists resumable batch metadata and appends events", 
     await rm(tempDir, { recursive: true, force: true });
   }
 });
+
+test("project-loop-state start resets stale startedAt metadata", async () => {
+  const tempDir = await mkdtemp(path.join(os.tmpdir(), "word-markdown-loop-reset-"));
+  const statePath = path.join(tempDir, "project-loop-state.json");
+  const eventsPath = path.join(tempDir, "project-loop-events.jsonl");
+
+  try {
+    await runNodeCommand([
+      "scripts/project-loop-state.js",
+      "start",
+      "--state-file",
+      statePath,
+      "--events-file",
+      eventsPath,
+      "--mode",
+      "pattern-b",
+      "--deadline",
+      "2026-05-01T09:00:00+08:00",
+      "--active-batch",
+      "Old batch",
+    ]);
+
+    const oldState = JSON.parse(await readFile(statePath, "utf8"));
+
+    await runNodeCommand([
+      "scripts/project-loop-state.js",
+      "start",
+      "--state-file",
+      statePath,
+      "--events-file",
+      eventsPath,
+      "--mode",
+      "pattern-b",
+      "--deadline",
+      "2026-05-01T21:00:00+08:00",
+      "--active-batch",
+      "New batch",
+    ]);
+
+    const newState = JSON.parse(await readFile(statePath, "utf8"));
+    assert.equal(newState.activeBatch, "New batch");
+    assert.notEqual(newState.startedAt, oldState.startedAt);
+  } finally {
+    await rm(tempDir, { recursive: true, force: true });
+  }
+});

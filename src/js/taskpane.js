@@ -1,5 +1,7 @@
 const statusElement = document.getElementById("status");
 const mdFileInput = document.getElementById("md-file");
+const chooseFileButton = document.getElementById("choose-file-btn");
+const selectedFileName = document.getElementById("selected-file-name");
 const importButton = document.getElementById("import-btn");
 const exportButton = document.getElementById("export-btn");
 const exportPreview = document.getElementById("export-preview");
@@ -34,6 +36,7 @@ let currentLocale = defaultLocale;
 let currentTheme = defaultTheme;
 let currentFontScale = defaultFontScale;
 let localeMessages = {};
+let selectedMarkdownFileName = "";
 
 const logTaskpaneEvent = async (message, extra = null) => {
   const detail =
@@ -261,6 +264,18 @@ const applyTranslations = () => {
     button.setAttribute("aria-label", label);
     button.setAttribute("title", label);
   });
+
+  updateSelectedFileName();
+};
+
+const updateSelectedFileName = (fileName = selectedMarkdownFileName) => {
+  selectedMarkdownFileName = fileName || "";
+
+  if (!selectedFileName) {
+    return;
+  }
+
+  selectedFileName.textContent = selectedMarkdownFileName || t("import.noFileSelected");
 };
 
 const getToolViewMeta = (viewName) => ({
@@ -678,15 +693,19 @@ const handlePendingMarkdownImport = async () => {
 
 const handleMdFile = (file) => {
   if (!file) {
+    updateSelectedFileName("");
     setStatus(t("status.selectMarkdownFirst"));
     return;
   }
 
   const ext = file.name.split(".").pop()?.toLowerCase();
   if (ext !== "md" && ext !== "markdown") {
+    updateSelectedFileName("");
     setStatus(t("status.onlyMarkdownSupported"));
     return;
   }
+
+  updateSelectedFileName(file.name);
 
   const reader = new FileReader();
   reader.onload = async (event) => {
@@ -810,6 +829,11 @@ Office.onReady(async () => {
   importButton.addEventListener("click", () => {
     mdFileInput.click();
   });
+  if (chooseFileButton) {
+    chooseFileButton.addEventListener("click", () => {
+      mdFileInput.click();
+    });
+  }
   if (mdAutoImportButton) {
     mdAutoImportButton.addEventListener("click", () => {
       if (pendingMarkdownState.markdown) {

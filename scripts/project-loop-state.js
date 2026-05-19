@@ -62,7 +62,7 @@ const nextState = {
   mode: readOption("mode") || previousState.mode || "pattern-b",
   activeBatch: readOption("active-batch") || previousState.activeBatch || "",
   deadline: readOption("deadline") || previousState.deadline || "",
-  startedAt: previousState.startedAt || now,
+  startedAt: action === "start" ? now : previousState.startedAt || now,
   updatedAt: now,
   lastCompletedCheckpoint:
     readOption("last-completed-checkpoint") ||

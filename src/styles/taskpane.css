@@ -258,18 +258,6 @@ body::before {
   font-size: clamp(1.08rem, 2.4vw, 1.42rem);
 }
 
-.hero-badge {
-  flex-shrink: 0;
-  padding: 4px 8px;
-  border: 1px solid var(--accent-border);
-  border-radius: 8px;
-  background: var(--accent-surface);
-  color: var(--accent-deep);
-  font-size: 0.63rem;
-  font-weight: 700;
-  letter-spacing: 0.08em;
-}
-
 .hero-controls {
   display: flex;
   flex-wrap: wrap;
@@ -716,24 +704,54 @@ body::before {
 }
 
 .file-input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  border: 0;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+.file-picker {
+  display: flex;
+  align-items: center;
+  gap: 10px;
   width: 100%;
   margin: 0 0 14px;
-  padding: 11px 12px;
+  padding: 8px;
   border: 1px dashed var(--accent-border-strong);
   border-radius: var(--radius-md);
   background: rgba(255, 255, 255, 0.74);
   color: var(--text-soft);
 }
 
-.file-input::file-selector-button {
-  margin-right: 10px;
-  border: 0;
-  border-radius: 6px;
+.file-picker-button {
+  flex: 0 0 auto;
+  min-height: 38px;
   padding: 8px 12px;
+  border-color: var(--accent-border);
   background: var(--accent-surface);
   color: var(--accent-deep);
-  font-weight: 700;
-  cursor: pointer;
+  box-shadow: none;
+}
+
+.file-picker-button:hover:not(:disabled),
+.file-picker-button:focus-visible {
+  border-color: var(--accent-border-hover);
+  background: var(--accent-surface-strong);
+}
+
+.file-picker-status {
+  min-width: 0;
+  overflow: hidden;
+  color: var(--text-soft);
+  font-size: 0.86rem;
+  line-height: 1.4;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .action-stack,
@@ -772,7 +790,7 @@ button:hover:not(:disabled) {
 }
 
 button:focus-visible,
-.file-input:focus-visible,
+.file-picker-button:focus-visible,
 textarea:focus-visible,
 .drop-zone:focus-visible {
   outline: 2px solid var(--accent-border-strong);
@@ -939,8 +957,8 @@ html[data-theme="microsoft"] .hero-link-kicker {
   color: #b9d7f4;
 }
 
-html[data-theme="dark"] .file-input,
-html[data-theme="microsoft"] .file-input,
+html[data-theme="dark"] .file-picker,
+html[data-theme="microsoft"] .file-picker,
 html[data-theme="dark"] button.ghost,
 html[data-theme="microsoft"] button.ghost,
 html[data-theme="dark"] .drop-zone,
@@ -949,16 +967,10 @@ html[data-theme="microsoft"] .drop-zone {
   color: var(--text-soft);
 }
 
-html[data-theme="dark"] .file-input::file-selector-button,
-html[data-theme="microsoft"] .file-input::file-selector-button {
+html[data-theme="dark"] .file-picker-button,
+html[data-theme="microsoft"] .file-picker-button {
   background: rgba(108, 182, 255, 0.18);
   color: #edf6ff;
-}
-
-html[data-theme="dark"] .hero-badge,
-html[data-theme="microsoft"] .hero-badge {
-  color: #eef6ff;
-  background: rgba(108, 182, 255, 0.18);
 }
 
 .panel-reference {
@@ -976,7 +988,7 @@ html[data-theme="microsoft"] .hero-badge {
   }
 
   .tool-view[data-tool-view="import"] .field-label,
-  .tool-view[data-tool-view="import"] .file-input,
+  .tool-view[data-tool-view="import"] .file-picker,
   .tool-view[data-tool-view="import"] .action-stack,
   .tool-view[data-tool-view="import"] .drop-zone,
   .tool-view[data-tool-view="import"] .helper {
@@ -1100,10 +1112,6 @@ code {
   .hero-heading {
     grid-template-columns: 1fr;
     align-items: start;
-  }
-
-  .hero-badge {
-    display: inline-flex;
   }
 
   .hero-controls {

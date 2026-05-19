@@ -60,6 +60,9 @@
   },
   "import": {
     "fileLabel": "Choose a source file",
+    "chooseFileAction": "Choose .md file",
+    "noFileSelected": "No file selected",
+    "fileInputAria": "Markdown source file",
     "primaryAction": "Insert Markdown into document",
     "dropzoneTitle": "Drop a file here",
     "dropzoneBody": "You can also choose a local Markdown file with the button above.",
@@ -85,27 +88,32 @@
       "summary": "These side-by-side examples show familiar Markdown syntax and the closest Word-style result you should expect inside this task pane workflow.",
       "heading": {
         "label": "Heading",
+        "syntax": "# Document heading",
         "render": "Document heading",
         "note": "This usually maps to a Word heading style."
       },
       "quote": {
         "label": "Quote",
+        "syntax": "> This is a highlighted quotation",
         "render": "This is a highlighted quotation"
       },
       "emphasis": {
         "label": "Emphasis",
+        "syntax": "**bold**\n_italic_\n`inline code`",
         "bold": "Bold text",
         "italic": "Italic text",
         "code": "inline code"
       },
       "list": {
         "label": "List",
+        "syntax": "- First item\n- Second item\n- Third item",
         "item1": "First item",
         "item2": "Second item",
         "item3": "Third item"
       },
       "table": {
         "label": "Table",
+        "syntax": "| Field | Value |\n| --- | --- |\n| Status | Done |",
         "col1": "Field",
         "col2": "Value",
         "row1col1": "Status",

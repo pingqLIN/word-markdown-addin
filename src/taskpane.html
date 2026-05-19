@@ -16,7 +16,6 @@
         <div class="hero-topline">
           <div class="hero-meta">
             <p class="eyebrow" data-i18n="hero.eyebrow">文件工具面板</p>
-            <span class="hero-badge" data-i18n="hero.badge">Word × Markdown</span>
           </div>
           <div class="hero-controls hero-controls-top">
             <div class="theme-switch" role="group" aria-label="主題切換" data-i18n-aria-label="controls.themeSwitcher">
@@ -72,7 +71,18 @@
         <div class="toolbox-views">
           <section class="tool-view is-active" data-tool-view="import">
             <label class="field-label" for="md-file" data-i18n="import.fileLabel">選取來源檔案</label>
-            <input id="md-file" class="file-input" type="file" accept=".md,.markdown,text/markdown" />
+            <div class="file-picker">
+              <button id="choose-file-btn" type="button" class="file-picker-button" data-i18n="import.chooseFileAction">選擇 .md 檔</button>
+              <span id="selected-file-name" class="file-picker-status" data-i18n="import.noFileSelected">尚未選擇檔案</span>
+            </div>
+            <input
+              id="md-file"
+              class="file-input"
+              type="file"
+              accept=".md,.markdown,text/markdown"
+              aria-label="Markdown 來源檔案"
+              data-i18n-aria-label="import.fileInputAria"
+            />
 
             <div class="action-stack">
               <button id="import-btn" type="button" class="primary-action" data-i18n="import.primaryAction">插入 Markdown 到文件</button>
@@ -125,7 +135,7 @@
           <div class="reference-demo-grid">
             <article class="reference-demo-card">
               <span class="reference-demo-label" data-i18n="reference.demo.heading.label">標題</span>
-              <code class="reference-demo-code"># 文件主標題</code>
+              <code class="reference-demo-code" data-i18n="reference.demo.heading.syntax"># 文件主標題</code>
               <div class="reference-demo-render">
                 <h4 data-i18n="reference.demo.heading.render">文件主標題</h4>
                 <p data-i18n="reference.demo.heading.note">在 Word 中通常會對應到標題樣式。</p>
@@ -134,7 +144,7 @@
 
             <article class="reference-demo-card">
               <span class="reference-demo-label" data-i18n="reference.demo.quote.label">引用</span>
-              <code class="reference-demo-code">&gt; 這是一段重點引用</code>
+              <code class="reference-demo-code" data-i18n="reference.demo.quote.syntax">&gt; 這是一段重點引用</code>
               <div class="reference-demo-render">
                 <blockquote data-i18n="reference.demo.quote.render">這是一段重點引用</blockquote>
               </div>
@@ -142,7 +152,7 @@
 
             <article class="reference-demo-card">
               <span class="reference-demo-label" data-i18n="reference.demo.emphasis.label">強調</span>
-              <code class="reference-demo-code">**bold**&#10;_italic_&#10;`inline code`</code>
+              <code class="reference-demo-code" data-i18n="reference.demo.emphasis.syntax">**bold**&#10;_italic_&#10;`inline code`</code>
               <div class="reference-demo-render reference-demo-emphasis">
                 <p>
                   <strong data-i18n="reference.demo.emphasis.bold">粗體文字</strong>
@@ -158,7 +168,7 @@
 
             <article class="reference-demo-card">
               <span class="reference-demo-label" data-i18n="reference.demo.list.label">清單</span>
-              <code class="reference-demo-code">- 第一項&#10;- 第二項&#10;- 第三項</code>
+              <code class="reference-demo-code" data-i18n="reference.demo.list.syntax">- 第一項&#10;- 第二項&#10;- 第三項</code>
               <div class="reference-demo-render">
                 <ul>
                   <li data-i18n="reference.demo.list.item1">第一項</li>
@@ -170,7 +180,7 @@
 
             <article class="reference-demo-card">
               <span class="reference-demo-label" data-i18n="reference.demo.table.label">表格</span>
-              <code class="reference-demo-code">| 欄位 | 值 |&#10;| --- | --- |&#10;| 狀態 | 完成 |</code>
+              <code class="reference-demo-code" data-i18n="reference.demo.table.syntax">| 欄位 | 值 |&#10;| --- | --- |&#10;| 狀態 | 完成 |</code>
               <div class="reference-demo-render">
                 <table class="reference-demo-table">
                   <thead>

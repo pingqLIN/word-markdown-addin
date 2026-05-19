@@ -60,6 +60,9 @@
   },
   "import": {
     "fileLabel": "選取來源檔案",
+    "chooseFileAction": "選擇 .md 檔",
+    "noFileSelected": "尚未選擇檔案",
+    "fileInputAria": "Markdown 來源檔案",
     "primaryAction": "匯入 Markdown 到文件",
     "dropzoneTitle": "拖放檔案到這裡",
     "dropzoneBody": "也可以使用上方按鈕選取本機 Markdown 檔。",
@@ -85,27 +88,32 @@
       "summary": "以下範例用常見 Markdown 寫法對照在 Word 內較接近的呈現效果，方便快速判斷格式是否符合預期。",
       "heading": {
         "label": "標題",
+        "syntax": "# 文件主標題",
         "render": "文件主標題",
         "note": "在 Word 中通常會對應到標題樣式。"
       },
       "quote": {
         "label": "引用",
+        "syntax": "> 這是一段重點引用",
         "render": "這是一段重點引用"
       },
       "emphasis": {
         "label": "強調",
+        "syntax": "**bold**\n_italic_\n`inline code`",
         "bold": "粗體文字",
         "italic": "斜體文字",
         "code": "inline code"
       },
       "list": {
         "label": "清單",
+        "syntax": "- 第一項\n- 第二項\n- 第三項",
         "item1": "第一項",
         "item2": "第二項",
         "item3": "第三項"
       },
       "table": {
         "label": "表格",
+        "syntax": "| 欄位 | 值 |\n| --- | --- |\n| 狀態 | 完成 |",
         "col1": "欄位",
         "col2": "值",
         "row1col1": "狀態",
