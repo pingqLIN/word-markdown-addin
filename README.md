@@ -1,4 +1,4 @@
-[![Word Markdown Companion product banner](Banner.jpg)](https://github.colorgeek.co/word-markdown-addin/install.html)
+[![Word Markdown Companion product banner](Banner_HDR2.jpg)](https://github.colorgeek.co/word-markdown-addin/install.html)
 
 # WORD MARKDOWN COMPANION
 
